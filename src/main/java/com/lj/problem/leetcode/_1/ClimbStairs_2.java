@@ -3,6 +3,7 @@ package com.lj.problem.leetcode._1;
 import com.lj.study.common.bean.A;
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -40,7 +41,7 @@ public class ClimbStairs_2 {
         int m = 0;
         int result = 0;
         while (m <= n) {
-            long tmp = c(n, m);
+            long tmp = c2(n, m);
             result += tmp;
             n--;
             m++;
@@ -48,6 +49,24 @@ public class ClimbStairs_2 {
         return result;
     }
 
+    /**
+     * 16 ms
+     */
+    public static int c2(int n, int m) {
+        return factorial2(n).divide(factorial2(m).multiply( factorial2(n - m) )).intValue();
+    }
+
+    public static BigDecimal factorial2(int n) {
+        BigDecimal result = BigDecimal.ONE;
+        for (int i = 1; i <= n; i++) {
+            result = result.multiply(BigDecimal.valueOf(i));
+        }
+        return result;
+    }
+
+    /**
+     * 0 ms
+     */
     public static int c(int n, int m){
         if (m == 0 || n == m) {
             return 1;
@@ -99,10 +118,9 @@ public class ClimbStairs_2 {
         return result;
     }
 
-
     @Test
     public void testFactorial() {
-        System.out.println(c(8, 7));
+        System.out.println(c2(11, 4));
 //        System.out.println(factorial(13));
     }
 }
