@@ -1,6 +1,6 @@
 package com.lj.problem.leetcode._2;
 
-import com.test.common.bean.Pair;
+import com.lj.study.common.bean.Pair;
 import org.junit.Test;
 
 import java.util.*;

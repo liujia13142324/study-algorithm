@@ -1,7 +1,7 @@
 package com.lj.problem.leetcode;
 
 import com.lj.algorithm.sort.QuickSort;
-import com.test.common.utils.MyArrayUtil;
+import com.lj.study.common.utils.MyArrayUtil;
 import org.junit.Test;
 
 import java.util.*;

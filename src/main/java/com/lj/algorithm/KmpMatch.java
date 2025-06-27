@@ -2,7 +2,7 @@ package com.lj.algorithm;
 
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.RandomUtil;
-import com.test.common.aop.annotation.PrintLog;
+import com.lj.study.common.aop.annotation.PrintLog;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 

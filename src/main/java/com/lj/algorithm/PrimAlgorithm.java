@@ -2,7 +2,7 @@ package com.lj.algorithm;
 
 
 import com.lj.datastructure.notline.graph.GraphByArray;
-import com.test.common.utils.MyArrayUtil;
+import com.lj.study.common.utils.MyArrayUtil;
 
 import java.util.Arrays;
 import java.util.List;

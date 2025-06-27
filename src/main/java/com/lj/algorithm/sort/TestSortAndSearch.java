@@ -1,6 +1,6 @@
 package com.lj.algorithm.sort;
 
-import com.test.common.utils.MyArrayUtil;
+import com.lj.study.common.utils.MyArrayUtil;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.Test;
 

@@ -1,7 +1,7 @@
 package com.lj.problem.leetcode;
 
 import com.lj.algorithm.AlgorithmUtil;
-import com.test.common.aop.annotation.PrintLog;
+import com.lj.study.common.aop.annotation.PrintLog;
 import lombok.AllArgsConstructor;
 import org.junit.Assert;
 import org.junit.Test;

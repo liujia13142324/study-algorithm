@@ -1,8 +1,8 @@
 package com.lj.algorithm.sort;
 
-import com.test.common.aop.annotation.PrintLog;
-import com.test.common.utils.MyArrayUtil;
-import com.test.common.utils.MyRandomUtil;
+import com.lj.study.common.aop.annotation.PrintLog;
+import com.lj.study.common.utils.MyArrayUtil;
+import com.lj.study.common.utils.MyRandomUtil;
 import org.junit.Test;
 
 import java.util.Arrays;

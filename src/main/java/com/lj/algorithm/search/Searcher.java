@@ -2,8 +2,8 @@ package com.lj.algorithm.search;
 
 import cn.hutool.core.util.RandomUtil;
 import com.lj.algorithm.sort.BucketSort;
-import com.test.common.aop.annotation.PrintLog;
-import com.test.common.utils.MyArrayUtil;
+import com.lj.study.common.aop.annotation.PrintLog;
+import com.lj.study.common.utils.MyArrayUtil;
 import org.junit.Test;
 
 import java.util.ArrayList;

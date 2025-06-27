@@ -1,6 +1,6 @@
 package com.lj.problem.leetcode._2;
 
-import com.test.common.bean.A;
+import com.lj.study.common.bean.A;
 
 import java.util.Arrays;
 

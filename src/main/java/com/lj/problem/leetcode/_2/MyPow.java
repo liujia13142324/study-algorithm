@@ -1,6 +1,6 @@
 package com.lj.problem.leetcode._2;
 
-import com.test.common.aop.annotation.PrintLog;
+import com.lj.study.common.aop.annotation.PrintLog;
 
 /**
  * 快速幂

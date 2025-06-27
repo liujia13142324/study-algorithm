@@ -1,6 +1,6 @@
 package com.lj.problem;
 
-import com.test.common.utils.MyArrayUtil;
+import com.lj.study.common.utils.MyArrayUtil;
 
 /**
  * 马踏棋盘

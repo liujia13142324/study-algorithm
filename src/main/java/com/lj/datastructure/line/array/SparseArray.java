@@ -1,6 +1,6 @@
 package com.lj.datastructure.line.array;
 
-import com.test.common.utils.MyArrayUtil;
+import com.lj.study.common.utils.MyArrayUtil;
 import lombok.Data;
 
 import java.util.LinkedList;

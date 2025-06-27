@@ -1,7 +1,7 @@
 package com.lj.datastructure.notline.graph;
 
 import com.lj.datastructure.line.queue.LoopArrayQueue;
-import com.test.common.utils.MyArrayUtil;
+import com.lj.study.common.utils.MyArrayUtil;
 
 import java.util.Arrays;
 import java.util.List;

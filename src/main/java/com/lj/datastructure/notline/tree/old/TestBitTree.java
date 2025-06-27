@@ -1,7 +1,7 @@
 package com.lj.datastructure.notline.tree.old;
 
 
-import com.test.common.utils.MyArrayUtil;
+import com.lj.study.common.utils.MyArrayUtil;
 
 public class TestBitTree {
 

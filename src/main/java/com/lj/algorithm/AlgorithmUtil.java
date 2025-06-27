@@ -1,6 +1,6 @@
 package com.lj.algorithm;
 
-import com.test.common.aop.annotation.PrintLog;
+import com.lj.study.common.aop.annotation.PrintLog;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.Test;
 

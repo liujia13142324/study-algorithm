@@ -1,6 +1,5 @@
 package com.lj.problem.leetcode._1;
 
-import org.aspectj.weaver.loadtime.definition.Definition;
 
 /**
  * 给你一棵二叉树的根节点 root ，翻转这棵二叉树，并返回其根节点。
