@@ -24,7 +24,17 @@ public class CommonDivisor {
     }
     
     public static void main(String[] args) {
-        System.out.println(Arrays.toString(new CommonDivisor().commonDivisor(12, 24)));
+        System.out.println(Arrays.toString(new CommonDivisor().commonDivisor(4, 4)));
+        System.out.println(Arrays.toString(CommonDivisor_2.commonDivisor(4, 4)));
+
+        for (int i = 1; i < 100; i++) {
+            for (int j = 1; j < 100; j++) {
+                Integer[] i1 = new CommonDivisor().commonDivisor(i, j);
+                Integer[] i2 = CommonDivisor_2.commonDivisor(i, j);
+                Arrays.sort(i1);
+                Arrays.sort(i2);
+                System.out.println( i + ", " + j + ": " + Arrays.equals(i1, i2));;
+            }
+        }
     }
-    
 }
