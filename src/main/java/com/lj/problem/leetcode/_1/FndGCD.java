@@ -1,6 +1,7 @@
 package com.lj.problem.leetcode._1;
 
 /**
+ * 1979. 找出数组的最大公约数
  * 示例 1：
  *
  * 输入：nums = [2,5,6,9,10]
