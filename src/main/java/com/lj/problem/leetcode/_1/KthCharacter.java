@@ -32,11 +32,27 @@ package com.lj.problem.leetcode._1;
  */
 public class KthCharacter {
 
+    /**
+     * 方法二，直接统计 k-1 的二进制中含有 1 的个数
+     * @param k
+     * @return
+     */
+    public char kthCharacter2(int k) {
+        int count = 0;
+        k--;
+        while (k > 0) {
+            count += k & 1;
+            k >>>= 1;
+        }
+        char result = (char) ('a' + count);
+        return result > 'z' ? 'a' : result;
+    }
+
     public char kthCharacter(int k) {
         char[] str = new char[tableSizeFor(k)];
         str[0] = 'a';
 
-        for (int i = 1; i < k; i = i<<1) {
+        for (int i = 1; i < k; i<<=1) {
             for (int j = 0; j < i; j++) {
                 char next = (char) (str[j] + 1);
                 str[j + i] = next > 'z' ? 'a' : next;
@@ -57,6 +73,6 @@ public class KthCharacter {
     }
 
     public static void main(String[] args) {
-        System.out.println('a' + 1);
+        System.out.println(new KthCharacter().kthCharacter2(5));;
     }
 }
