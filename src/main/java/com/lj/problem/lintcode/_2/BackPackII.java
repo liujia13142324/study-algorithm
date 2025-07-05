@@ -37,9 +37,18 @@ package com.lj.problem.lintcode._2;
  * 装入 A[0] 和 A[2] 可以得到最大价值, V[0] + V[2] = 10
  */
 public class BackPackII {
+
+    // TODO 待研究 滚动数组减少空间成本
+
+    public int backPackII2(int m, int[] w, int[] v) {
+        int thingCount = w.length;
+
+    }
+
+
     public int backPackII(int m, int[] w, int[] v) {
         int thingCount = w.length;
-        int value[][] = new int[thingCount + 1][ m + 1];
+        int[][] value = new int[thingCount + 1][ m + 1];
 
         for (int j = 1; j <= m; j++) {
             for (int i = 1; i <= thingCount; i++) {
