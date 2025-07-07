@@ -1,5 +1,7 @@
 package com.lj.problem.lintcode._2;
 
+import org.junit.Test;
+
 /**
  * 有 n 个物品和一个大小为 m 的背包. 给定数组 A 表示每个物品的大小和数组 V 表示每个物品的价值.
  *
@@ -38,11 +40,23 @@ package com.lj.problem.lintcode._2;
  */
 public class BackPackII {
 
-    // TODO 待研究 滚动数组减少空间成本
+    @Test
+    public void test1() {
+        System.out.println(backPackII2(10, new int[]{2, 3, 5, 7}, new int[]{1, 5, 2, 4}));
+        System.out.println(backPackII2(10, new int[]{2, 3, 8}, new int[]{2, 5, 8}));
+    }
 
     public int backPackII2(int m, int[] w, int[] v) {
         int thingCount = w.length;
-
+        int[] value = new int[m+1];
+        for (int i = 0; i < thingCount; i++) {
+            for (int j = m; j >= w[i]; j--) {
+                if (w[i] <= j && value[j] < v[i] + value[j-w[i]]) {
+                    value[j] = v[i] + value[j-w[i]];
+                }
+            }
+        }
+        return value[m];
     }
 
 
