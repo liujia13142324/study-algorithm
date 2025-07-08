@@ -32,10 +32,41 @@ public class MaxEvents {
 //        System.out.println(maxEvents(new int[][]{{1,2}, {2,3}, {3,4}}));;
 //        System.out.println(maxEvents2(new int[][]{{1,4}, {4,4}, {2,2}, {3,4}, {1,1}}));;
 //        System.out.println(maxEvents(new int[][]{{1,5}, {1,5}, {1,5}, {2,3}, {2,3}}));;
-        System.out.println(maxEvents2(new int[][]{{1,2}, {1,2}, {3,3}, {1,5}, {1,5}}));;
+        System.out.println(maxEvents3(new int[][]{{1,2}, {1,2}, {3,3}, {1,5}, {1,5}}));;
 //        System.out.println(maxEvents(new int[][]{{52,79}, {7,34}}));;
     }
 
+
+    public int maxEvents3(int[][] events) {
+        Arrays.sort(events, Comparator.comparing(e -> e[0]));
+        int day = events[0][0];
+        int count = 0;
+        PriorityQueue<Integer> priorityQueue = new PriorityQueue<>();
+        int j = 0;
+
+        while (j < events.length || !priorityQueue.isEmpty()) {
+            if (priorityQueue.isEmpty()) {
+                day = events[j][0];
+            }
+            while (j < events.length && day >= events[j][0]) {
+                priorityQueue.offer(events[j][1]);
+                j++;
+            }
+
+            while (!priorityQueue.isEmpty() && priorityQueue.peek() < day) {
+                priorityQueue.poll();
+            }
+
+            if (!priorityQueue.isEmpty()) {
+                priorityQueue.poll();
+                count++;
+                day++;
+            }
+
+        }
+
+        return count;
+    }
 
 
     public int maxEvents2(int[][] events) {
