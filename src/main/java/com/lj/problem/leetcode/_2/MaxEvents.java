@@ -1,5 +1,6 @@
 package com.lj.problem.leetcode._2;
 
+import com.lj.study.common.bean.A;
 import org.junit.Test;
 
 import java.util.*;
@@ -29,11 +30,109 @@ public class MaxEvents {
 
     @Test
     public void test() {
-//        System.out.println(maxEvents(new int[][]{{1,2}, {2,3}, {3,4}}));;
-//        System.out.println(maxEvents2(new int[][]{{1,4}, {4,4}, {2,2}, {3,4}, {1,1}}));;
+//        System.out.println(maxEvents5(new int[][]{{1,2}, {2,3}, {3,4}}));
+        System.out.println(maxEvents5(new int[][]{{1,2}, {2,3}, {3,4}, {1,2}}));
+//        System.out.println(maxEvents5(new int[][]{{1,4}, {4,4}, {2,2}, {3,4}, {1,1}}));;
 //        System.out.println(maxEvents(new int[][]{{1,5}, {1,5}, {1,5}, {2,3}, {2,3}}));;
-        System.out.println(maxEvents3(new int[][]{{1,2}, {1,2}, {3,3}, {1,5}, {1,5}}));;
+//        System.out.println(maxEvents4(new int[][]{{1,2}, {1,2}, {3,3}, {1,5}, {1,5}}));;
 //        System.out.println(maxEvents(new int[][]{{52,79}, {7,34}}));;
+    }
+
+    public int maxEvents5(int[][] events) {
+
+        int max = 0;
+        for (int[] e : events) {
+            max = Math.max(max, e[1]);
+        }
+
+        List<Integer>[] groups = new ArrayList[max+1];
+        Arrays.setAll(groups, e -> new ArrayList<>());
+        for (int[] e : events) {
+            groups[e[0]].add(e[1]);
+        }
+
+        List<Integer> startDays = new ArrayList<>();
+        for(int i = 1; i < groups.length; i++) {
+            if (!groups[i].isEmpty()) {
+                startDays.add(i);
+            }
+        }
+
+        int count = 0;
+        int i = 0;
+        int startDaysLen = startDays.size();
+        int day = startDays.get(i);
+        PriorityQueue<Integer> priorityQueue = new PriorityQueue<>();
+
+        // i > startDays 说明全部的会议都过了一遍，要么已经都处理完了，要么还在小顶堆里面等着出队
+        while (day <= max && (i < startDaysLen || !priorityQueue.isEmpty())) {
+
+            // 维护当前全部起始日期的指针
+            if (i < startDaysLen && day >= startDays.get(i)) {
+                i++;
+            }
+
+            for (int endDay: groups[day]) {
+                priorityQueue.offer(endDay);
+            }
+
+            while (!priorityQueue.isEmpty() && priorityQueue.peek() < day) {
+                priorityQueue.poll();
+            }
+
+            if (!priorityQueue.isEmpty()) {
+                priorityQueue.poll();
+                count++;
+            }
+
+            // 跳下个有意义的开始日期，避免无意义循环
+            if (priorityQueue.isEmpty() && i < startDaysLen) {
+                day = startDays.get(i);
+            }else {
+                day ++;
+            }
+        }
+
+        return count;
+    }
+
+    public int maxEvents4(int[][] events) {
+
+        int max = 0;
+        int min = Integer.MAX_VALUE;
+        for (int[] e : events) {
+            max = Math.max(max, e[1]);
+            min = Math.min(min, e[0]);
+        }
+
+        // 比直接用hash要快
+        List<Integer>[] groups = new ArrayList[max+1];
+        Arrays.setAll(groups, e -> new ArrayList<>());
+        for (int[] e : events) {
+            groups[e[0]].add(e[1]);
+        }
+
+        int count = 0;
+        PriorityQueue<Integer> priorityQueue = new PriorityQueue<>();
+
+        for (int day = min; day <= max; day++) {
+
+            for (int endDay: groups[day]) {
+                priorityQueue.offer(endDay);
+            }
+
+            while (!priorityQueue.isEmpty() && priorityQueue.peek() < day) {
+                priorityQueue.poll();
+            }
+
+            if (!priorityQueue.isEmpty()) {
+                priorityQueue.poll();
+                count++;
+            }
+
+        }
+
+        return count;
     }
 
 
