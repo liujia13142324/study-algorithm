@@ -48,19 +48,20 @@ public class MaximumLength {
     public int maximumLength(int[] nums) {
         int c1 = 0, c2 = 0, c3 = 0;
         int pre = 0;
-
-        for (int i = 0; i < nums.length; i++) {
+        int tmp;
+        for (int num : nums) {
+            tmp = num & 1;
             // 奇数
-            if ((nums[i] & 1) == 1) {
+            if (tmp == 1) {
                 c1++;
-            }else {
+            } else {
                 // 偶数
                 c2++;
             }
 
-            if ( c3 == 0 || ((nums[i] & 1) ^ (pre & 1)) == 1 ) {
+            if (c3 == 0 || (tmp ^ (pre & 1)) == 1) {
                 c3++;
-                pre = nums[i];
+                pre = num;
             }
 
         }
