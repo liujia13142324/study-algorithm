@@ -1,12 +1,15 @@
 package com.lj.problem.leetcode._2;
 
+import org.junit.Test;
 import sun.security.util.Length;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
- *
+ * 3. 无重复字符的最长子串
  * 给定一个字符串 s ，请你找出其中不含有重复字符的 最长
  * 子串的长度
  *
@@ -28,7 +31,51 @@ import java.util.Arrays;
  *      请注意，你的答案必须是 子串 的长度，"pwke" 是一个子序列，不是子串。
  */
 public class LengthOfLongestSubstring {
-    
+
+
+
+    public static void main(String[] args) {
+        System.out.println(new LengthOfLongestSubstring().lengthOfLongestSubstring("abcabcbb"));
+        System.out.println(new LengthOfLongestSubstring().lengthOfLongestSubstring("bbbbbbb"));
+        System.out.println(new LengthOfLongestSubstring().lengthOfLongestSubstring("dvdf"));
+        System.out.println(new LengthOfLongestSubstring().lengthOfLongestSubstring(" "));
+        System.out.println(new LengthOfLongestSubstring().lengthOfLongestSubstring("abba"));
+    }
+
+    @Test
+    public void test() {
+        System.out.println(lengthOfLongestSubstring1("abcabcbb"));
+        System.out.println(lengthOfLongestSubstring("abcabcbb"));
+
+        System.out.println(lengthOfLongestSubstring1("bbbbbbb"));
+        System.out.println(lengthOfLongestSubstring("bbbbbbb"));
+
+        System.out.println(lengthOfLongestSubstring1("abba"));
+        System.out.println(lengthOfLongestSubstring("abba"));
+
+        System.out.println(lengthOfLongestSubstring1("  "));
+        System.out.println(lengthOfLongestSubstring("  "));
+    }
+
+    public int lengthOfLongestSubstring1(String s) {
+        int l = 0, r = 0, ans = 0;
+        Map<Character, Integer> map = new HashMap<>();
+        char[] charArray = s.toCharArray();
+
+        for (int len = charArray.length; r < len; r++) {
+            if (map.get(charArray[r]) == null || map.get(charArray[r]) < l) {
+                map.put(charArray[r], r);
+                ans = Math.max(ans, r - l + 1);
+            }else {
+                l = map.get(charArray[r]) + 1;
+                map.put(charArray[r], r);
+            }
+        }
+        return ans;
+    }
+
+
+
     /*public int lengthOfLongestSubstring(String s) {
         int[] helper = new int[128];
         char[] chars = s.toCharArray();
@@ -84,11 +131,5 @@ public class LengthOfLongestSubstring {
     
     
     
-    public static void main(String[] args) {
-        System.out.println(new LengthOfLongestSubstring().lengthOfLongestSubstring("abcabcbb"));
-        System.out.println(new LengthOfLongestSubstring().lengthOfLongestSubstring("bbbbbbb"));
-        System.out.println(new LengthOfLongestSubstring().lengthOfLongestSubstring("dvdf"));
-        System.out.println(new LengthOfLongestSubstring().lengthOfLongestSubstring(" "));
-        System.out.println(new LengthOfLongestSubstring().lengthOfLongestSubstring("abba"));
-    }
+
 }
