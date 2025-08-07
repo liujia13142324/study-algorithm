@@ -37,6 +37,24 @@ public class MaximumLengthSubstring {
         System.out.println(maximumLengthSubstring("acaccacbba"));
     }
 
+    public int maximumLengthSubstring2(String S) {
+        char[] s = S.toCharArray();
+        int ans = 0;
+        int l = 0;
+        int[] cnt = new int[26];
+        for (int i = 0; i < s.length; i++) {
+            int b = s[i] - 'a';
+            cnt[b]++;
+            while (cnt[b] > 2) {
+                cnt[s[l] - 'a']--;
+                l++;
+            }
+            ans = Math.max(ans, i - l + 1);
+        }
+        return ans;
+    }
+
+
     public int maximumLengthSubstring(String s) {
         char[] charArray = s.toCharArray();
         Map<Character, int[]> map = new HashMap<>();

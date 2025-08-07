@@ -57,18 +57,39 @@ public class LengthOfLongestSubstring {
         System.out.println(lengthOfLongestSubstring("  "));
     }
 
+    public int lengthOfLongestSubstring2(String str) {
+        char[] s = str.toCharArray();
+        int ans = 0;
+        int l = 0;
+        int[] cnt = new int[128];
+        for (int r = 0; r < s.length; r++) {
+            int b = s[r] ;
+            cnt[b]++;
+            while (cnt[b] > 1) {
+                cnt[s[l]]--;
+                l++;
+            }
+            ans = Math.max(ans, r - l + 1);
+        }
+        return ans;
+    }
+
     public int lengthOfLongestSubstring1(String s) {
         int l = 0, r = 0, ans = 0;
-        Map<Character, Integer> map = new HashMap<>();
+        int[] map = new int[128];
+        Arrays.fill(map, -1);
         char[] charArray = s.toCharArray();
-
+        int idx;
+        char c;
         for (int len = charArray.length; r < len; r++) {
-            if (map.get(charArray[r]) == null || map.get(charArray[r]) < l) {
-                map.put(charArray[r], r);
+            c = charArray[r];
+            idx = map[c];
+            if (idx == -1 || idx < l) {
+                map[c] = r;
                 ans = Math.max(ans, r - l + 1);
             }else {
-                l = map.get(charArray[r]) + 1;
-                map.put(charArray[r], r);
+                l = map[c] + 1;
+                map[c] = r;
             }
         }
         return ans;
