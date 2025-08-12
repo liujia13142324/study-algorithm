@@ -42,9 +42,71 @@ public class FindTargetSumWays {
 
     @Test
     public void test() {
-        System.out.println(findTargetSumWays2(new int[]{1,1,1,1,1}, 3));
-        System.out.println(findTargetSumWays2(new int[]{1}, 1));
+        System.out.println(findTargetSumWays4(new int[]{1,1,1,1,1}, 3));
+        System.out.println(findTargetSumWays4(new int[]{1}, 1));
+        System.out.println(findTargetSumWays4(new int[]{0}, 0));
+
+        System.out.println(findTargetSumWays3(new int[]{1,1,1,1,1}, 3));
+        System.out.println(findTargetSumWays3(new int[]{1}, 1));
     }
+
+
+    public int findTargetSumWays4(int[] nums, int target) {
+        target += Arrays.stream(nums).sum();
+        if (target < 0 || target % 2 != 0) {
+            return 0;
+        }
+        target /= 2;
+
+        int[][] f = new int[nums.length + 1][target + 1];
+        for (int i = 0; i < f.length; i++) {
+            f[i][0] = 1;
+        }
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = 0; j <= target; j++) {
+                if (j < nums[i]) {
+                    f[i+1][j] = f[i][j];
+                }else {
+                    f[i+1][j] = f[i][j] + f[i][j - nums[i]];
+                }
+            }
+        }
+
+        return f[nums.length][target];
+    }
+
+    public int findTargetSumWays3(int[] nums, int target) {
+        target += Arrays.stream(nums).sum();
+        if (target < 0 || target % 2 != 0) {
+            return 0;
+        }
+        target /= 2;
+        Integer[][] cache = new Integer[nums.length][target + 1];
+        return dfs1(nums, target, nums.length-1, cache);
+    }
+
+    public int dfs1(int[] nums, int target, int i, Integer[][] cache) {
+        if (i < 0) {
+            return target == 0 ? 1 : 0;
+        }
+
+        if (cache[i][target] != null) {
+            return cache[i][target];
+        }
+
+        int result ;
+
+        if (target < nums[i]) {
+            result = dfs1(nums, target, i-1, cache);
+        }else {
+            result = dfs1(nums, target - nums[i], i-1, cache) + dfs1(nums, target, i-1, cache);
+        }
+
+        cache[i][target] = result;
+
+        return result;
+    }
+
 
     public int findTargetSumWays2(int[] nums, int target) {
         target += Arrays.stream(nums).sum();
@@ -52,32 +114,19 @@ public class FindTargetSumWays {
             return 0;
         }
         target /= 2;
-        Map<String, Integer> cache = new HashMap<>();
-        return dfs(nums, target, nums.length-1, cache);
+        return dfs(nums, target, nums.length-1);
     }
 
-    public int dfs(int[] nums, int target, int i, Map<String, Integer> cache) {
+    public int dfs(int[] nums, int target, int i) {
         if (i < 0) {
             return target == 0 ? 1 : 0;
         }
 
-        String cacheKey = target + "_" + i;
-
-        if (cache.containsKey(cacheKey)) {
-            return cache.get(cacheKey);
-        }
-
-        int result ;
-
         if (target < nums[i]) {
-            result = dfs(nums, target, i-1, cache);
-        }else {
-            result = dfs(nums, target - nums[i], i-1, cache) + dfs(nums, target, i-1, cache);
+            return dfs(nums, target, i-1);
         }
 
-        cache.put(cacheKey, result);
-
-        return result;
+        return dfs(nums, target - nums[i], i-1) + dfs(nums, target, i-1);
     }
 
 
