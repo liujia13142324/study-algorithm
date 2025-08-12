@@ -3,6 +3,8 @@ package com.lj.problem.leetcode._2;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 494. 目标和
@@ -50,19 +52,32 @@ public class FindTargetSumWays {
             return 0;
         }
         target /= 2;
-        return dfs(nums, target, nums.length-1);
+        Map<String, Integer> cache = new HashMap<>();
+        return dfs(nums, target, nums.length-1, cache);
     }
 
-    public int dfs(int[] nums, int target, int i) {
+    public int dfs(int[] nums, int target, int i, Map<String, Integer> cache) {
         if (i < 0) {
             return target == 0 ? 1 : 0;
         }
 
-        if (target < nums[i]) {
-            return dfs(nums, target, i-1);
+        String cacheKey = target + "_" + i;
+
+        if (cache.containsKey(cacheKey)) {
+            return cache.get(cacheKey);
         }
 
-        return dfs(nums, target - nums[i], i-1) + dfs(nums, target, i-1);
+        int result ;
+
+        if (target < nums[i]) {
+            result = dfs(nums, target, i-1, cache);
+        }else {
+            result = dfs(nums, target - nums[i], i-1, cache) + dfs(nums, target, i-1, cache);
+        }
+
+        cache.put(cacheKey, result);
+
+        return result;
     }
 
 
