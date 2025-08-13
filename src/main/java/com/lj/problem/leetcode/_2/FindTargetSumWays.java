@@ -42,6 +42,10 @@ public class FindTargetSumWays {
 
     @Test
     public void test() {
+        System.out.println(findTargetSumWays5(new int[]{1,1,1,1,1}, 3));
+        System.out.println(findTargetSumWays5(new int[]{1}, 1));
+        System.out.println(findTargetSumWays5(new int[]{0}, 0));
+
         System.out.println(findTargetSumWays4(new int[]{1,1,1,1,1}, 3));
         System.out.println(findTargetSumWays4(new int[]{1}, 1));
         System.out.println(findTargetSumWays4(new int[]{0}, 0));
@@ -50,6 +54,26 @@ public class FindTargetSumWays {
         System.out.println(findTargetSumWays3(new int[]{1}, 1));
     }
 
+
+    public int findTargetSumWays5(int[] nums, int target) {
+        target += Arrays.stream(nums).sum();
+        if (target < 0 || target % 2 != 0) {
+            return 0;
+        }
+        target /= 2;
+
+        int[] f = new int[target + 1];
+        f[0] = 1;
+        for (int num : nums) {
+            // 左边会影响右边，如果从左边开始跑，那么新右会被新左影响，所以要从右边往左跑，这样都只会用老一轮的数据，不会被影响
+            for (int j = target; j >= 0; j--) {
+                if (j >= num) {
+                    f[j] = f[j] + f[j - num];
+                }
+            }
+        }
+        return f[target];
+    }
 
     public int findTargetSumWays4(int[] nums, int target) {
         target += Arrays.stream(nums).sum();
