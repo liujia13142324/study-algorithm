@@ -39,8 +39,62 @@ public class CoinChange {
         System.out.println(coinChange(new int[]{2}, 3));
         System.out.println(coinChange(new int[]{1}, 0));
         System.out.println(coinChange(new int[]{186,419,83,408}, 6249));
-        System.out.println(coinChange2(new int[]{186,419,83,408}, 6249));
+
+        System.out.println(coinChange3(new int[]{1,2,5}, 11));
+        System.out.println(coinChange3(new int[]{2}, 3));
+        System.out.println(coinChange3(new int[]{1}, 0));
+        System.out.println(coinChange3(new int[]{186,419,83,408}, 6249));
     }
+
+    public int coinChange3(int[] coins, int amount) {
+
+        if (amount == 0) return 0;
+
+        Integer[][] f = new Integer[coins.length][amount+1];
+
+        return dfs3(coins, coins.length-1, amount, f);
+    }
+
+    private int dfs3(int[] coins, int i, int amount, Integer[][] f) {
+        if (amount == 0) {
+            return 0;
+        }
+
+        if (i < 0) {
+            return -1;
+        }
+
+        if (f[i][amount] != null) {
+            return f[i][amount];
+        }
+
+        if (coins[i] > amount) {
+            f[i][amount] = dfs3(coins, i - 1, amount, f);
+            return f[i][amount];
+        }
+
+        int v1 = dfs3(coins, i, amount - coins[i], f);
+        int v2 = dfs3(coins, i-1, amount, f);
+
+        if (v1 < 0 && v2 < 0) {
+            f[i][amount] = -1;
+            return -1;
+        }
+
+        if (v1 < 0) {
+            f[i][amount] = v2;
+            return v2;
+        }
+
+        if (v2 < 0) {
+            f[i][amount] = v1 + 1;
+            return f[i][amount];
+        }
+
+        f[i][amount] = Math.min(v1+1, v2);
+        return f[i][amount];
+    }
+
 
     public int coinChange2(int[] coins, int amount) {
 
