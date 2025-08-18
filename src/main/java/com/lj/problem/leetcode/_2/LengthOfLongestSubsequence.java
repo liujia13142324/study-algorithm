@@ -4,7 +4,6 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.IntFunction;
 
 /**
  * 2915. 和为目标值的最长子序列的长度
@@ -48,9 +47,14 @@ public class LengthOfLongestSubsequence {
     }
 
     public int lengthOfLongestSubsequence4(List<Integer> nums, int target) {
-        int[] array = nums.stream().mapToInt(Integer::intValue).toArray();
+        int[] array = new int[nums.size()];
+        int i = 0;
+        for (; i < array.length; i++) {
+            array[i] = nums.get(i);
+        }
+
         int[] f = new int[target + 1];
-        for (int i = 1; i < f.length; i++) {
+        for (i = 1; i < f.length; i++) {
             f[i] = Integer.MIN_VALUE;
         }
         for (int k : array) {
