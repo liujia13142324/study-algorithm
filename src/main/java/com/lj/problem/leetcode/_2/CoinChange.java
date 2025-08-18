@@ -40,13 +40,31 @@ public class CoinChange {
         System.out.println(coinChange(new int[]{1}, 0));
         System.out.println(coinChange(new int[]{186,419,83,408}, 6249));
 
-        System.out.println(coinChange5(new int[]{1,2,5}, 11));
-        System.out.println(coinChange5(new int[]{2}, 3));
-        System.out.println(coinChange5(new int[]{1}, 0));
-        System.out.println(coinChange5(new int[]{186,419,83,408}, 6249));
+        System.out.println(coinChange6(new int[]{1,2,5}, 11));
+        System.out.println(coinChange6(new int[]{2}, 3));
+        System.out.println(coinChange6(new int[]{1}, 0));
+        System.out.println(coinChange6(new int[]{186,419,83,408}, 6249));
     }
 
     int NULL = 100000;
+
+    public int coinChange6(int[] coins, int amount) {
+        if (amount == 0) return 0;
+        int[] f = new int[amount+1];
+        for (int i = 1; i < f.length; i++) {
+            f[i] = NULL;
+        }
+        // 增强 for 循环，更省空间
+        for (int coin : coins) {
+            // 这个要从前往后计算，不能从后往前
+            for (int j = 1; j <= amount; j++) {
+                if (coin <= j) {
+                    f[j] = Math.min(f[j], 1 + f[j - coin]);
+                }
+            }
+        }
+        return f[amount] >= NULL ? -1 : f[amount];
+    }
 
     public int coinChange5(int[] coins, int amount) {
         if (amount == 0) return 0;
