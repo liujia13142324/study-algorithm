@@ -40,31 +40,31 @@ public class CoinChange {
         System.out.println(coinChange(new int[]{1}, 0));
         System.out.println(coinChange(new int[]{186,419,83,408}, 6249));
 
-//        System.out.println(coinChange5(new int[]{1,2,5}, 11));
-//        System.out.println(coinChange5(new int[]{2}, 3));
-//        System.out.println(coinChange5(new int[]{1}, 0));
-//        System.out.println(coinChange5(new int[]{186,419,83,408}, 6249));
+        System.out.println(coinChange5(new int[]{1,2,5}, 11));
+        System.out.println(coinChange5(new int[]{2}, 3));
+        System.out.println(coinChange5(new int[]{1}, 0));
+        System.out.println(coinChange5(new int[]{186,419,83,408}, 6249));
     }
 
     int NULL = 100000;
 
-//    public int coinChange5(int[] coins, int amount) {
-//        if (amount == 0) return 0;
-//        int[][] f = new int[coins.length+1][amount+1];
-//        for (int i = 1; i < f[0].length; i++) {
-//            f[0][i] = NULL;
-//        }
-//        for (int i = 1; i < coins.length; i++) {
-//            for (int j = 1; j <= amount; j++) {
-//                if (coins[i] > j) {
-//                    f[i+1][j] = f[i][j];
-//                }else {
-//                    f[i+1][j] = Math.min(f[i][j], 1 + f[i+1][j-coins[i]]);
-//                }
-//            }
-//        }
-//        return f[coins.length][amount] >= NULL ? -1 : f[coins.length][amount];
-//    }
+    public int coinChange5(int[] coins, int amount) {
+        if (amount == 0) return 0;
+        int[][] f = new int[coins.length+1][amount+1];
+        for (int i = 1; i < f[0].length; i++) {
+            f[0][i] = NULL;
+        }
+        for (int i = 0; i < coins.length; i++) {
+            for (int j = 1; j <= amount; j++) {
+                if (coins[i] > j) {
+                    f[i+1][j] = f[i][j];
+                }else {
+                    f[i+1][j] = Math.min(f[i][j], 1 + f[i+1][j-coins[i]]);
+                }
+            }
+        }
+        return f[coins.length][amount] >= NULL ? -1 : f[coins.length][amount];
+    }
 
     public int coinChange4(int[] coins, int amount) {
         if (amount == 0) return 0;
