@@ -26,10 +26,34 @@ public class CanPartition {
     public void test() {
         System.out.println(canPartition(new int[]{1,2,3,5}));
         System.out.println(canPartition(new int[]{1,5,11,5}));
+        System.out.println(canPartition(new int[]{1, 1}));
 
-        System.out.println(canPartition3(new int[]{1,2,3,5}));
-        System.out.println(canPartition3(new int[]{1,5,11,5}));
-        System.out.println(canPartition3(new int[]{1, 1}));
+        System.out.println(canPartition4(new int[]{1,2,3,5}));
+        System.out.println(canPartition4(new int[]{1,5,11,5}));
+        System.out.println(canPartition4(new int[]{1, 1}));
+    }
+
+    public boolean canPartition4(int[] nums) {
+        int sum = 0;
+        for (int num : nums) {
+            sum += num;
+        }
+        if (sum % 2 != 0) return false;
+        int t = sum / 2, i, j;
+        boolean[] f = new boolean[t + 1];
+        f[0] = true;
+        outer:
+        for (i = 0; i < nums.length; i++) {
+            for (j = t; j > 0; j--) {
+                if (nums[i] <= j && !f[j]) {
+                    f[j] = f[j - nums[i]];
+                }
+                if (f[t] || i == nums.length - 1) {
+                    break outer;
+                }
+            }
+        }
+        return f[t];
     }
 
     public boolean canPartition3(int[] nums) {
