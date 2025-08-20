@@ -39,15 +39,15 @@ public class NumberOfWays {
         System.out.println(numberOfWays(64, 3));
         System.out.println(numberOfWays(125, 3));
 
-        System.out.println(numberOfWays2(10, 2));
-        System.out.println(numberOfWays2(4, 1));
-        System.out.println(numberOfWays2(64, 3));
-        System.out.println(numberOfWays2(125, 3));
+        System.out.println(numberOfWays3(10, 2));
+        System.out.println(numberOfWays3(4, 1));
+        System.out.println(numberOfWays3(64, 3));
+        System.out.println(numberOfWays3(125, 3));
     }
 
     public int numberOfWays2(int n, int x) {
         Integer[] maxI = new Integer[n+1];
-        Long[][] f = new Long[n+1][maxI(n, x, maxI) + 1];
+        Long[][] f = new Long[n+1][(int) Math.ceil(Math.pow(n, 1.0/x)) + 1];
         return (int) (dfs2(n, x, 1, f, maxI) % 1000000007);
     }
 
@@ -55,7 +55,7 @@ public class NumberOfWays {
         if (n == 0) {
             return 1L;
         }
-        if (i >= maxI(n, x, maxI)) {
+        if (i > maxI(n, x, maxI)) {
             return 0L;
         }
 
@@ -66,6 +66,29 @@ public class NumberOfWays {
         f[n][i] = dfs2(n, x, i+1, f, maxI) + dfs2(n - (int) Math.pow(i, x), x, i+1, f, maxI);
         return f[n][i];
     }
+
+    // 这个写法不如2，所以放在后面
+    public int numberOfWays3(int n, int x) {
+        Long[][] f = new Long[n+1][maxI(n, x) + 1];
+        return (int) (dfs3(n, x, 1, f) % 1000000007);
+    }
+
+    private long dfs3(int n, int x, int i, Long[][] f) {
+        if (n == 0) {
+            return 1L;
+        }
+        if (i > f[0].length - 1 || n < 0) {
+            return 0L;
+        }
+
+        if (f[n][i] != null) {
+            return f[n][i];
+        }
+
+        f[n][i] = dfs3(n, x, i+1, f) + dfs3(n - (int) Math.pow(i, x), x, i+1, f);
+        return f[n][i];
+    }
+
 
     public int numberOfWays(int n, int x) {
         return dfs(n, x, 1, maxI(n, x));
@@ -87,7 +110,7 @@ public class NumberOfWays {
     private int maxI(int n, int x) {
         double tmp = Math.pow(n, 1.0/x);
         if (Math.ceil(tmp) - tmp < 1e-9) {
-            return (int) (Math.ceil(tmp) + 1);
+            return (int) (Math.ceil(tmp));
         }else {
             return (int) tmp;
         }
@@ -99,7 +122,7 @@ public class NumberOfWays {
         }
         double tmp = Math.pow(n, 1.0/x);
         if (Math.ceil(tmp) - tmp < 1e-9) {
-            cache[n] = (int) (Math.ceil(tmp) + 1);
+            cache[n] = (int) (Math.ceil(tmp));
         }else {
             cache[n] = (int) tmp;
         }
