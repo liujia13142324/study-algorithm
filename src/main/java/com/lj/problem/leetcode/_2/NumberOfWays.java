@@ -2,6 +2,8 @@ package com.lj.problem.leetcode._2;
 
 import org.junit.Test;
 
+import java.math.BigDecimal;
+
 /**
  * 2787. 将一个数字表示成幂的和的方案数
  * 给你两个 正 整数 n 和 x 。
@@ -32,31 +34,64 @@ public class NumberOfWays {
 
     @Test
     public void test() {
-        System.out.println(numberOfWays(10, 2));
-        System.out.println(numberOfWays(4, 1));
+//        System.out.println(numberOfWays(10, 2));
+//        System.out.println(numberOfWays(4, 1));
+//        System.out.println(numberOfWays(64, 3));
+        System.out.println(numberOfWays(125, 3));
+
+        System.out.println(numberOfWays2(10, 2));
+        System.out.println(numberOfWays2(4, 1));
+        System.out.println(numberOfWays2(64, 3));
+        System.out.println(numberOfWays2(64, 3));
+    }
+
+    public int numberOfWays2(int n, int x) {
+        Long[][] f = new Long[n+1][maxI(n, x)];
+        return (int) (dfs2(n, x, 1, f) % 1000000007);
+    }
+
+    private long dfs2(int n, int x, int i, Long[][] f) {
+        if (n == 0) {
+            return 1L;
+        }
+        if (i >= maxI(n, x)) {
+            return 0L;
+        }
+
+        if (f[n][i] != null) {
+            return f[n][i];
+        }
+
+        // 0^2 + 1^2 + 3^2, 1^2 + 3^2
+        // 0 + 4, 1 + 3
+        f[n][i] = dfs2(n, x, i+1, f) + dfs2(n - (int) Math.pow(i, x), x, i+1, f);
+        return f[n][i];
     }
 
     public int numberOfWays(int n, int x) {
-        double tmp = Math.pow(n, 1.0/x);
-        int maxI;
-        if (tmp == Math.floor(tmp)) {
-            maxI = (int) (tmp + 1);
-        }else {
-            maxI = (int) Math.ceil(tmp);
-        }
-        return dfs(n, x, 1, maxI);
+        return dfs(n, x, 1, maxI(n, x));
     }
 
     private int dfs(int n, int x, int i, int maxI) {
         if (n == 0) {
             return 1;
         }
-
         if (i >= maxI) {
             return 0;
         }
         // 0^2 + 1^2 + 3^2, 1^2 + 3^2
         // 0 + 4, 1 + 3
-        return dfs(n, x, i+1, maxI) + dfs(n - (int) Math.pow(i, x), x, i+1, maxI);
+        int nextN = n - (int) Math.pow(i, x);
+        return dfs(n, x, i+1, maxI) + dfs(nextN, x, i+1, maxI(nextN, x));
+    }
+
+    private int maxI(int n, int x) {
+        double tmp = Math.pow(n, 1.0/x);
+        double tmpCeil = Math.ceil(tmp);
+        if (tmpCeil - tmp < 1e-9) {
+            return (int) (tmpCeil + 1);
+        }else {
+            return (int) tmpCeil;
+        }
     }
 }
