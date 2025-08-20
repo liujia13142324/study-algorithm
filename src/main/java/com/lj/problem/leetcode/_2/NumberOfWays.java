@@ -39,10 +39,23 @@ public class NumberOfWays {
         System.out.println(numberOfWays(64, 3));
         System.out.println(numberOfWays(125, 3));
 
-        System.out.println(numberOfWays3(10, 2));
-        System.out.println(numberOfWays3(4, 1));
-        System.out.println(numberOfWays3(64, 3));
-        System.out.println(numberOfWays3(125, 3));
+        System.out.println(numberOfWays4(10, 2));
+        System.out.println(numberOfWays4(4, 1));
+        System.out.println(numberOfWays4(64, 3));
+        System.out.println(numberOfWays4(125, 3));
+    }
+
+    public int numberOfWays4(int n, int x) {
+        long[] f = new long[n + 1];
+        f[0] = 1;
+        int tmp1;
+        for (int i = 1, len = maxI(n, x); i <= len; i++) {
+            tmp1 = (int) Math.pow(i, x);
+            for (int j = n; j >= tmp1; j--) {
+                f[j] = f[j] + f[j - tmp1];
+            }
+        }
+        return (int) (f[n] % 1000000007);
     }
 
     public int numberOfWays2(int n, int x) {
