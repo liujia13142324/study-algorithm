@@ -54,12 +54,11 @@ public class NumberOfWays {
         f[0] = 1;
         int value = 1;
         int sum = 0;
-        for (int i = 1; value <= n; i++) {
+        for (int i = 1; value <= n; i++, value = (int) Math.pow(i, x)) {
             sum += value;
             for (int s = Math.min(sum, n); s >= value; s--) {
                 f[s] += f[s - value];
             }
-            value = (int) Math.pow(i + 1, x);
         }
         return (int) (f[n] % 1_000_000_007);
     }
@@ -87,6 +86,12 @@ public class NumberOfWays {
         int tmp1, j, len = maxI(n, x);
         for (int i = 1; i <= len; i++) {
             tmp1 = (int) Math.pow(i, x);
+            // j 每次都从 n 开始, tmp1 = i^x, i从1开始，
+            // 第一轮最终影响的范围只有 j = 1^x = 1
+            // 第二轮最终收到影响的范围 j <= 2^x + 1
+            // 1: 0, 1^x
+            // 2: 0, 1, 2^x, 2^x+1 (2^x+1^x)
+            // 3: 0, 1, 2^x, 2^x+1, 3^x, 3^x+1, 3^x+2^x, 3^x+2^x+1 (3^x+2^x+1^x)
             for (j = n; j >= tmp1; j--) {
                 f[j] += f[j - tmp1];
             }
