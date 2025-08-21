@@ -43,9 +43,22 @@ public class Change {
         System.out.println(change(3, new int[]{2}));
         System.out.println(change(10, new int[]{10}));
         System.out.println();
-        System.out.println(change2(5, new int[]{1, 2, 5}));
-        System.out.println(change2(3, new int[]{2}));
-        System.out.println(change2(10, new int[]{10}));
+        System.out.println(change3(5, new int[]{1, 2, 5}));
+        System.out.println(change3(3, new int[]{2}));
+        System.out.println(change3(10, new int[]{10}));
+    }
+
+    public int change3(int amount, int[] coins) {
+        int[] f = new int[amount+1];
+        f[0] = 1;
+        for (int coin : coins) {
+            for (int j = 1; j <= amount; j++) {
+                if (j >= coin) {
+                    f[j] += f[j - coin];
+                }
+            }
+        }
+        return f[amount];
     }
 
     public int change2(int amount, int[] coins) {
