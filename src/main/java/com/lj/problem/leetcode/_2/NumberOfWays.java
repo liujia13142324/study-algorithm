@@ -45,14 +45,50 @@ public class NumberOfWays {
         System.out.println(numberOfWays4(125, 3));
     }
 
+    /**
+     * https://leetcode.cn/problems/ways-to-express-an-integer-as-sum-of-powers/solutions/2354970/0-1-bei-bao-mo-ban-ti-by-endlesscheng-ap09/
+     * TODO 别人的答案，有空可以研究：可以搞个sum += value; 不用每次都从n开始循环，节约一点时间
+     */
+    int numberOfWays6(int n, int x) {
+        long[] f = new long[n + 1];
+        f[0] = 1;
+        int value = 1;
+        int sum = 0;
+        for (int i = 1; value <= n; i++) {
+            sum += value;
+            for (int s = Math.min(sum, n); s >= value; s--) {
+                f[s] += f[s - value];
+            }
+            value = (int) Math.pow(i + 1, x);
+        }
+        return (int) (f[n] % 1_000_000_007);
+    }
+
+    /**
+     * 去除一遍循环，优化不大（根本没有优化）
+     */
+    public int numberOfWays5(int n, int x) {
+        long[] f = new long[n + 1];
+        f[0] = 1;
+        int tmp1, j, len = maxI(n, x);
+        for (int i = 1; i < len; i++) {
+            tmp1 = (int) Math.pow(i, x);
+            for (j = n; j >= tmp1; j--) {
+                f[j] += f[j - tmp1];
+            }
+        }
+        f[n] += f[n - (int) Math.pow(len, x)];
+        return (int) (f[n] % 1000000007);
+    }
+
     public int numberOfWays4(int n, int x) {
         long[] f = new long[n + 1];
         f[0] = 1;
-        int tmp1;
-        for (int i = 1, len = maxI(n, x); i <= len; i++) {
+        int tmp1, j, len = maxI(n, x);
+        for (int i = 1; i <= len; i++) {
             tmp1 = (int) Math.pow(i, x);
-            for (int j = n; j >= tmp1; j--) {
-                f[j] = f[j] + f[j - tmp1];
+            for (j = n; j >= tmp1; j--) {
+                f[j] += f[j - tmp1];
             }
         }
         return (int) (f[n] % 1000000007);
