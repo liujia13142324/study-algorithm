@@ -36,17 +36,19 @@ public class MyPow {
     @Test
     public void test() {
         System.out.println(myPow2(2, 7));
+        System.out.println(myPow2(2, 8));
+        System.out.println(myPow2(2, -3));
     }
     public double myPow2(double x, int n) {
-        return dfs(x, n);
+        return n >= 0 ? dfs(x, n) : 1/dfs(x, n);
     }
 
     private double dfs(double x, int n) {
         if (n == 0) {
             return 1;
         }
-
-        return x * dfs(x, n/2) * dfs(x, n/2);
+        double val = dfs(x, n/2);
+        return (n & 1) == 0 ? val * val :x * val * val;
     }
 
 
