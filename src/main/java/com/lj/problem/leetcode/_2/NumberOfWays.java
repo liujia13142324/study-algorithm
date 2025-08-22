@@ -47,7 +47,6 @@ public class NumberOfWays {
 
     /**
      * https://leetcode.cn/problems/ways-to-express-an-integer-as-sum-of-powers/solutions/2354970/0-1-bei-bao-mo-ban-ti-by-endlesscheng-ap09/
-     * TODO 别人的答案，有空可以研究：可以搞个sum += value; 不用每次都从n开始循环，节约一点时间
      */
     int numberOfWays6(int n, int x) {
         long[] f = new long[n + 1];
