@@ -1,30 +1,81 @@
 package com.lj.problem.leetcode._2;
 
+import org.junit.Test;
+
+import java.util.Arrays;
+
 /**
  * 279. 完全平方数
  * 给你一个整数 n ，返回 和为 n 的完全平方数的最少数量 。
  *
  * 完全平方数 是一个整数，其值等于另一个整数的平方；换句话说，其值等于一个整数自乘的积。例如，1、4、9 和 16 都是完全平方数，而 3 和 11 不是。
  *
- *
- *
  * 示例 1：
- *
  * 输入：n = 12
  * 输出：3
  * 解释：12 = 4 + 4 + 4
- * 示例 2：
  *
+ * 示例 2：
  * 输入：n = 13
  * 输出：2
  * 解释：13 = 4 + 9
  *
  * 提示：
- *
  * 1 <= n <= 104
  */
 public class NumSquares {
-    
+
+    @Test
+    public void test() {
+        System.out.println(numSquares2(12));
+        System.out.println(numSquares2(13));
+
+        System.out.println(numSquares3(12));
+        System.out.println(numSquares3(13));
+    }
+
+    int MAX = 100000;
+
+    public int numSquares3(int n) {
+        int maxI = (int) Math.pow(n, 0.5);
+        int[] f = new int[n + 1];
+        Arrays.fill(f, MAX);
+        f[0] = 0;
+        int square;
+        for (int i = 1; i <= maxI; i++) {
+            square = i * i;
+            for (int j = square; j <= n; j++) {
+                f[j] = Math.min(f[j], 1 + f[j - square]);
+            }
+        }
+        return f[n];
+    }
+
+    public int numSquares2(int n) {
+        int maxI = (int) Math.pow(n, 0.5);
+        return dfs(n, maxI);
+    }
+
+
+    private int dfs(int n, int i) {
+        if (n == 0) return 0;
+
+        if (i <= 0 || n < 0) return MAX;
+
+        int square = i * i;
+
+        if (n < square) {
+            return dfs(n , i-1);
+        }
+
+        return Math.min(dfs(n , i-1), 1 + dfs(n - square, i));
+    }
+
+
+
+
+
+
     public int numSquares(int n) {
         int[] f = new int[n+1];
         
