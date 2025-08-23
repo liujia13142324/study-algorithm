@@ -34,12 +34,37 @@ public class NumSquares {
         System.out.println(numSquares3(13));
     }
 
-    int MAX = 100000;
+
+    private static final int N = 10000;
+    private static final int[] f = new int[N + 1];
+    private static boolean initialized = false;
+
+    // 这样写比 static block 更快
+    private void init() {
+        if (initialized) {
+            return;
+        }
+        initialized = true;
+
+        Arrays.fill(f, Integer.MAX_VALUE);
+        f[0] = 0;
+        for (int i = 1; i * i <= N; i++) {
+            for (int j = i * i; j <= N; j++) {
+                f[j] = Math.min(f[j], f[j - i * i] + 1); // 不选 vs 选
+            }
+        }
+    }
+    // TODO 问下AI 为什么这样更快
+    public int numSquares4(int n) {
+        init();
+        return f[n];
+    }
+
 
     public int numSquares3(int n) {
         int maxI = (int) Math.pow(n, 0.5);
         int[] f = new int[n + 1];
-        Arrays.fill(f, MAX);
+        Arrays.fill(f, n);
         f[0] = 0;
         int square;
         for (int i = 1; i <= maxI; i++) {
@@ -60,7 +85,7 @@ public class NumSquares {
     private int dfs(int n, int i) {
         if (n == 0) return 0;
 
-        if (i <= 0 || n < 0) return MAX;
+        if (i <= 0 || n < 0) return n;
 
         int square = i * i;
 
