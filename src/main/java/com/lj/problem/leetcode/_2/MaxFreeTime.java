@@ -37,6 +37,8 @@ import org.junit.Test;
  * 1 <= k <= n
  * 0 <= startTime[i] < endTime[i] <= eventTime
  * endTime[i] <= startTime[i + 1] 其中 i 在范围 [0, n - 2] 之间。
+ *
+ *
  */
 public class MaxFreeTime {
 
