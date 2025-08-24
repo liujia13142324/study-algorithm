@@ -47,6 +47,38 @@ public class MaxFreeTime {
         System.out.println(maxFreeTime(10, 1, new int[]{0,2,9}, new int[]{1,4,10}));
     }
 
+
+
+    public int maxFreeTime2(int eventTime, int k, int[] startTime, int[] endTime) {
+
+        return 0;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public int maxFreeTime(int eventTime, int k, int[] startTime, int[] endTime) {
         int len = startTime.length;
         int[] gap = new int[len + 1];
