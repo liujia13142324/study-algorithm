@@ -30,8 +30,8 @@ public class NumSquares {
         System.out.println(numSquares2(12));
         System.out.println(numSquares2(13));
 
-        System.out.println(numSquares3(12));
-        System.out.println(numSquares3(13));
+        System.out.println(numSquares3_1(12));
+        System.out.println(numSquares3_1(13));
     }
 
 
@@ -54,10 +54,31 @@ public class NumSquares {
             }
         }
     }
-    // TODO 问下AI 为什么这样更快
+
+    // 全量预加载优化，只算一次题目给出的N的全部范围，后续的用力直接返回结果就好
     public int numSquares4(int n) {
         init();
         return f[n];
+    }
+
+
+    public int numSquares3_1(int n) {
+        numSquares3_2();
+        return f[n];
+    }
+
+    public void numSquares3_2() {
+        if (initialized) return;
+        initialized = true;
+        Arrays.fill(f, N);
+        f[0] = 0;
+        int square;
+        for (int i = 1; i*i <= N; i++) {
+            square = i * i;
+            for (int j = square; j <= N; j++) {
+                f[j] = Math.min(f[j], 1 + f[j - square]);
+            }
+        }
     }
 
 
