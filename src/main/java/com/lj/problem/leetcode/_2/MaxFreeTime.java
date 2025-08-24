@@ -2,6 +2,8 @@ package com.lj.problem.leetcode._2;
 
 import org.junit.Test;
 
+import java.util.Arrays;
+
 /**
  * 3439. 重新安排会议得到最多空余时间 I
  *
@@ -47,37 +49,52 @@ public class MaxFreeTime {
         System.out.println(maxFreeTime(5, 1, new int[]{1,3}, new int[]{2,5}));
         System.out.println(maxFreeTime(5, 2, new int[]{0,1,2,3,4}, new int[]{1,2,3,4,5}));
         System.out.println(maxFreeTime(10, 1, new int[]{0,2,9}, new int[]{1,4,10}));
+        System.out.println(maxFreeTime(21, 2, new int[]{18,20}, new int[]{20,21}));
+        System.out.println(maxFreeTime(99, 1, new int[]{7,21,25}, new int[]{13,25,78}));
+        System.out.println();
+        System.out.println(maxFreeTime2(5, 1, new int[]{1,3}, new int[]{2,5}));
+        System.out.println(maxFreeTime2(5, 2, new int[]{0,1,2,3,4}, new int[]{1,2,3,4,5}));
+        System.out.println(maxFreeTime2(10, 1, new int[]{0,2,9}, new int[]{1,4,10}));
+        // 18, 0, 0
+        System.out.println(maxFreeTime2(21, 2, new int[]{18,20}, new int[]{20,21}));
+        // 7-0, 21-13, 25-25, 99-78
+        // 7, 8, 0, 21
+        System.out.println(maxFreeTime2(99, 1, new int[]{7,21,25}, new int[]{13,25,78}));
     }
 
 
-
+    // 1 0 1 0 0
+    // 1 A 1 B B
+    // [1,2), [3,5)
+    // 1, 1, 0, win=2
+    // 0 1 0 0 1 1 1 1 1 0
+    // A 1 B B 1 1 1 1 1 C
+    // 0:[0, 1) 1:[2, 4) 2:[9, 10)
+    // 0, 1, 5, 0, win=2
+    // 1 0 0 0 1 1 1 1 1 0
+    // 1 A B B 1 1 1 1 1 C
+    // 0:[1, 2) 1:[2, 4) 2:[9, 10)
+    // 1, 0, 5, 0, win=2
     public int maxFreeTime2(int eventTime, int k, int[] startTime, int[] endTime) {
-
-        return 0;
+        int len = startTime.length;
+        int[] help = new int[len + 1];
+        help[0] = startTime[0];
+        for (int i = 1; i < len; i++) {
+            help[i] = startTime[i] - endTime[i - 1];
+        }
+        help[len] = eventTime - endTime[len -1];
+        int l = 0, r = 0, sum = 0, ans, win = k + 1;
+        while (r < win) {
+            sum += help[r++];
+        }
+        ans = sum;
+        while (r < help.length) {
+            sum += help[r++];
+            sum -= help[l++];
+            ans = Math.max(ans, sum);
+        }
+        return ans;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
