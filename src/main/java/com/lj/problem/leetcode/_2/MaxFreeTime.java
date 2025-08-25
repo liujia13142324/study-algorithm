@@ -40,7 +40,7 @@ import java.util.Arrays;
  * 0 <= startTime[i] < endTime[i] <= eventTime
  * endTime[i] <= startTime[i + 1] 其中 i 在范围 [0, n - 2] 之间。
  *
- * cc
+ * ccc
  *
  */
 public class MaxFreeTime {
