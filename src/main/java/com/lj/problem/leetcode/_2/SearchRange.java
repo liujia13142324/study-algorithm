@@ -38,9 +38,43 @@ public class SearchRange {
         System.out.println(Arrays.toString(searchRange(new int[]{5,7,7,8,8,10}, 8)));
         System.out.println(Arrays.toString(searchRange(new int[]{5,7,7,8,8,10}, 2)));
         System.out.println(Arrays.toString(searchRange(new int[]{}, 2)));
+
+        System.out.println(Arrays.toString(searchRange2(new int[]{5,7,7,8,8,10}, 8)));
+        System.out.println(Arrays.toString(searchRange2(new int[]{5,7,7,8,8,10}, 2)));
+        System.out.println(Arrays.toString(searchRange2(new int[]{}, 2)));
     }
 
     int[] EMPTY = new int[]{-1, -1};
+
+    // >=t第一位 和 <=t第一位
+    public int[] searchRange2(int[] nums, int target) {
+        // >=t第一位
+        int i = low_bound(nums, target);
+        if (i == nums.length || nums[i] != target) {
+            return EMPTY;
+        }
+        return new int[]{i, low_bound(nums, target + 1) - 1};
+    }
+
+    /**
+     * >=: 找到第一个大于等于 target 的
+     * >  -->  >= target + 1
+     * <= -->  >
+     * <  -->
+     */
+    private int low_bound(int[] nums, int target) {
+        int l = 0, r = nums.length - 1, mid;
+        while (l <= r) {
+            mid = (l + r) / 2;
+            if (target <= nums[mid]) {
+                r = mid - 1;
+            }else {
+                l = mid + 1;
+            }
+        }
+        return l;
+    }
+
 
     public int[] searchRange(int[] nums, int target) {
         if (nums.length == 0) return EMPTY;
