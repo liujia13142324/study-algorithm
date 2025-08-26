@@ -41,6 +41,38 @@ public class TwoSum {
     @Test
     public void test() {
         System.out.println(Arrays.toString(twoSum(new int[]{2,3,4,6,7,11,15}, 7)));
+        System.out.println(Arrays.toString(twoSum2(new int[]{2,3,4,6,7,11,15}, 7)));
+    }
+
+    public int[] twoSum2(int[] numbers, int target) {
+        int l = 0, r = numbers.length - 1;
+        while (numbers[l] + numbers[r] != target) {
+            if (numbers[l] + numbers[r] > target) {
+                // 第一个 <= target - numbers[l] 的位置
+                r = low_bound(numbers, target - numbers[l] + 1) - 1;
+            }else {
+                // 第一个 >= target - numbers[r] 的位置
+                l = low_bound(numbers, target - numbers[r]);
+            }
+        }
+        return new int[]{l+1, r+1};
+    }
+
+    // 第一个 >= target 的位置: low(target)
+    // 第一个 >  target 的位置: low(target + 1)
+    // 第一个 <  target 的位置: low(target) - 1
+    // 第一个 <= target 的位置: low(target + 1) - 1
+    private int low_bound(int[] nums, int target) {
+        int l = 0, r = nums.length - 1, mid;
+        while (l <= r) {
+            mid = (l + r) / 2;
+            if (target <= nums[mid]) {
+                r = mid - 1;
+            }else {
+                l = mid + 1;
+            }
+        }
+        return l;
     }
 
     /**
