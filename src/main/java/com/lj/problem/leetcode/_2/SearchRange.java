@@ -56,12 +56,10 @@ public class SearchRange {
         return new int[]{i, low_bound(nums, target + 1) - 1};
     }
 
-    /**
-     * >=: 找到第一个大于等于 target 的
-     * >  -->  >= target + 1
-     * <= -->  >
-     * <  -->
-     */
+    // 第一个 >= target 的位置: low_bound(target)
+    // 第一个 >  target 的位置: low_bound(target + 1)
+    // 第一个 <  target 的位置: low_bound(target) - 1
+    // 第一个 <= target 的位置: low_bound(target + 1) - 1
     private int low_bound(int[] nums, int target) {
         int l = 0, r = nums.length - 1, mid;
         while (l <= r) {
