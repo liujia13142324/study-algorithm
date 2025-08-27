@@ -51,10 +51,16 @@ public class ThreeSum {
         System.out.println(threeSum4(new int[]{0, 1, 1}));
     }
 
+    /**
+     * 这种最快，不是很清楚为什么
+     * @param nums
+     * @return
+     */
     public List<List<Integer>> threeSum3(int[] nums) {
         Arrays.sort(nums);
         List<List<Integer>> res = new ArrayList<>();
         int pre = Integer.MAX_VALUE;
+        // i < nums.length - 2 也可以是 i < nums.length（i in nums.length-2, nums,length-1 的时候，twoSum的for循环不会进去），后者避免了做减法
         for (int i = 0; i < nums.length && nums[i] <= 0; i++) {
             if (nums[i] == pre) {
                 continue;
@@ -69,22 +75,54 @@ public class ThreeSum {
         int v;
         for (int l = left, r = nums.length - 1; l < r;) {
             v = nums[l] + nums[r];
-            if (v == target){
+            if (v > target) {
+                r--;
+            }else if (v < target){
+                l++;
+            }else {
                 res.add(Arrays.asList(nums[left-1], nums[l], nums[r]));
                 while (nums[l] == nums[++l] && l < r);
                 while (nums[r] == nums[--r] && l < r);
-                continue;
-            }
-            if (v > target) {
-                r--;
-            }else {
-                l++;
             }
         }
     }
 
-    // 速度慢很多
     public List<List<Integer>> threeSum4(int[] nums) {
+        Arrays.sort(nums);
+        List<List<Integer>> res = new ArrayList<>();
+        int j,k,val;
+        for (int i = 0; i < nums.length - 2 && nums[i] <= 0; i++) {
+            if (i > 0 && nums[i] == nums[i - 1]) {
+                continue;
+            }
+            int target = -nums[i];
+            j = i + 1;
+            k = nums.length - 1;
+            while (j < k) {
+                val = nums[j] + nums[k];
+                if (nums[i] + nums[j] + nums[j+1] > 0) {
+                    break;
+                }
+                if (nums[i] + nums[k] + nums[k-1] < 0) {
+                    break;
+                }
+                if (val > target) {
+                    k--;
+                }else if (val < target) {
+                    j++;
+                }else {
+                    res.add(Arrays.asList(nums[i], nums[j], nums[k]));
+                    while (nums[j] == nums[++j] && j < k );
+                    while (nums[k] == nums[--k] && j < k );
+                }
+            }
+
+        }
+        return res;
+    }
+
+    // 速度慢很多
+    public List<List<Integer>> threeSum2(int[] nums) {
         Arrays.sort(nums);
         List<List<Integer>> res = new ArrayList<>();
         int pre = Integer.MAX_VALUE;
