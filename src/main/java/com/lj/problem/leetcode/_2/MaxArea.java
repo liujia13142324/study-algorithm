@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._2;
 
+import org.junit.Test;
+
 /**
  * 11. 盛最多水的容器
  * 提示
@@ -27,8 +29,28 @@ package com.lj.problem.leetcode._2;
  * 0 <= height[i] <= 104
  */
 public class MaxArea {
-    
-    
+
+    @Test
+    public void test1() {
+        System.out.println(maxArea2(new int[]{1,8,6,2,5,4,8,3,7}));
+        System.out.println(maxArea2(new int[]{1, 1}));
+    }
+
+    public int maxArea2(int[] height) {
+        int l = 0, r = height.length - 1, ans = 0;
+        while (l < r) {
+            if (height[l] <= height[r]) {
+                ans = Math.max(ans, (r - l) * height[l]);
+                l++;
+            }else {
+                ans = Math.max(ans, (r - l) * height[r]);
+                r--;
+            }
+        }
+        return ans;
+    }
+
+
     // 双指针
     public int maxArea(int[] height) {
         int l = 0;
