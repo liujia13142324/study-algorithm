@@ -36,7 +36,78 @@ public class CountGoodTriplets {
     public void test() {
         System.out.println(countGoodTriplets(new int[]{3,0,1,1,9,7}, 7, 2, 3));
         System.out.println(countGoodTriplets(new int[]{1,1,2,2,3}, 0, 0, 1));
+        System.out.println(countGoodTriplets(new int[]{1,1,1,2,3}, 0, 0, 0));
+        System.out.println(countGoodTriplets(new int[]{22,31,26,16,1,12,0,30,20,34,17,36,16,5,3,36,31,21,12}, 8, 19, 4));
+        System.out.println(countGoodTriplets2(new int[]{3,0,1,1,9,7}, 7, 2, 3));
+        System.out.println(countGoodTriplets2(new int[]{1,1,2,2,3}, 0, 0, 1));
+        System.out.println(countGoodTriplets2(new int[]{1,1,1,2,3}, 0, 0, 0));
+        System.out.println(countGoodTriplets2(new int[]{22,31,26,16,1,12,0,30,20,34,17,36,16,5,3,36,31,21,12}, 8, 19, 4));
+
+        System.out.println(countGoodTriplets3(new int[]{3,0,1,1,9,7}, 7, 2, 3));
+        System.out.println(countGoodTriplets3(new int[]{1,1,2,2,3}, 0, 0, 1));
+        System.out.println(countGoodTriplets3(new int[]{1,1,1,2,3}, 0, 0, 0));
+        System.out.println(countGoodTriplets3(new int[]{22,31,26,16,1,12,0,30,20,34,17,36,16,5,3,36,31,21,12}, 8, 19, 4));
     }
+
+
+    public int countGoodTriplets3(int[] arr, int a, int b, int c) {
+        int ans = 0, j, k, max = 0, l, r, y, z, m;
+        for (int num: arr) {
+            max = Math.max(max, num);
+        }
+        int[] sum = new int[max+1];
+        for (m = arr[0]; m <= max; m++) {
+            sum[m]++;
+        }
+        for (j = 1; j < arr.length-1; j++) {
+            y = arr[j];
+            for (k = j+1; k < arr.length; k++) {
+                z = arr[k];
+                if (Math.abs(y - z) > b) {
+                    continue;
+                }
+                l = Math.max(z - c, Math.max(0, y - a));
+                r = Math.min(z + c, Math.min(max, y + a));
+                if (l > r) continue;
+                ans += l == 0 ? sum[r] : sum[r] - sum[l-1];
+            }
+            for (m = y; m <= max; m++) {
+                sum[m]++;
+            }
+        }
+        return ans;
+    }
+
+    public int countGoodTriplets2(int[] arr, int a, int b, int c) {
+        int mx = 0;
+        for (int x : arr) {
+            mx = Math.max(mx, x);
+        }
+        int[] s = new int[mx + 2]; // cnt 数组的前缀和
+
+        int n = arr.length;
+        int ans = 0;
+        for (int v = arr[0] + 1; v < s.length; v++) {
+            s[v]++; // 把 y 加到 cnt 数组中，更新所有受到影响的前缀和
+        }
+        for (int j = 1; j < n; j++) {
+            int y = arr[j];
+            for (int k = j + 1; k < n; k++) {
+                int z = arr[k];
+                if (Math.abs(y - z) > b) {
+                    continue;
+                }
+                int l = Math.max(Math.max(y - a, z - c), 0);
+                int r = Math.min(Math.min(y + a, z + c), mx);
+                ans += Math.max(s[r + 1] - s[l], 0); // 如果 l > r + 1，s[r + 1] - s[l] 可能是负数
+            }
+            for (int v = y + 1; v < s.length; v++) {
+                s[v]++; // 把 y 加到 cnt 数组中，更新所有受到影响的前缀和
+            }
+        }
+        return ans;
+    }
+
     public int countGoodTriplets(int[] arr, int a, int b, int c) {
         int ans = 0;
         for (int i = 0; i < arr.length - 2; i++) {
