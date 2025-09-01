@@ -11,7 +11,47 @@ package com.lj.problem.leetcode._2;
  * 你可以假设除了数字 0 之外，这两个数都不会以 0 开头。
  */
 public class AddTwoNumbers {
-    
+
+
+
+    public ListNode addTwoNumbers2(ListNode l1, ListNode l2) {
+        ListNode result = l1;
+        ListNode pre = null;
+        while (l1 != null && l2 != null) {
+            if (l1.val + l2.val >= 10) {
+                l1.val = l1.val + l2.val - 10;
+                if (l1.next != null) {
+                    l1.next.val++;
+                }else {
+                    l1.next = new ListNode(1);
+                }
+            }else {
+                l1.val += l2.val;
+            }
+            pre = l1;
+            l1 = l1.next;
+            l2 = l2.next;
+        }
+
+        while (l1 != null && l1.val >= 10) {
+            l1.val = l1.val - 10;
+            if (l1.next != null) {
+                l1.next.val++;
+            }else {
+                l1.next = new ListNode(1);
+            }
+            l1 = l1.next;
+        }
+
+        while (l2 != null) {
+            pre.next = new ListNode(l2.val);
+            l2 = l2.next;
+            pre = pre.next;
+        }
+        return result;
+    }
+
+
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
         ListNode head = new ListNode();
         ListNode h = head;
