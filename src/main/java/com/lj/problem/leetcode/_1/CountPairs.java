@@ -3,6 +3,7 @@ package com.lj.problem.leetcode._1;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -11,6 +12,9 @@ import java.util.List;
  *
  * 示例 1：
  * 输入：nums = [-1,1,2,3,1], target = 2
+ *
+ * -1 1 1 2 3
+ *
  * 输出：3
  * 解释：总共有 3 个下标对满足题目描述：
  * - (0, 1) ，0 < 1 且 nums[0] + nums[1] = 0 < target
@@ -20,6 +24,7 @@ import java.util.List;
  *
  * 示例 2：
  * 输入：nums = [-6,2,5,-2,-7,-1,3], target = -2
+ * -7 -6 -2 -1 2 3 5
  * 输出：10
  * 解释：总共有 10 个下标对满足题目描述：
  * - (0, 1) ，0 < 1 且 nums[0] + nums[1] = -4 < target
@@ -48,11 +53,55 @@ public class CountPairs {
         System.out.println(countPairs(Arrays.asList(6,-1,7,4,2,3), 8));
         // 1,2 0,3, 1,3 2,3
         System.out.println(countPairs(Arrays.asList(6, 4, 1, -7), 7));
+
+        System.out.println(countPairs2(Arrays.asList(-1, 1, 2, 3, 1), 2));
+        System.out.println(countPairs2(Arrays.asList(-6,2,5,-2,-7,-1,3), -2));
+        System.out.println(countPairs2(Arrays.asList(6,-1,7,4,2,3), 8));
+        // 1,2 0,3, 1,3 2,3
+        System.out.println(countPairs2(Arrays.asList(6, 4, 1, -7), 7));
     }
+
+    /**
+     * 双指针做法2
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int countPairs3(List<Integer> nums, int target) {
+        Collections.sort(nums);
+        int ans = 0, l = 0, r = nums.size() - 1;
+        while (l < r) {
+            if (nums.get(l) + nums.get(r) < target) {
+                ans += r - l;
+                l++;
+            }else {
+                r--;
+            }
+        }
+        return ans;
+    }
+
+    /**
+     * 双指针做法
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int countPairs2(List<Integer> nums, int target) {
+        Collections.sort(nums);
+        int ans = 0, len = nums.size() - 1, maxR = len;
+        for (int i = 0; i < len && i < maxR; i++) {
+            int r = len;
+            while (i < r && nums.get(i) + nums.get(r) >= target) r--;
+            ans += r - i;
+            maxR = r;
+        }
+        return ans;
+    }
+
     /**
      * nums[i] + nums[j] < target
      *  -50 <= nums[j] < target - nums[i]
-     *
      */
     public int countPairs(List<Integer> nums, int target) {
         int max = 0, size = nums.size();
