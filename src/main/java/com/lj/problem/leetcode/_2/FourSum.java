@@ -36,11 +36,64 @@ public class FourSum {
     public void test() {
         // -2 -1 0 0 1 2
         // [[-2, -1, 1, 2], [-2, 0, 0, 2], [-1, 0, 0, 1]]
-//        System.out.println(fourSum(new int[]{1,0,-1,0,-2,2}, 0));
-//        System.out.println(fourSum(new int[]{2,2,2,2,2}, 8));
+        System.out.println(fourSum(new int[]{1,0,-1,0,-2,2}, 0));
+        System.out.println(fourSum(new int[]{2,2,2,2,2}, 8));
         System.out.println(fourSum(new int[]{1000000000,1000000000,1000000000,1000000000}, -294967296));
+        System.out.println(fourSum(new int[]{0,0,0,1000000000,1000000000,1000000000,1000000000}, 1000000000));
+
+        System.out.println(fourSum2(new int[]{1,0,-1,0,-2,2}, 0));
+        System.out.println(fourSum2(new int[]{2,2,2,2,2}, 8));
+        System.out.println(fourSum2(new int[]{1000000000,1000000000,1000000000,1000000000}, -294967296));
+        System.out.println(fourSum2(new int[]{0,0,0,1000000000,1000000000,1000000000,1000000000}, 1000000000));
     }
 
+    public List<List<Integer>> fourSum2(int[] nums, int target) {
+        Arrays.sort(nums);
+        List<List<Integer>> result = new ArrayList<>();
+        int len = nums.length;
+        long target2 = target;
+        for (int i = 0; i < len - 3; i++) {
+            if (i > 0 && nums[i - 1] == nums[i]) {
+                continue;
+            }
+            if ((long)nums[i] + nums[i + 1] + nums[i + 2] + nums[i + 3] > target2) {
+                break;
+            }
+            if ((long)nums[i] + nums[len - 3] + nums[len - 2] + nums[len - 1] < target2) {
+                continue;
+            }
+
+            for (int j = i + 1; j < nums.length - 2; j++) {
+                if (j != i + 1 && nums[j - 1] == nums[j]) {
+                    continue;
+                }
+                if ((long)nums[i] + nums[j] + nums[j + 1] + nums[j + 2] > target2) {
+                    break;
+                }
+                if ((long)nums[i] + nums[j] + nums[len - 2] + nums[len - 1] < target2) {
+                    continue;
+                }
+                int l = j + 1;
+                int r = nums.length - 1;
+                long newTarget = target2 - nums[i] - nums[j];
+                while (l < r) {
+                    long tmp = nums[l] + nums[r];
+                    if (tmp > newTarget) {
+                        r--;
+                    }else if (tmp < newTarget) {
+                        l++;
+                    }else{
+                        result.add(Arrays.asList(nums[i], nums[j], nums[l], nums[r]));
+                        while (nums[l] == nums[++l] && l < r);
+                        while (nums[r] == nums[--r] && l < r);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    // TODO 优化版本
     public List<List<Integer>> fourSum(int[] nums, int target) {
         Arrays.sort(nums);
         List<List<Integer>> result = new ArrayList<>();
