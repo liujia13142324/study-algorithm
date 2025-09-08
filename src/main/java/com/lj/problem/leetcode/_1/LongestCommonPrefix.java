@@ -1,9 +1,11 @@
 package com.lj.problem.leetcode._1;
 
 
+import org.junit.Test;
+
 /**
+ * 14. 最长公共前缀
  * 编写一个函数来查找字符串数组中的最长公共前缀。
- *
  * 如果不存在公共前缀，返回空字符串 ""。
  *
  *
@@ -26,9 +28,27 @@ package com.lj.problem.leetcode._1;
  * strs[i] 仅由小写英文字母组成
  */
 public class LongestCommonPrefix {
-    
-    
-    
+
+
+    @Test
+    public void test() {
+        System.out.println(longestCommonPrefix2(new String[]{"ab", "a"}));
+    }
+
+    public String longestCommonPrefix2(String[] strs) {
+        int maxLen = 0;
+        outer:
+        for (int i = 0, len = strs[0].length(); i < len; i++, maxLen++) {
+            for (int j = 1; j < strs.length; j++) {
+                if (strs[j].length() <= maxLen || (strs[j].length() > maxLen && strs[j].charAt(maxLen) != strs[0].charAt(maxLen))) {
+                    break outer;
+                }
+            }
+        }
+        return maxLen > 0 ? strs[0].substring(0, maxLen) : "";
+    }
+
+
     public String longestCommonPrefix(String[] strs) {
         if (strs == null || strs.length == 0) {
             return "";
