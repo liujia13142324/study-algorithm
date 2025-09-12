@@ -31,36 +31,31 @@ public class MySqrt {
         System.out.println(mySqrt(2147395599));
     }
 
-  /*  private static final int SQRT_INT_MAX = (int) Math.sqrt(Integer.MAX_VALUE);
+    private static final int SQRT_INT_MAX = (int) Math.sqrt(Integer.MAX_VALUE);
 
     public int mySqrt2(int x) {
         if (x <= 1) {return x;}
-        return lowBounce2(0, SQRT_INT_MAX, Math.min(x, SQRT_INT_MAX) + 1) - 1;
+        return lowerBound2(0, SQRT_INT_MAX + 1, x);
     }
 
-    int lowBounce2(int l, int r, int target){
-        int mid = 0;
-        while (l <= r) {
-            mid = (l + r) / 2;
-            int tmp =  mid * mid;
-            if (target == tmp) {
-                return mid;
-            }else if (target > tmp) {
-                l = mid + 1;
+    int lowerBound2(int l, int r, int target){
+        while (l + 1 < r) {
+            int mid = (l + r) / 2;
+            if (mid * mid > target) {
+                r = mid;
             }else {
-                r = mid - 1;
+                l = mid;
             }
         }
         return l;
     }
-*/
 
     public int mySqrt(int x) {
         if (x <= 1) {return x;}
-        return lowBounce(0, x, ((long) x) + 1) - 1;
+        return lowerBound(0, x, ((long) x) + 1) - 1;
     }
 
-    int lowBounce(int l, int r, long target){
+    int lowerBound(int l, int r, long target){
         int mid = 0;
         while (l <= r) {
             mid = (l + r) / 2;
