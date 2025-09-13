@@ -33,6 +33,46 @@ public class MySqrt {
 
     private static final int SQRT_INT_MAX = (int) Math.sqrt(Integer.MAX_VALUE);
 
+    /**
+     * 闭区间
+     */
+    public int mySqrt4(int x) {
+        if (x <= 1) {return x;}
+        int l = 0;
+        int r = Math.min(SQRT_INT_MAX, x);
+        while (l <= r) {
+            int mid = (l + r) >>> 1;
+            if (mid * mid <= x) {
+                l = mid + 1;
+            }else {
+                r = mid - 1;
+            }
+        }
+        return r;
+    }
+
+    /**
+     * 开区间
+     * 循环不变量，0 的平方一定 <= x，不需要在二分区间中。注意二分区间只需要包含那些尚未确定平方是否 <= x 的数。
+     *
+     */
+    public int mySqrt3(int x) {
+        if (x <= 1) {return x;}
+//        int l = -1;
+        // 0 和 -1 都可以
+        int l = 0;
+        int r = Math.min(SQRT_INT_MAX, x) + 1;
+        while (l + 1 < r) {
+            int mid = (l + r) >>> 1;
+            if (mid * mid <= x) {
+                l = mid;
+            }else {
+                r = mid;
+            }
+        }
+        return l;
+    }
+
     public int mySqrt2(int x) {
         if (x <= 1) {return x;}
         return lowerBound2(0, SQRT_INT_MAX + 1, x);
@@ -40,7 +80,7 @@ public class MySqrt {
 
     int lowerBound2(int l, int r, int target){
         while (l + 1 < r) {
-            int mid = (l + r) / 2;
+            int mid = (l + r) >>> 1;
             if (mid * mid > target) {
                 r = mid;
             }else {
