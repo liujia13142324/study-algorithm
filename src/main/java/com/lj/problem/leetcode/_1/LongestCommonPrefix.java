@@ -40,7 +40,8 @@ public class LongestCommonPrefix {
         outer:
         for (int i = 0, len = strs[0].length(); i < len; i++, maxLen++) {
             for (int j = 1; j < strs.length; j++) {
-                if (strs[j].length() <= maxLen || (strs[j].length() > maxLen && strs[j].charAt(maxLen) != strs[0].charAt(maxLen))) {
+//                if (strs[j].length() <= maxLen || (strs[j].length() > maxLen && strs[j].charAt(maxLen) != strs[0].charAt(maxLen))) {
+                if (strs[j].length() <= maxLen || (strs[j].charAt(maxLen) != strs[0].charAt(maxLen))) {
                     break outer;
                 }
             }
