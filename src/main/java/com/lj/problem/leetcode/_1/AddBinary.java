@@ -1,5 +1,9 @@
 package com.lj.problem.leetcode._1;
 
+import org.junit.Test;
+
+import java.util.Arrays;
+
 /**
  * 67. 二进制求和
  * 相关企业
@@ -21,25 +25,68 @@ package com.lj.problem.leetcode._1;
  */
 public class AddBinary {
 
+
+    public String addBinary2(String a, String b) {
+        StringBuilder ans = new StringBuilder();
+        int ca = 0;
+        for(int i = a.length() - 1, j = b.length() - 1;i >= 0 || j >= 0; i--, j--) {
+            int sum = ca;
+            sum += i >= 0 ? a.charAt(i) - '0' : 0;
+            sum += j >= 0 ? b.charAt(j) - '0' : 0;
+            ans.append(sum % 2);
+            ca = sum / 2;
+        }
+        ans.append(ca == 1 ? ca : "");
+        return ans.reverse().toString();
+    }
+
+
     public String addBinary(String a, String b) {
         char[] charArray = a.toCharArray();
         char[] charArray1 = b.toCharArray();
         char[] result;
-        if (charArray.length >= charArray1.length) {
+        int offset = 2 * '0';
+        int i = charArray.length - 1, j = charArray1.length - 1, k, m = 0;
+        if (i >= j) {
             result = charArray;
+            k = i;
         }else {
             result = charArray1;
+            k = j;
         }
-        int i = charArray.length - 1, j = charArray1.length - 1, k = 0;
         while (i >= 0 && j >= 0) {
-            if (charArray[i] == '1' && charArray[j] == '1') {
+            int tmp = (charArray[i] + charArray1[j] + m) - offset;
+            result[k] = (char) ('0' + (tmp & 1));
+            m = tmp >>> 1;
+            i--;j--;k--;
+        }
 
-            }else if (charArray[i] == '0' && charArray[j] == '0') {
-
+        if (m > 0) {
+            while (k >= 0 && m > 0) {
+                if (result[k] == '0') {
+                    result[k] = '1';
+                    m = 0;
+                }else {
+                    result[k--] = '0';
+                    m = 1;
+                }
             }
         }
 
+        if (m > 0) {
+            char[] tmp = new char[result.length + 1];
+            System.arraycopy(result, 0, tmp, 1, result.length);
+            tmp[0] = '1';
+            return new String(tmp);
+        }
 
+        return new String(result);
+    }
+
+    @Test
+    public void test() {
+        System.out.println(addBinary("11", "1"));
+//        System.out.println(addBinary("1010", "1011"));
     }
 
 }
