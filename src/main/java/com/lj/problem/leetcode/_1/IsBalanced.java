@@ -37,6 +37,18 @@ public class IsBalanced {
     }
 
     // TODO 自底向上写法
+    public boolean isBalanced2(TreeNode root) {
+        return dfs(root) != -1;
+    }
+
+    private int dfs(TreeNode root) {
+        if (root == null) return 0;
+        int l = dfs(root.left);
+        int r = dfs(root.right);
+        if (l == -1 || r == -1 || Math.abs(l - r) > 1) return -1;
+        return 1 + Math.max(l, r);
+    }
+
 
     public boolean isBalanced(TreeNode root) {
         if (root == null) return true;
