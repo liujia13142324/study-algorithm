@@ -1,7 +1,7 @@
 package com.lj.problem.leetcode._1;
 
 /**
- * 买卖股票的最佳时机
+ * 121. 买卖股票的最佳时机
  *
  * 给定一个数组 prices ，它的第 i 个元素 prices[i] 表示一支给定股票第 i 天的价格。
  *
@@ -30,7 +30,25 @@ package com.lj.problem.leetcode._1;
  * 0 <= prices[i] <= 104
  */
 public class MaxProfit {
-    
+
+
+    public int maxProfit2(int[] prices) {
+        int min = Integer.MAX_VALUE;
+        int ans = 0;
+        for (int price : prices) {
+            if (min > price) {
+                min = price;
+            }else {
+                ans = Math.max(ans, price - min);
+            }
+        }
+        return ans;
+    }
+
+
+
+
+
     public int maxProfit(int[] prices) {
         int l = 0;
         int max = 0;
