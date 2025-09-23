@@ -28,12 +28,30 @@ import java.util.Map;
  */
 public class MajorityElement {
 
+    /**
+     * 比武擂台、投票..
+     * @param nums
+     * @return
+     */
+    public int majorityElement3(int[] nums) {
+        int cnt = 0, ans = 0;
+        for (int num: nums) {
+            if (cnt == 0) {
+                ans = num;
+                cnt++;
+            }else if (num == ans){
+                cnt++;
+            }else {
+                cnt--;
+            }
+        }
+        return ans;
+    }
 
     public int majorityElement2(int[] nums) {
         Arrays.sort(nums);
         return nums[nums.length/2];
     }
-
 
 
     
