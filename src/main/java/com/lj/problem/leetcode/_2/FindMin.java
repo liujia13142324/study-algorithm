@@ -40,17 +40,18 @@ package com.lj.problem.leetcode._2;
 public class FindMin {
 
     public int findMin2(int[] nums) {
-        int l = 1;
-        int r = nums.length;
-        while (l + 1 < r) {
-            int mid = (l + r) >>> 1;
-            if (nums[mid] < nums[0]) {
-                r = mid;
-            }else {
-                l = mid;
+        int n = nums.length;
+        int left = -1;
+        int right = n - 1; // 开区间 (-1, n-1)
+        while (left + 1 < right) { // 开区间不为空
+            int mid = (left + right) >>> 1;
+            if (nums[mid] < nums[n - 1]) {
+                right = mid;
+            } else {
+                left = mid;
             }
         }
-        return nums[r  % nums.length];
+        return nums[right];
     }
 
     public int findMin(int[] nums) {
