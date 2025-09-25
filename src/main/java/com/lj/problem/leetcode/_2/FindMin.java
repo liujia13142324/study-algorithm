@@ -39,6 +39,8 @@ package com.lj.problem.leetcode._2;
  */
 public class FindMin {
 
+    // TODO 头部写法
+
     public int findMin2(int[] nums) {
         int n = nums.length;
         int left = -1;
