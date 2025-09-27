@@ -34,7 +34,25 @@ public class SearchMatrix {
         System.out.println(searchMatrix(new int[][]{new int[]{1}}, 0));
     }
 
-    public boolean searchMatrix(int[][] matrix, int target) {
+    public boolean searchMatrix2(int[][] matrix, int target) {
+        int l = -1;
+        int r = matrix.length * matrix[0].length;
+        while (l + 1 < r) {
+            int mid = (l + r) >>> 1;
+            int i = mid / matrix[0].length;
+            int j = mid % matrix[0].length;
+            if (matrix[i][j] > target) {
+                r = mid;
+            }else if (matrix[i][j] < target) {
+                l = mid;
+            }else {
+                return true;
+            }
+        }
+        return false;
+    }
+
+        public boolean searchMatrix(int[][] matrix, int target) {
         int start = -1, end = matrix.length, laxIdx = matrix[0].length - 1;
         while (start + 1 < end) {
             int mid = (start + end) >>> 1;
@@ -52,13 +70,15 @@ public class SearchMatrix {
         end = arr.length;
         while (start + 1 < end) {
             int mid = (start + end) >>> 1;
-            if (arr[mid] >= target) {
+            if (arr[mid] > target) {
                 end = mid;
-            }else {
+            }else if (arr[mid] < target){
                 start = mid;
+            }else {
+                return true;
             }
         }
-        return end < arr.length && arr[end] == target;
+        return false;
     }
 
 }
