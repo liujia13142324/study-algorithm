@@ -41,6 +41,22 @@ public class ReverseList {
         }
     }
 
+    public ListNode reverseList3(ListNode head) {
+        if (head == null) return null;
+        if (head.next == null) return head;
+        ListNode p1 = head,p2= p1.next,p3 = p2.next;
+        while (p3 != null) {
+            p2.next = p1;
+            p1 = p2;
+            p2 = p3;
+            p3 = p3.next;
+        }
+        p2.next = p1;
+        head.next = null;
+        return p2;
+    }
+
+
     ListNode ans = null;
     public ListNode reverseList2(ListNode head) {
         if (head == null) return null;
