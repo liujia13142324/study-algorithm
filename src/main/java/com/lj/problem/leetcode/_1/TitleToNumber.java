@@ -34,12 +34,22 @@ package com.lj.problem.leetcode._1;
  * columnTitle 在范围 ["A", "FXSHRXW"] 内
  */
 public class TitleToNumber {
+
+    public int titleToNumber2(String s) {
+        int ans = 0;
+        for(int i=0, len = s.length();i<len;i++) {
+            int num = s.charAt(i) - 'A' + 1;
+            ans = ans * 26 + num;
+        }
+        return ans;
+    }
+
+
     public int titleToNumber(String columnTitle) {
         int ans = 0;
         int tmp = 1;
-        char[] charArray = columnTitle.toCharArray();
-        for (int i = charArray.length - 1; i >= 0; i--) {
-            ans += (charArray[i] - 'A' + 1) * tmp;
+        for (int i = columnTitle.length() - 1; i >= 0; i--) {
+            ans += (columnTitle.charAt(i) - 'A' + 1) * tmp;
             tmp *= 26;
         }
         return ans;
