@@ -26,12 +26,38 @@ public class ReverseBetween {
 
     @Test
     public void test() {
-        System.out.println(reverseBetween(new ListNode(new int[]{1,2,3,4,5}), 2,4).formatString());
-//        System.out.println(reverseBetween(new ListNode(new int[]{5}), 1,1));
-//        System.out.println(reverseBetween(new ListNode(new int[]{3, 5}), 1,2).formatString());
+        System.out.println(reverseBetween2(new ListNode(new int[]{1,2,3,4,5}), 2,4).formatString());
+        System.out.println(reverseBetween2(new ListNode(new int[]{5}), 1,1).formatString());
+        System.out.println(reverseBetween2(new ListNode(new int[]{3, 5}), 1,2).formatString());
     }
 
-    // TODO 看教程，以及别人的写法
+    public ListNode reverseBetween2(ListNode head, int left, int right) {
+        ListNode pre = new ListNode(Integer.MAX_VALUE, head);
+        for (int i = 0; i < left - 1; i++)
+            pre = pre.next;
+
+        ListNode joint = pre;
+        ListNode curr = pre.next;
+        ListNode next;
+
+        for (int i = 0; i < right - left + 1; i++) {
+            next = curr.next;
+            curr.next = pre;
+            pre = curr;
+            curr = next;
+        }
+
+        joint.next.next = curr;
+        joint.next = pre;
+
+        if (left == 1) {
+            return joint.next;
+        }else {
+            return head;
+        }
+    }
+
+
     public ListNode reverseBetween(ListNode head, int left, int right) {
         if (left == right) return head;
         int i = 1;
