@@ -30,7 +30,7 @@ package com.lj.problem.leetcode._2;
  *
  * 进阶：你是否可以使用 O(1) 空间解决此题？
  *
- * tmp
+ *
  */
 public class DetectCycle {
 
