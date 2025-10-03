@@ -29,12 +29,33 @@ package com.lj.problem.leetcode._2;
  * pos 的值为 -1 或者链表中的一个有效索引
  *
  * 进阶：你是否可以使用 O(1) 空间解决此题？
- *
+ * tmp
  *
  */
 public class DetectCycle {
 
     public ListNode detectCycle(ListNode head) {
+        int d = 0;
+        ListNode s = head;
+        ListNode f = head;
+
+        while (f != null && f.next != null) {
+            f = f.next.next;
+            s = s.next;
+            d++;
+            if (f == s) {
+                if (f == head) {
+                    return head;
+                }
+                do {
+                    head = head.next;
+                    s = s.next;
+                }while (head != s);
+
+                return head;
+            }
+        }
+
         return null;
     }
 
