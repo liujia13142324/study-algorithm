@@ -35,31 +35,23 @@ package com.lj.problem.leetcode._2;
 public class DetectCycle {
 
     public ListNode detectCycle(ListNode head) {
-        int d = 0;
         ListNode s = head;
         ListNode f = head;
 
         while (f != null && f.next != null) {
             f = f.next.next;
             s = s.next;
-            d++;
             if (f == s) {
-                if (f == head) {
-                    return head;
-                }
-                do {
+                while (s != head) {
                     head = head.next;
                     s = s.next;
-                }while (head != s);
-
+                }
                 return head;
             }
         }
 
         return null;
     }
-
-
 
     class ListNode {
         int val;
