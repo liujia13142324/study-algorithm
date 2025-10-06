@@ -29,10 +29,32 @@ public class RemoveNodes {
 
     @Test
     public void test() {
-        System.out.println(removeNodes2(new ListNode(new int[]{5,2,13,3,8})).formatString());
+        System.out.println(removeNodes3(new ListNode(new int[]{5,2,13,3,8})).formatString());
     }
 
-    //反转链表、去除比当前节点小的节点，然后再反转链表
+    public ListNode removeNodes3(ListNode head) {
+        head = reverse(head);
+        ListNode curr = head;
+        while (curr != null && curr.next != null) {
+            if (curr.val > curr.next.val) {
+                curr.next = curr.next.next;
+            }else {
+                curr = curr.next;
+            }
+        }
+        return reverse(head);
+    }
+
+    private ListNode reverse(ListNode head) {
+        ListNode prev = null;
+        while (head != null) {
+            ListNode next = head.next;
+            head.next = prev;
+            prev = head;
+            head = next;
+        }
+        return prev;
+    }
 
     public ListNode removeNodes2(ListNode head) {
         ListNode dummy = new ListNode(Integer.MAX_VALUE, head);
