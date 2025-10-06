@@ -70,4 +70,15 @@ public class HasPathSum {
         return hasPathSum(root.left, targetSum, sum) || hasPathSum(root.right, targetSum, sum);
     }
 
+    public boolean hasPathSum3(TreeNode root, int targetSum) {
+        return hasPathSum3(root, 0, targetSum);
+    }
+    public boolean hasPathSum3(TreeNode root, int currentVal, int targetSum) {
+        if (root == null) return false;
+        currentVal += root.val;
+        // if (currentVal > targetSum) return false;
+        if (root.left == null && root.right == null) return currentVal == targetSum;
+        return hasPathSum3(root.left, currentVal, targetSum) || hasPathSum3(root.right, currentVal, targetSum);
+    }
+
 }
