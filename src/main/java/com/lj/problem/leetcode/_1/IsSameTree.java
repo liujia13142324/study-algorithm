@@ -39,12 +39,26 @@ public class IsSameTree {
         }
     }
 
+    public boolean isSameTree3(TreeNode p, TreeNode q) {
+        if (p == null || q == null) {
+            return p == q;
+        }
+        return p.val == q.val && isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+    }
 
     public boolean isSameTree(TreeNode p, TreeNode q) {
         if (p != null && q != null && p.val == q.val) {
             return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
         }
         return p == null && q == null;
+    }
+
+    public boolean isSameTree2(TreeNode p, TreeNode q) {
+        int v1 = p == null ? Integer.MIN_VALUE : p.val;
+        int v2 = q == null ? Integer.MIN_VALUE : q.val;
+        if (v1 != v2) return false;
+        if (v1 == Integer.MIN_VALUE) return true;
+        return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
     }
 
 }
