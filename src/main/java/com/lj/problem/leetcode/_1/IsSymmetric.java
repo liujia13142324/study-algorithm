@@ -33,6 +33,15 @@ public class IsSymmetric {
         }
     }
 
+    public boolean isSymmetric2(TreeNode root) {
+        return isSymmetric2(root.left, root.right);
+    }
+
+    public boolean isSymmetric2(TreeNode l, TreeNode r) {
+        if (l == null || r == null) return l == r;
+        return l.val == r.val && isSymmetric2(l.left, r.right) && isSymmetric2(l.right, r.left);
+    }
+
 
     public boolean isSymmetric(TreeNode root) {
         return isSymmetric(root.left, root.right);
