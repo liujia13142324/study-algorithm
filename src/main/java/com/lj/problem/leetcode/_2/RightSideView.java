@@ -32,6 +32,23 @@ import java.util.List;
  */
 public class RightSideView {
 
+    int maxDepth2 = 0;
+    List<Integer> ans = new ArrayList();
+    public List<Integer> rightSideView2(TreeNode root) {
+        dfs(root, 0);
+        return ans;
+    }
+    public void dfs(TreeNode root, int depth) {
+        if (root == null) return;
+        if (maxDepth2 == depth) {
+            ans.add(root.val);
+            maxDepth2++;
+        }
+        dfs(root.right, depth + 1);
+        dfs(root.left, depth + 1);
+    }
+
+
     int maxDepth = Integer.MIN_VALUE;
     public List<Integer> rightSideView(TreeNode root) {
         List<Integer> ans = new ArrayList();
