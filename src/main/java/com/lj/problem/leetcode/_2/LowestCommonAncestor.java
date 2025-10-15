@@ -1,6 +1,7 @@
 package com.lj.problem.leetcode._2;
 
 
+import org.junit.Test;
 
 /**
  * 236. 二叉树的最近公共祖先
@@ -25,7 +26,42 @@ package com.lj.problem.leetcode._2;
  *
  */
 public class LowestCommonAncestor {
+
+    @Test
+    public void test() {
+        TreeNode root = new TreeNode(3);
+        root.left = new TreeNode(5);
+        root.right = new TreeNode(1);
+        root.left.left = new TreeNode(6);
+        root.left.right = new TreeNode(2);
+        root.right.left = new TreeNode(0);
+        root.right.right = new TreeNode(8);
+        root.left.right.left = new TreeNode(7);
+        root.left.right.right = new TreeNode(4);
+        System.out.println(lowestCommonAncestor2(root, new TreeNode(5), new TreeNode(4)).val);
+    }
+
+    TreeNode ans = null;
+    public TreeNode lowestCommonAncestor2(TreeNode root, TreeNode p, TreeNode q) {
+        dfs(root, p, q);
+        return ans;
+    }
+
+    public int dfs(TreeNode root, TreeNode p, TreeNode q) {
+        if (root == null || ans != null) return 0;
+        int val = dfs(root.left, p, q)
+                + dfs(root.right, p, q)
+                + ((q.val == root.val || p.val == root.val) ? 1 : 0);
+        if (ans == null && val == 2) ans = root;
+        return val;
+    }
+
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        /**
+         * 这里有个断路的设计
+         * 问：为什么发现当前节点是 p 或者 q 就不再往下递归了？万一下面有 q 或者 p 呢？
+         * 答：如果下面有 q 或者 p，那么当前节点就是最近公共祖先，直接返回当前节点。如果下面没有 q 和 p，那既然都没有要找的节点了，也不需要递归，直接返回当前节点
+         */
         if (root == null || root == p || root == q) return root;
         TreeNode left = lowestCommonAncestor(root.left, p, q);
         TreeNode right = lowestCommonAncestor(root.right, p, q);
