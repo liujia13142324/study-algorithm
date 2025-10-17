@@ -1,7 +1,6 @@
 package com.lj.problem.leetcode._2;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * 199. 二叉树的右视图
@@ -64,6 +63,52 @@ public class RightSideView {
         }
         dfs(ans, root.right, depth + 1);
         dfs(ans, root.left, depth + 1);
+    }
+
+    public List<Integer> rightSideView4(TreeNode root) {
+        if (root == null) return Collections.emptyList();
+        ArrayDeque<TreeNode> stack = new ArrayDeque();
+        stack.addLast(root);
+        List<Integer> ans = new ArrayList<>();
+        while (!stack.isEmpty()) {
+            int size = stack.size();
+            ans.add(stack.peekLast().val);
+            while (size --> 0) {
+                TreeNode node = stack.pollFirst();
+                if (node.left != null) stack.addLast(node.left);
+                if (node.right != null) stack.addLast(node.right);
+            }
+        }
+        return ans;
+    }
+
+    /**
+     * 超出内存限制
+     * @param root
+     * @return
+     */
+    public List<Integer> rightSideView3(TreeNode root) {
+        if (root == null) return Collections.emptyList();
+        int length = 64;
+        TreeNode[] arr = new TreeNode[length];
+        int idx = -1;
+        int start = -1;
+        arr[++idx] = root;
+        List<Integer> ans = new ArrayList<>();
+        while (start != idx) {
+            int size = idx - start;
+            ans.add(arr[idx].val);
+            while (size --> 0) {
+                TreeNode node = arr[start = nextIndex(start, length)];
+                if (node.left != null) arr[idx = nextIndex(idx, length)] = node.left;
+                if (node.right != null) arr[idx = nextIndex(idx, length)] = node.right;
+            }
+        }
+        return ans;
+    }
+
+    private int nextIndex(int curr, int len) {
+        return ++curr % len;
     }
 
     public class TreeNode {
