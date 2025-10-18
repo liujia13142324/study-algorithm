@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._2;
 
+import org.junit.Test;
+
 import java.util.*;
 
 /**
@@ -30,6 +32,22 @@ import java.util.*;
  * -100 <= Node.val <= 100
  */
 public class RightSideView {
+
+    @Test
+    public void test() {
+        /*TreeNode root = new TreeNode(1);
+        root.left = new TreeNode(2);
+        root.right = new TreeNode(3);
+        root.left.right = new TreeNode(5);
+        root.right.right = new TreeNode(4);
+        System.out.println(rightSideView3(root));*/
+        int[] num = new int[5];
+        int idx = -1;
+        for (int i = 1; i <= 20; i++) {
+            num[idx = nextIndex(idx, num.length)] = i;
+            System.out.println(Arrays.toString(num));
+        }
+    }
 
     int maxDepth2 = 0;
     List<Integer> ans = new ArrayList();
@@ -83,7 +101,6 @@ public class RightSideView {
     }
 
     /**
-     * 超出内存限制
      * @param root
      * @return
      */
@@ -96,7 +113,7 @@ public class RightSideView {
         arr[++idx] = root;
         List<Integer> ans = new ArrayList<>();
         while (start != idx) {
-            int size = idx - start;
+            int size = (idx - start + length) % length;
             ans.add(arr[idx].val);
             while (size --> 0) {
                 TreeNode node = arr[start = nextIndex(start, length)];
