@@ -8,16 +8,16 @@ import java.util.*;
 /**
  * 131. 分割回文串
  * 给你一个字符串 s，请你将 s 分割成一些 子串，使每个子串都是 回文串 。返回 s 所有可能的分割方案。
- *
+ * <p>
  * 示例 1：
  * 输入：s = "aab"
  * 输出：[["a","a","b"],["aa","b"]]
- *
+ * <p>
  * 示例 2：
  * 输入：s = "a"
  * 输出：[["a"]]
- *
- *
+ * <p>
+ * <p>
  * 提示：
  * 1 <= s.length <= 16
  * s 仅由小写英文字母组成
@@ -26,16 +26,101 @@ public class Partition {
 
     @Test
     public void test() {
-        System.out.println(partition("aab"));
+//        System.out.println(partition3("aab"));
 //        System.out.println(partition("abcdbaabd"));
 //        System.out.println(partition("fff"));
 //        System.out.println(partition("efe"));
 //        System.out.println(partition("cdd"));
-        System.out.println(partition("cbbbcc"));
+        System.out.println(partition2_1("cbbbcc"));
     }
 
 
+    //dp+缓存 10s
+    public List<List<String>> partition2_1(String s) {
+        char[] chars = s.toCharArray();
+        return dfs(chars, chars.length - 1, new ArrayList[s.length()]);
+    }
 
+    private List<List<String>> dfs(char[] chars, int r, List<List<String>>[] cache) {
+        if (r < 0) {
+            List<List<String>> ans = new ArrayList<>();
+            ans.add(new ArrayList<>());
+            return ans;
+        }
+        if (cache[r] != null) {
+            return cache[r];
+        }
+        List<List<String>> ans = new ArrayList<>();
+        cache[r] = ans;
+        for (int i = r; i >= 0; i--) {
+            if (isHuiWen(chars, i, r)) {
+                String s = new String(Arrays.copyOfRange(chars, i, r + 1));
+                for (List<String> partition : dfs(chars, i - 1, cache)) {
+                    List<String> newList = new ArrayList<>(partition);
+                    newList.add(s);
+                    ans.add(newList);
+                }
+            }
+        }
+        return ans;
+    }
+
+
+    // DP 15s
+    public List<List<String>> partition2(String s) {
+        char[] chars = s.toCharArray();
+        return dfs(chars, chars.length - 1);
+    }
+
+    private List<List<String>> dfs(char[] chars, int r) {
+        List<List<String>> ans = new ArrayList<>();
+        if (r < 0) {
+            ans.add(new ArrayList<>());
+            return ans;
+        }
+        for (int i = r; i >= 0; i--) {
+            if (isHuiWen(chars, i, r)) {
+                String s = new String(Arrays.copyOfRange(chars, i, r + 1));
+                for (List<String> partition : dfs(chars, i - 1)) {
+                    partition.add(s);
+                    ans.add(partition);
+                }
+            }
+        }
+        return ans;
+    }
+
+    // DP 迭代, 17s?
+    public List<List<String>> partition3(String s) {
+        List<List<String>>[] dfs = new ArrayList[s.length() + 1];
+        dfs[0] = new ArrayList<>();
+        dfs[0].add(new ArrayList<>());
+        char[] chars = s.toCharArray();
+        for (int i = 1; i <= chars.length; i++) {
+            dfs[i] = new ArrayList<>();
+            for (int j = i-1; j >= 0; j--) {
+                if (isHuiWen(chars, j, i-1)) {
+                    String tmp = new String(Arrays.copyOfRange(chars, j, i));
+                    for (List<String> list : dfs[j]) {
+                        List<String> newList = new ArrayList<>(list);
+                        newList.add(tmp);
+                        dfs[i].add(newList);
+                    }
+                }
+            }
+        }
+        return dfs[s.length()];
+    }
+
+    private boolean isHuiWen(char[] chars, int start, int end) {
+        if (start == end) return true;
+        int l = start;
+        int r = end;
+        while (l < r) {
+            if (chars[l++] != chars[r--]) return false;
+        }
+        return true;
+    }
 
 
     public List<List<String>> partition(String s) {
@@ -59,7 +144,7 @@ public class Partition {
                     List<String> tmp = new ArrayList<>(list.subList(0, j));
                     tmp.add(s);
                     String tmpStr = "";
-                    if (!cache.contains((tmpStr=String.join(",", tmp)))) {
+                    if (!cache.contains((tmpStr = String.join(",", tmp)))) {
                         cache.add(tmpStr);
                         ans.add(tmp);
                     }
@@ -72,6 +157,7 @@ public class Partition {
     }
 
     private boolean isHuiWen(String str) {
+        if (str.length() == 1) return true;
         int l = 0;
         int r = str.length() - 1;
         while (l < r) {
