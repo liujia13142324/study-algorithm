@@ -1,6 +1,5 @@
 package com.lj.problem.leetcode._2;
 
-import cn.hutool.core.lang.hash.Hash;
 import org.junit.Test;
 
 import java.util.*;
@@ -24,6 +23,9 @@ import java.util.*;
  */
 public class Partition {
 
+    int count1;
+    int count2;
+
     @Test
     public void test() {
 //        System.out.println(partition3("aab"));
@@ -32,6 +34,23 @@ public class Partition {
 //        System.out.println(partition("efe"));
 //        System.out.println(partition("cdd"));
         System.out.println(partition2_1("cbbbcc"));
+        System.out.println(partition3("cbbbcc"));
+        System.out.println(count1);
+        System.out.println(count2);
+    }
+
+    /**
+     *TODO
+     * 方法一：选或不选
+     * 方法二：枚举字串结束的位置
+     */
+
+    /**
+     * 选或不选
+     * @param str
+     */
+    public void partition4(String str) {
+
     }
 
 
@@ -47,16 +66,16 @@ public class Partition {
             ans.add(new ArrayList<>());
             return ans;
         }
-        if (cache[r] != null) {
-            return cache[r];
-        }
+
+        if (cache[r] != null) return cache[r];
+
         List<List<String>> ans = new ArrayList<>();
         cache[r] = ans;
         for (int i = r; i >= 0; i--) {
             if (isHuiWen(chars, i, r)) {
                 String s = new String(Arrays.copyOfRange(chars, i, r + 1));
                 for (List<String> partition : dfs(chars, i - 1, cache)) {
-                    List<String> newList = new ArrayList<>(partition);
+                    List<String> newList = newArrayList1(partition);
                     newList.add(s);
                     ans.add(newList);
                 }
@@ -90,7 +109,7 @@ public class Partition {
         return ans;
     }
 
-    // DP 迭代, 17s?
+    // DP 迭代, 17s? Problem: 测试效果看 TestDfsOrder 这个类 ，结果大多数应该都是这个快，不知道 leetcode 为啥会这样？
     public List<List<String>> partition3(String s) {
         List<List<String>>[] dfs = new ArrayList[s.length() + 1];
         dfs[0] = new ArrayList<>();
@@ -102,7 +121,7 @@ public class Partition {
                 if (isHuiWen(chars, j, i-1)) {
                     String tmp = new String(Arrays.copyOfRange(chars, j, i));
                     for (List<String> list : dfs[j]) {
-                        List<String> newList = new ArrayList<>(list);
+                        List<String> newList = newArrayList2(list);
                         newList.add(tmp);
                         dfs[i].add(newList);
                     }
@@ -110,6 +129,16 @@ public class Partition {
             }
         }
         return dfs[s.length()];
+    }
+
+    private List<String> newArrayList1(List<String> list) {
+        count1++;
+        return new ArrayList<>(list);
+    }
+
+    private List<String> newArrayList2(List<String> list) {
+        count2++;
+        return new ArrayList<>(list);
     }
 
     private boolean isHuiWen(char[] chars, int start, int end) {
