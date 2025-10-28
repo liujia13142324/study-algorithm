@@ -33,15 +33,18 @@ public class Partition {
 //        System.out.println(partition("fff"));
 //        System.out.println(partition("efe"));
 //        System.out.println(partition("cdd"));
-        System.out.println(partition2_1("cbbbcc"));
+//        System.out.println(partition2_1("cbbbcc"));
+//        System.out.println(partition3("cbbbcc"));
+//        System.out.println(count1);
+//        System.out.println(count2);
+//        System.out.println(partition4("abbab"));
         System.out.println(partition3("cbbbcc"));
-        System.out.println(count1);
-        System.out.println(count2);
+        System.out.println(partition4("cbbbcc"));
+
     }
 
     /**
      *TODO
-     * 方法一：选或不选
      * 方法二：枚举字串结束的位置
      */
 
@@ -49,8 +52,98 @@ public class Partition {
      * 选或不选
      * @param str
      */
-    public void partition4(String str) {
+    public List<List<String>> partition4(String str) {
+        List<String> path = new ArrayList<>();
+        List<List<String>> ans = new ArrayList<>();
+        dfs(str, 0 , 0, ans, path);
+        return ans;
+    }
 
+    public void dfs(String str, int start, int end, List<List<String>> ans, List<String> path) {
+        if (end == str.length()) {
+            ans.add(new ArrayList<>(path));
+            return;
+        }
+
+        // 不选, 等于 str.length() 的时候，必须选
+        if (end < str.length() - 1) {
+            dfs(str, start, end + 1, ans, path);
+        }
+
+        // 选
+        if (isHuiWen(str, start, end)) {
+            path.add(str.substring(start, end + 1));
+            dfs(str, end + 1, end + 1, ans, path);
+            path.remove(path.size() - 1);
+        }
+    }
+
+    /*public void dfs(String str, int start, int end, List<List<String>> ans, List<String> path) {
+        if (end == str.length() - 1) {
+            if (isHuiWen(str,start, end)) {
+                path.add(str.substring(start, end + 1));
+                ans.add(new ArrayList<>(path));
+                path.remove(path.size() - 1);
+            }
+            return;
+        }
+
+        // 选
+        if (isHuiWen(str, start, end)) {
+            path.add(str.substring(start, end + 1));
+            dfs(str, end + 1, end + 1, ans, path);
+            path.remove(path.size() - 1);
+        }
+
+        // 不选
+        dfs(str, start, end + 1, ans, path);
+    }*/
+
+    public boolean isHuiWen(String str, int start, int end) {
+        if (start == end) return true;
+        int l = start;
+        int r = end;
+        while (l < r) {
+            if (str.charAt(l++) != str.charAt(r--)) return false;
+        }
+        return true;
+    }
+
+    /**
+     * leetcode 的答案，选或不选
+     * @param s
+     * @return
+     */
+    public List<List<String>> partition4_1(String s) {
+        List<List<String>> ans = new ArrayList<>();
+        List<String> path = new ArrayList<>();
+        dfs(0, 0, s, path, ans);
+        return ans;
+    }
+
+    // 考虑 i 后面的逗号怎么选
+    // start 表示当前这段回文子串的开始位置
+    private void dfs(int i, int start, String s, List<String> path, List<List<String>> ans) {
+        if (i == s.length()) { // s 分割完毕
+            ans.add(new ArrayList<>(path)); // 复制 path
+            return;
+        }
+
+        // 不分割，不选 i 和 i+1 之间的逗号
+        if (i < s.length() - 1) { // i=n-1 时只能分割
+            // 考虑 i+1 后面的逗号怎么选
+            dfs(i + 1, start, s, path, ans);
+        }
+
+        // 分割，选 i 和 i+1 之间的逗号（把 s[i] 作为子串的最后一个字符）
+        if (isHuiWen(s, start, i)) {
+            path.add(s.substring(start, i + 1));
+            // 考虑 i+1 后面的逗号怎么选
+            // start=i+1 表示下一个子串从 i+1 开始
+            dfs(i + 1, i + 1, s, path, ans);
+//            path.removeLast();
+            path.remove(path.size() - 1);
+        }
     }
 
 
