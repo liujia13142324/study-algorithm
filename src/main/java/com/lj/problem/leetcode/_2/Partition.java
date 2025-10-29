@@ -19,7 +19,7 @@ import java.util.*;
  * 提示：
  * 1 <= s.length <= 16
  * s 仅由小写英文字母组成
- * 1
+ * 2
  */
 public class Partition {
 
