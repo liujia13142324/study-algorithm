@@ -19,7 +19,7 @@ import java.util.*;
  * 提示：
  * 1 <= s.length <= 16
  * s 仅由小写英文字母组成
- * 2
+ * 3
  */
 public class Partition {
 
@@ -38,15 +38,38 @@ public class Partition {
 //        System.out.println(count1);
 //        System.out.println(count2);
 //        System.out.println(partition4("abbab"));
-        System.out.println(partition3("cbbbcc"));
         System.out.println(partition4("cbbbcc"));
+        System.out.println(partition5("cbbbcc"));
 
     }
 
     /**
-     *TODO
      * 方法二：枚举字串结束的位置
+     * 本质和 选或不选是同一种
      */
+
+    public List<List<String>> partition5(String str) {
+        List<String> path = new ArrayList<>();
+        List<List<String>> ans = new ArrayList<>();
+        dfs(0, str, path, ans);
+        return ans;
+    }
+
+    public void dfs(int start, String str, List<String> path, List<List<String>> ans) {
+        if (start == str.length()) {
+            ans.add(new ArrayList<>(path));
+            return;
+        }
+
+        for (int i = start; i < str.length(); i++) {
+            if (isHuiWen(str, start, i)) {
+                path.add(str.substring(start, i + 1));
+                dfs(i + 1, str, path, ans);
+                path.remove(path.size() - 1);
+            }
+        }
+    }
+
 
     /**
      * 选或不选
