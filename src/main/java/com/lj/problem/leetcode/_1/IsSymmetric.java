@@ -20,17 +20,13 @@ package com.lj.problem.leetcode._1;
  */
 public class IsSymmetric {
 
-    public class TreeNode {
-        int val;
-        TreeNode left;
-        TreeNode right;
-        TreeNode() {}
-        TreeNode(int val) { this.val = val; }
-        TreeNode(int val, TreeNode left, TreeNode right) {
-            this.val = val;
-            this.left = left;
-            this.right = right;
-        }
+    public boolean isSymmetric2(TreeNode root) {
+        return isSymmetric2(root.left, root.right);
+    }
+
+    public boolean isSymmetric2(TreeNode l, TreeNode r) {
+        if (l == null || r == null) return l == r;
+        return l.val == r.val && isSymmetric2(l.left, r.right) && isSymmetric2(l.right, r.left);
     }
 
 
@@ -43,6 +39,20 @@ public class IsSymmetric {
         if (left == null || right == null) return false;
         if (left.val != right.val) return false;
         return isSymmetric(left.left, right.right) && isSymmetric(left.right, right.left);
+    }
+
+
+    public class TreeNode {
+        int val;
+        TreeNode left;
+        TreeNode right;
+        TreeNode() {}
+        TreeNode(int val) { this.val = val; }
+        TreeNode(int val, TreeNode left, TreeNode right) {
+            this.val = val;
+            this.left = left;
+            this.right = right;
+        }
     }
 
 }

@@ -36,20 +36,22 @@ public class IsBalanced {
         }
     }
 
-    // TODO 自底向上写法
+    // 自底向上（求root高度的同时，把是否平衡判断了）
     public boolean isBalanced2(TreeNode root) {
-        return dfs(root) != -1;
+        return height(root) != -1;
     }
-
-    private int dfs(TreeNode root) {
+    public int height(TreeNode root) {
         if (root == null) return 0;
-        int l = dfs(root.left);
-        int r = dfs(root.right);
-        if (l == -1 || r == -1 || Math.abs(l - r) > 1) return -1;
-        return 1 + Math.max(l, r);
+        int lh = height(root.left);
+        if (lh == -1) return -1;
+        int rh = height(root.right);
+        if (rh == -1 || Math.abs(lh - rh) > 1) {
+            return -1;
+        }
+        return Math.max(lh, rh) + 1;
     }
 
-
+    // 自顶向下
     public boolean isBalanced(TreeNode root) {
         if (root == null) return true;
         int minus = depth(root.left) - depth(root.right);
