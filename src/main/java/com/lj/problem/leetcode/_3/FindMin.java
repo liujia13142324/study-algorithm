@@ -45,6 +45,7 @@ public class FindMin {
         return findMin(nums, -1, nums.length - 1);
     }
 
+    // TODO 看看别人怎么做的
     private int findMin(int[] nums, int l, int r) {
         while (l + 1 < r) {
             int mid = (l + r) >>> 1;
