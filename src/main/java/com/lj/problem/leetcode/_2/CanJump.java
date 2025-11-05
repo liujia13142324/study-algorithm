@@ -24,7 +24,7 @@ import java.util.Arrays;
  * 输入：nums = [3,2,1,0,4]
  * 输出：false
  * 解释：无论怎样，总会到达下标为 3 的位置。但该下标的最大跳跃长度是 0 ， 所以永远不可能到达最后一个下标。
- *
+ * tmp
  *
  */
 public class CanJump {
