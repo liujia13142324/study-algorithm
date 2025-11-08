@@ -2,6 +2,9 @@ package com.lj.problem.leetcode._2;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 2698. 求一个整数的惩罚数
  * 提示
@@ -31,16 +34,59 @@ import org.junit.Test;
  * - 10 ，因为 10 * 10 = 100 ，且 100 可以分割成 10 + 0 。
  * - 36 ，因为 36 * 36 = 1296 ，且 1296 可以分割成 1 + 29 + 6 。
  * 因此，37 的惩罚数为 1 + 81 + 100 + 1296 = 1478
+ *
+ * 提示：
+ * 1 <= n <= 1000
  */
 public class PunishmentNumber {
 
     @Test
     public void test() {
         System.out.println(punishmentNumber(10));
+        System.out.println(punishmentNumber3(10));
         System.out.println(punishmentNumber(37));
+        System.out.println(punishmentNumber3(37));
     }
 
-    // TODO 看看别人怎么做的
+
+    private static int[] cache = null;
+    public int punishmentNumber(int n) {
+
+        if (cache == null) {
+            cache = new int[1001];
+            for (int k = 1; k < 1001; k++) {
+                int tmp = k * k;
+                if (check2(0, (tmp+"").toCharArray(), k)) {
+                    cache[k] = cache[k - 1] + tmp;
+                }else {
+                    cache[k] = cache[k - 1];
+                }
+            }
+        }
+
+        return cache[n];
+    }
+
+
+    private static int[] cache3 = new int[1001];
+    private static int cacheIdx = 0;
+
+    public int punishmentNumber3(int n) {
+        if (cacheIdx >= n) {
+            return cache3[n];
+        }
+
+        for (int i = cacheIdx + 1; i <= n; i++) {
+            int tmp = i * i;
+            if (check2(0, (tmp+"").toCharArray(), i)) {
+                cache3[++cacheIdx] = cache3[cacheIdx - 1] + tmp;
+            }else {
+                cache3[++cacheIdx] = cache3[cacheIdx - 1];
+            }
+        }
+        return cache3[cacheIdx];
+    }
+
     public int punishmentNumber2(int n) {
         int ans = 0;
         for (int i = 1; i <= n; i++) {
@@ -52,27 +98,21 @@ public class PunishmentNumber {
         return ans;
     }
 
-    private static int[] cache = null;
-
-    public int punishmentNumber(int n) {
-
-        if (cache == null) {
-            cache = new int[1001];
-            for (int k = 1; k <= 1000; k++) {
-                int ans = 0;
-                for (int i = 1; i <= k; i++) {
-                    int tmp = i * i;
-                    if (check(0, tmp+"", i)) {
-                        ans += tmp;
-                    }
-                }
-                cache[k] = ans;
+    /**
+     * 不使用 substring 和 parseInteger
+     */
+    private boolean check2(int idx, char[] n, int target) {
+        if (idx == n.length) return target == 0;
+        int x = 0;
+        for (int i = idx; i < n.length; i++) {
+            x = x * 10 + n[i] - '0';
+            if (x > target) break;
+            if (check2(i + 1, n, target - x) ) {
+                return true;
             }
         }
-
-        return cache[n];
+        return false;
     }
-
 
 
     private boolean check(int idx, String n, int target) {
