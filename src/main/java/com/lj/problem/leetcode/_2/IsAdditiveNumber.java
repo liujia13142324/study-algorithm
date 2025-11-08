@@ -25,6 +25,7 @@ import java.util.List;
  *
  * 示例 2：
  * 输入："199100199"
+ * 输入："1 99 100 199"
  * 输出：true
  * 解释：累加序列为: 1, 99, 100, 199。1 + 99 = 100, 99 + 100 = 199
  *
@@ -40,10 +41,77 @@ public class IsAdditiveNumber {
     @Test
     public void test() {
         System.out.println(isAdditiveNumber("000"));
+        System.out.println(isAdditiveNumber2("000"));
+
+        System.out.println(isAdditiveNumber("011112"));
+        System.out.println(isAdditiveNumber2("011112"));
+
+        System.out.println(isAdditiveNumber("111122335588143"));
+        System.out.println(isAdditiveNumber2("111122335588143"));
+        // 9999999999999999999
+        System.out.println(isAdditiveNumber2("999999999999999999999999"));
     }
 
 
-    // TODO 优化。。。
+    //TODO 看看别人怎么做的
+    public boolean isAdditiveNumber2(String num) {
+        int length = num.length();
+        if (length < 3) {
+            return false;
+        }
+        // 第一个数
+        for (int i = 0, len1 = (int) (Math.ceil((double) length / 2) - 1); i < len1; i++) {
+            int zz = 0;
+            // 第二个数
+            for (int j = i + 1; length - j - 1 >= Math.max(i + 1, j - i); j++) {
+                long v1 = Long.parseLong(num.substring(0, i+1));
+                long v2 = Long.parseLong(num.substring(i+1, j+1));
+                int start = j + 1;
+                do {
+                    String v3 = (v1 + v2) + "";
+                    String next = num.substring(start, Math.min(start + v3.length(), length));
+                    if (!next.equals(v3)) {
+                       break;
+                    }
+                    v1 = v2;
+                    v2 = Long.parseLong(v3);
+                    start += v3.length();
+                }while(start < length);
+                if (start == length) return true;
+                if (num.charAt(i + 1) == '0') break;
+            }
+            if (num.charAt(0) == '0') break;
+        }
+        return false;
+    }
+
+    @Test
+    public void testNormal() {
+        String num = "111122335588143";
+        int length = num.length();
+        int i = 1;
+        int j = 3;
+        long v1 = Long.parseLong(num.substring(0, i+1));
+        // 第二个数
+            long v2 = Long.parseLong(num.substring(i+1, j+1));
+            int start = j + 1;
+            do {
+                String v3 = (v1 + v2) + "";
+                String next = num.substring(start, Math.min(start + v3.length(), length));
+                if (!next.equals(v3)) {
+                    break;
+                }
+                v1 = v2;
+                v2 = Long.parseLong(v3);
+                start += v3.length();
+            }while(start < length);
+            if (start == length) {
+                System.out.println("success");
+            }
+    }
+
+
+
     public boolean isAdditiveNumber(String num) {
         if (num.length() < 3) {
             return false;
@@ -100,11 +168,11 @@ public class IsAdditiveNumber {
     @Test
     public void testSplit() {
         System.out.println(split2("12045", 3));
-        System.out.println(split3("12045", 3));
+        System.out.println(split2_1("12045", 3));
         System.out.println(split2("1204", 3));
-        System.out.println(split3("1204", 3));
+        System.out.println(split2_1("1204", 3));
         System.out.println(split2("000", 3));
-        System.out.println(split3("000", 3));
+        System.out.println(split2_1("000", 3));
     }
 
 
@@ -137,6 +205,29 @@ public class IsAdditiveNumber {
     }
 
 
+
+    // 枚举结束的位置
+    public List<String> split2_1(String str,  int n) {
+        String[] path = new String[n];
+        List<String> ans = new ArrayList<>();
+        dfs2_1(0, str, n, path, ans);
+        return ans;
+    }
+
+    private void dfs2_1(int idx, String str, int n, String[] path, List<String> ans) {
+        if (n == 0) {
+            ans.add(String.join(",", path));
+            return;
+        }
+
+        for (int i = idx, len = str.length() - n; i <= len; i++) {
+            if (n > 1 || i == len) {
+                path[path.length - n] = str.substring(idx, i + 1);
+                dfs2_1(i + 1, str, n - 1, path, ans);
+            }
+        }
+    }
+
     public List<String> split2(String str,  int n) {
         String[] path = new String[n];
         List<String> ans = new ArrayList<>();
@@ -144,7 +235,6 @@ public class IsAdditiveNumber {
         return ans;
     }
 
-    // 枚举结束的位置
     private void dfs2(int idx, String str, int n, String[] path, List<String> ans) {
         if (n == 1) {
             path[path.length - n] = str.substring(idx);
