@@ -52,7 +52,6 @@ public class MaximumBobPoints {
         System.out.println(Arrays.toString(maximumBobPoints(9, new int[]{1,1,0,1,0,0,2,1,0,1,2,0})));
     }
 
-    // TODO 看看别人怎么做的
     public int[] maximumBobPoints(int numArrows, int[] aliceArrows) {
         int[] ans = new int[12];
         int[] path = new int[12];
@@ -81,5 +80,57 @@ public class MaximumBobPoints {
 
         // 不选
         dfs(i-1, remainShots, aliceArrows, path, ans, sums);
+    }
+
+
+    /**
+     * 二进制枚举，12 个靶子，共有 2^12 中可能，即 0 ～ 1023
+     * 000000000000
+     * 000000000001
+     * 000000000010
+     * 000000000011
+     * ...
+     */
+    public int[] maximumBobPoints2(int numArrows, int[] aliceArrows) {
+        int[] ans = null;
+        int maxScore = 0;
+        for (int i = 0, len = 1 << aliceArrows.length; i < len; i++) {
+            int[] tmp = new int[aliceArrows.length];
+            int remains = numArrows;
+            int score = 0;
+            for (int j = 0; j < aliceArrows.length; j++) {
+                // 区域获胜
+                if (((i >>> j) & 1) == 1 && remains > aliceArrows[j] ) {
+                    tmp[j] = aliceArrows[j] + 1;
+                    remains -= aliceArrows[j] + 1;
+                    score += j;
+                    if (remains == 0) {
+                        break;
+                    }
+                }
+            }
+            if (score > maxScore) {
+                tmp[0] += remains;
+                maxScore = score;
+                ans = tmp;
+            }
+        }
+
+        return ans;
+    }
+
+    @Test
+    public void testBinary() {
+        int k = 10;
+        k -= 5 + 1;
+        System.out.println(k);
+        int target = 3;
+        for (int i = 0, len = 1 << target; i < len; i++) {
+            int[] result = new int[target];
+            for (int j = 0; j < target; j++) {
+                result[j] = (i >>> j) & 1;
+            }
+            System.out.println(Arrays.toString(result));
+        }
     }
 }
