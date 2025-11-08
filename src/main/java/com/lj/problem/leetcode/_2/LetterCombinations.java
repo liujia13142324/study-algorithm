@@ -33,6 +33,37 @@ public class LetterCombinations {
         System.out.println(letterCombinations2("234"));
     }
 
+    static char[][] chars = new char[][]{
+            {},{},
+            {'a', 'b', 'c'},
+            {'d', 'e', 'f'},
+            {'g', 'h', 'i'},
+            {'j', 'k', 'l'},
+            {'m', 'n', 'o'},
+            {'p', 'q', 'r', 's'},
+            {'t', 'u', 'v'},
+            {'w', 'x', 'y', 'z'},
+    };
+
+    public List<String> letterCombinations3(String digits) {
+        List<String> ans = new ArrayList<>();
+        char[] path = new char[digits.length()];
+        dfs(0, ans, digits, path);
+        return ans;
+    }
+
+    private void dfs(int i, List<String> ans, String digits, char[] path) {
+        if (i == digits.length()) {
+            ans.add(new String(path));
+            return;
+        }
+        for (char c: chars[digits.charAt(i) - '0']) {
+            path[i] = c;
+            dfs(i + 1, ans, digits, path);
+        }
+    }
+
+
     String[][] strs = new String[][]{
             {},{},
             {"a", "b", "c"},
@@ -45,7 +76,7 @@ public class LetterCombinations {
             {"w", "x", "y", "z"},
     };
 
-    // TODO 看看别人怎么写的
+
     public List<String> letterCombinations2(String digits) {
         List<String> ans = new ArrayList<>();
         dfs("", digits, 0, ans);
