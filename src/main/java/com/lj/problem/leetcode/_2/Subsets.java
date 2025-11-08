@@ -2,10 +2,7 @@ package com.lj.problem.leetcode._2;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * 78. 子集
@@ -34,9 +31,58 @@ public class Subsets {
     @Test
     public void test() {
         System.out.println(subsets(new int[]{1,2,3,4}));
+        System.out.println(subsets2(new int[]{1,2,3,4}));
+        System.out.println(subsets3(new int[]{1,2,3,4}));
     }
 
-    //TODO 看看别人怎么做的
+    /**
+     * 从答案角度， 每次从里面选一个
+     * @param nums
+     * @return
+     */
+    public List<List<Integer>> subsets3(int[] nums) {
+        List<Integer> path = new ArrayList<>();
+        List<List<Integer>> ans = new ArrayList<>();
+        ans.add(Collections.emptyList());
+        dfs2(0, nums, ans, path);
+        return ans;
+    }
+
+    private void dfs2(int i, int[] nums, List<List<Integer>> ans, List<Integer> path) {
+        if (i == nums.length) return;
+        for (int j = i; j < nums.length; j++) {
+            path.add(nums[j]);
+            ans.add(new ArrayList<>(path));
+            dfs2(j + 1, nums, ans, path);
+            path.remove(path.size() - 1);
+        }
+    }
+
+    /**
+     * 选或者不选（从输入角度）
+     * @param nums
+     * @return
+     */
+    public List<List<Integer>> subsets2(int[] nums) {
+        List<Integer> path = new ArrayList<>();
+        List<List<Integer>> ans = new ArrayList<>();
+        dfs(0, nums, ans, path);
+        return ans;
+    }
+
+    private void dfs(int i, int[] nums, List<List<Integer>> ans, List<Integer> path) {
+        if (i == nums.length) {
+            ans.add(new ArrayList<>(path));
+            return;
+        }
+
+        path.add(nums[i]);
+        dfs(i+1, nums, ans, path);
+        path.remove(path.size() - 1);
+        dfs(i+1, nums, ans, path);
+    }
+
+
     public List<List<Integer>> subsets(int[] nums) {
         return dfs(nums, 0);
     }
