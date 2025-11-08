@@ -36,11 +36,53 @@ public class RestoreIpAddresses {
 
     @Test
     public void test () {
-//        System.out.println(restoreIpAddresses("25525511135"));
-//        System.out.println(restoreIpAddresses("0000"));
+        System.out.println(restoreIpAddresses("25525511135"));
+        System.out.println(restoreIpAddresses2("25525511135"));
+        System.out.println(restoreIpAddresses("0000"));
+        System.out.println(restoreIpAddresses2("0000"));
         System.out.println(restoreIpAddresses("101023"));
-//        System.out.println(restoreIpAddresses("19216811"));
+        System.out.println(restoreIpAddresses2("101023"));
+        System.out.println(restoreIpAddresses("19216811"));
+        System.out.println(restoreIpAddresses2("19216811"));
     }
+
+    // TODO 看看别人怎么做的
+    public List<String> restoreIpAddresses2(String s) {
+        if (s.length() < 4 || s.length() > 24) {
+            return Collections.emptyList();
+        }
+        String[] path = new String[4];
+        List<String> ans = new ArrayList<>();
+        dfs2(0, 0, 4, s, path, ans);
+        return ans;
+    }
+
+
+    private void dfs2(int start, int end, int n, String s, String[] path, List<String> ans) {
+        if (n == 0) {
+            ans.add(String.join(".", path));
+            return;
+        }
+
+        // choose,
+        if (n > 1 || end == s.length() - 1) {
+            String tmp = s.substring(start, end + 1);
+            if (Integer.parseInt(tmp) > 255) {
+                return;
+            }
+            path[path.length - n] = tmp;
+            dfs2(end + 1, end + 1, n - 1, s, path, ans);
+        }
+
+
+        // not choose,
+        if (s.charAt(start) != '0' && end < s.length() - n && end - start + 1 < 3) {
+            dfs2(start, end + 1, n, s, path, ans);
+        }
+    }
+
+
+
 
     public List<String> restoreIpAddresses(String s) {
         if (s.length() < 4 || s.length() > 24) {
@@ -82,5 +124,8 @@ public class RestoreIpAddresses {
             dfs(start, end + 1, n, s, path, ans);
         }
     }
+
+
+
 
 }
