@@ -46,7 +46,10 @@ public class RestoreIpAddresses {
         System.out.println(restoreIpAddresses2("19216811"));
     }
 
-    // TODO 看看别人怎么做的
+    // TODO 枚举法
+
+
+    // TODO 看看别人怎么做的,
     public List<String> restoreIpAddresses2(String s) {
         if (s.length() < 4 || s.length() > 24) {
             return Collections.emptyList();
@@ -81,6 +84,39 @@ public class RestoreIpAddresses {
         }
     }
 
+    /**
+     * 选或不选
+     * @param s
+     * @return
+     */
+    public List<String> restoreIpAddresses3(String s) {
+        if (s.length() < 4 || s.length() > 24) return Collections.emptyList();
+        List<String> ans = new ArrayList<>();
+        String[] path = new String[4];
+        dfs3(0, 0, 0, s, ans, path);
+        return ans;
+    }
+
+    private void dfs3(int start, int end, int i, String s, List<String> ans, String[] path) {
+        if (i == path.length) {
+            ans.add(String.join(".", path));
+            return;
+        }
+
+        // choose
+        if (i < 3 || end == s.length() - 1) {
+            path[i] = s.substring(start, end + 1);
+            if (Integer.parseInt(path[i]) <= 255) {
+                dfs3(end + 1, end + 1, i + 1, s, ans, path);
+            }
+        }
+
+        if (s.charAt(start) != '0' && end - start < 3 && end < s.length() - 4 + i) {
+            // not choose
+            dfs3(start, end + 1, i, s, ans, path);
+        }
+
+    }
 
 
 
