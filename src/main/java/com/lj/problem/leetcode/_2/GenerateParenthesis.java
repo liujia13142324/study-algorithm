@@ -1,6 +1,9 @@
 package com.lj.problem.leetcode._2;
 
+import org.junit.Test;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
@@ -25,8 +28,111 @@ import java.util.List;
  * 1 <= n <= 8
  */
 public class GenerateParenthesis {
-    
-    
+
+
+    @Test
+    public void test () {
+        System.out.println(generateParenthesis3(3));
+        System.out.println(generateParenthesis4(3));
+    }
+
+
+
+    /**
+     * 选 （ 还是 ）
+     * @param n
+     * @return
+     */
+    public List<String> generateParenthesis2(int n) {
+        List<String> ans = new ArrayList<>();
+        char[] path = new char[2*n];
+        dfs(0, 0, 0, ans, path);
+        return ans;
+    }
+
+    public void dfs(int i, int lc, int rc, List<String> ans, char[] path) {
+        if (i == path.length) {
+            ans.add(new String(path));
+            return;
+        }
+
+        // choose (
+        if (lc < path.length/2) {
+            path[i] = '(';
+            dfs(i + 1, lc + 1, rc, ans, path);
+        }
+        // choose )
+        if (rc < lc) {
+            path[i] = ')';
+            dfs(i + 1, lc, rc + 1, ans, path);
+        }
+    }
+
+
+    /**
+     * 枚举 （ 结束的位置
+     * @param n
+     * @return
+     */
+    public List<String> generateParenthesis3(int n) {
+        int[] pos = new int[n];
+        List<String> ans  = new ArrayList<>();
+        dfs(0, 0, pos, ans);
+        return ans;
+    }
+
+    private void dfs(int i, int lc, int[] pos, List<String> ans) {
+        if (lc == pos.length) {
+            char[] chars = new char[2 * pos.length];
+            Arrays.fill(chars, ')');
+            for (int p: pos) chars[p] = '(';
+            ans.add(new String(chars));
+            return;
+        }
+
+        for (int j = i; j <= 2 * lc; j++) {
+            pos[lc] = j;
+            dfs(j + 1, lc + 1, pos, ans);
+        }
+    }
+
+    /**
+     * 枚举 （ 结束的位置，方法二
+     * @param n
+     * @return
+     */
+    public List<String> generateParenthesis4(int n) {
+        int[] pos = new int[n];
+        List<String> ans  = new ArrayList<>();
+        dfs(0, 0, 0, pos, ans);
+        return ans;
+    }
+
+    /**
+     *
+     * @param i         下一个左括号开始的位置
+     * @param lc        左括号的数量
+     * @param balance   左括号-右括号
+     * @param pos
+     * @param ans
+     */
+    private void dfs(int i, int lc, int balance, int[] pos, List<String> ans) {
+        if (lc == pos.length) {
+            char[] chars = new char[2 * pos.length];
+            Arrays.fill(chars, ')');
+            for (int p: pos) chars[p] = '(';
+            ans.add(new String(chars));
+            return;
+        }
+
+        // 枚举右括号的个数
+        for (int r = 0; r <= balance; r++) {
+            pos[lc] = i + r;
+            dfs(i + r + 1, lc + 1, balance - r + 1, pos, ans);
+        }
+    }
+
+
     // 左括号的数量只可能小于等于右括号
     public List<String> generateParenthesis(int n) {
         List<String> combinations = new ArrayList<>();
