@@ -46,6 +46,36 @@ public class RestoreIpAddresses {
         System.out.println(restoreIpAddresses2("19216811"));
     }
 
+
+    // 枚举法
+    public List<String> restoreIpAddresses3(String s) {
+        String[] part = new String[4];
+        List<String> ans = new ArrayList<>();
+        dfs(0, 0, s, part, ans);
+        return ans;
+    }
+
+    private void dfs(int start, int i, String s, String[] part, List<String> ans) {
+        if (i == 4) {
+            ans.add(String.join(".", part));
+            return;
+        }
+        if (s.length() - start > (4 - i) * 3 || s.length() - start < 4 - i) {
+            return;
+        }
+
+        for (int j = start, len1 = s.length(), len2 = start + 3; j < len1 && j < len2; j++) {
+            if (i < 3 || j == s.length() - 1) {
+                if (j > start && s.charAt(start) == '0') break;
+                String tmp = s.substring(start, j + 1);
+                if (Integer.parseInt(tmp) > 255) break;
+                part[i] = tmp;
+                dfs(j + 1, i + 1, s, part, ans);
+            }
+        }
+    }
+
+
     // TODO 看看别人怎么做的
     public List<String> restoreIpAddresses2(String s) {
         if (s.length() < 4 || s.length() > 24) {
