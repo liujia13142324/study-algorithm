@@ -4,7 +4,6 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -37,6 +36,37 @@ public class Permute {
     public void test() {
         System.out.println(permute2(new int[]{1,2,3}));
         System.out.println(permute2(new int[]{1,2,3,4}));
+    }
+
+
+
+    public List<List<Integer>> permute3(int[] nums) {
+        List<List<Integer>> ans = new ArrayList<>();
+        boolean[] cache = new boolean[21];
+        Integer[] path = new Integer[nums.length];
+
+        dfs(0, nums, path, ans, cache);
+
+        return ans;
+    }
+
+
+    public void dfs(int i, int[] nums, Integer[] path, List<List<Integer>> ans, boolean[] cache) {
+
+        if (i == path.length) {
+            ans.add(new ArrayList<>(Arrays.asList(path)));
+            return;
+        }
+
+        for (int j = 0; j < nums.length; j++) {
+            if (!cache[j + 10]) {
+                cache[j + 10] = true;
+                path[i] = nums[j];
+                dfs(i + 1, nums, path, ans, cache);
+                cache[j + 10] = false;
+            }
+        }
+
     }
 
 
