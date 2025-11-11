@@ -35,8 +35,88 @@ public class SolveNQueens {
 
     @Test
     public void test() {
-        System.out.println(solveNQueens(4));
+        List<List<String>> lists = solveNQueens2(4);
+        System.out.println(lists.size());
+        System.out.println(lists);
     }
+
+
+    public List<List<String>> solveNQueens3(int n) {
+        int[] path = new int[n];
+        List<List<String>> ans = new ArrayList<>();
+        // 垂直不能走
+        boolean[] vertical = new boolean[n];
+        // 左斜不能走，左斜线 i1 + j1 == i2 + j2 == i3 + j3 ...
+        boolean[] left = new boolean[n * 2];
+        // 右斜不能走，右斜线 i1 - j1 == i2 - j2 == i3 - j3 ...
+        boolean[] right = new boolean[n * 2];
+        dfs(0, path, ans, vertical, left, right);
+        return ans;
+    }
+
+    private void dfs(int i, int[] path, List<List<String>> ans, boolean[] vertical, boolean[] left, boolean[] right) {
+        if (i == path.length) {
+            List<String> tmp = new ArrayList<>();
+            for (int k : path) {
+                char[] chars = new char[path.length];
+                Arrays.fill(chars, '.');
+                chars[k] = 'Q';
+                tmp.add(new String(chars));
+            }
+            ans.add(tmp);
+            return;
+        }
+
+        for (int c = 0; c < path.length; c++) {
+            if (!vertical[c] && !left[i + c] && !right[i - c + path.length]) {
+                path[i] = c;
+                vertical[c] = left[i + c] = right[i - c + path.length] = true;
+                dfs(i + 1, path, ans, vertical, left, right);
+                vertical[c] = left[i + c] = right[i - c + path.length] = false;
+            }
+        }
+    }
+
+
+
+    public List<List<String>> solveNQueens2(int n) {
+        int[] path = new int[n];
+        List<List<String>> ans = new ArrayList<>();
+        dfs(0, path, ans);
+        return ans;
+    }
+
+    private void dfs(int i, int[] path, List<List<String>> ans) {
+        if (i == path.length) {
+            List<String> tmp = new ArrayList<>();
+            for (int k : path) {
+                char[] chars = new char[path.length];
+                Arrays.fill(chars, '.');
+                chars[k] = 'Q';
+                tmp.add(new String(chars));
+            }
+            ans.add(tmp);
+            return;
+        }
+
+        for (int j = 0; j < path.length; j++) {
+            if (isValid(i, j, path)) {
+                path[i] = j;
+                dfs(i + 1, path, ans);
+            }
+        }
+    }
+
+    private boolean isValid(int i, int j, int[] path) {
+        for (int k = 0; k < i; k++) {
+            //
+            if (j == path[k] || i + j == k + path[k] || i - j == k - path[k]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     public List<List<String>> solveNQueens(int n) {
         // 存放每行放置皇后的位置
@@ -69,6 +149,7 @@ public class SolveNQueens {
         }
 
     }
+
 
     private boolean[] copyAndSetDisabled(int curr, int[] path) {
         boolean[] disabled = new boolean[path.length];
