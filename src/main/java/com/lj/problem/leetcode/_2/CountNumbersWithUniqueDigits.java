@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._2;
 
+import org.junit.Test;
+
 /**
  * 357. 统计各位数字都不同的数字个数
  * 提示
@@ -14,13 +16,39 @@ package com.lj.problem.leetcode._2;
  * 输入：n = 0
  * 输出：1
  *
- * tmp
  *
  * 提示：
  * 0 <= n <= 8
  */
 public class CountNumbersWithUniqueDigits {
 
+
+    @Test
+    public void test() {
+        System.out.println(countNumbersWithUniqueDigits(4));
+        System.out.println(countNumbersWithUniqueDigits2(4));
+    }
+
+    // TODO 看看别人怎么做的
+    /**
+     *  数学法， 首位不为 0 的数字， 例 n = 3，把 3,2,1 位的结果相加，在加上 1（为0的情况）
+     *  0 -> 1
+     *  1 -> 9
+     *  2 -> 9 * 9
+     *  3 -> 9 * 9 * 8
+     *  4 -> 9 * 9 * 8 * 7
+     */
+    public int countNumbersWithUniqueDigits2(int n) {
+        int ans = 0;
+        for (int i = 0; i < n; i++) {
+            int val = 9;
+            for (int j = 0; j < i; j++) {
+                val *= (9 - j);
+            }
+            ans += val;
+        }
+        return ans + 1;
+    }
 
     private static int[] cache = new int[9];
     public int countNumbersWithUniqueDigits(int n) {
