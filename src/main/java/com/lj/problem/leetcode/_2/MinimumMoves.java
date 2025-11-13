@@ -34,7 +34,7 @@ import java.util.List;
  * 总共需要 4 次操作让每个格子都有一个石头。
  * 让每个格子都有一个石头的最少操作次数为 4 。
  *
- * tmp
+ *
  * 提示：
  * grid.length == grid[i].length == 3
  * 0 <= grid[i][j] <= 9
