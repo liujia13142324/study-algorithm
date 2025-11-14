@@ -28,7 +28,7 @@ import java.util.Arrays;
  * 1 <= nums.length <= 100
  * 0 <= nums[i] <= 400
  *
- * tmp
+ *
  *
  */
 public class Rob {
