@@ -34,8 +34,33 @@ public class Rob {
     @Test
     public void test() {
         System.out.println(rob(new int[]{1,2,3,1}));
+//        System.out.println(rob6(new int[]{1,2,3,1}));
         System.out.println(rob(new int[]{2,7,9,3,1}));
+        System.out.println(rob6(new int[]{2,7,9,3,1}));
     }
+
+
+
+    public int rob6(int[] nums) {
+        return dfs(nums.length - 1, nums);
+    }
+
+    private int dfs(int i, int[] nums) {
+        if (i >= nums.length) {
+            return 0;
+        }
+
+        return Math.max(dfs(i + 1, nums), nums[i] + dfs(i + 2, nums));
+    }
+
+    private int dfs2(int i, int[] nums) {
+        if (i < 0) {
+            return 0;
+        }
+
+        return Math.max(dfs(i - 1, nums), nums[i] + dfs(i + 2, nums));
+    }
+
 
 
     public int rob(int[] nums) {
