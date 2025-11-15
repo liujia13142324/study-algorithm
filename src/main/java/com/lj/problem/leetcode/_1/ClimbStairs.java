@@ -1,11 +1,9 @@
 package com.lj.problem.leetcode._1;
 
 /**
+ * 70. 爬楼梯 https://leetcode.cn/problems/climbing-stairs/
  * 假设你正在爬楼梯。需要 n 阶你才能到达楼顶。
- *
  * 每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？
- *
- *
  *
  * 示例 1：
  *
@@ -24,7 +22,19 @@ package com.lj.problem.leetcode._1;
  * 3. 2 阶 + 1 阶
  */
 public class ClimbStairs {
-    
+
+    public int climbStairs2(int n) {
+        int i1 = 1;
+        int i2 = 1;
+        int ans = 1;
+        for (int i = 2; i <= n; i++) {
+            ans = i1 + i2;
+            i1 = i2;
+            i2 = ans;
+        }
+        return ans;
+    }
+
     /**
      * 我们用 f(x)f(x)f(x) 表示爬到第 xxx 级台阶的方案数，考虑最后一步可能跨了一级台阶，也可能跨了两级台阶，所以我们可以列出如下式子：
      *

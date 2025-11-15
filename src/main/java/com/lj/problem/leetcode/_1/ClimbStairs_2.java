@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * 70. 爬楼梯 https://leetcode.cn/problems/climbing-stairs/
  * 假设你正在爬楼梯。需要 n 阶你才能到达楼顶。
  *
  * 每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？
@@ -36,6 +37,45 @@ public class ClimbStairs_2 {
     public static void main(String[] args) {
         System.out.println(climbStairs(35));
     }
+
+
+    public int climbStairs2_(int n) {
+        int i1 = 1;
+        int i2 = 1;
+        int ans = 1;
+        for (int i = 2; i <= n; i++) {
+            ans = i1 + i2;
+            i1 = i2;
+            i2 = ans;
+        }
+        return ans;
+    }
+
+
+     public int climbStairs2(int n) {
+         int[] cache = new int[n + 1];
+         return dfs(n, n, cache);
+     }
+
+    private int dfs(int i, int n, int[]cache) {
+        if (i == 0) {
+            return 1;
+        }
+
+        if (cache[i] != 0) {
+            return cache[i];
+        }
+
+        int ans = dfs(i - 1, n, cache);
+        if (i > 1) {
+            ans += dfs(i - 2, n, cache);
+        }
+
+        cache[i] = ans;
+
+        return ans;
+    }
+
 
     private static int climbStairs(int n) {
         int m = 0;
