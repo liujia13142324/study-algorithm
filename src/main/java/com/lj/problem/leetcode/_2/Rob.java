@@ -38,12 +38,30 @@ public class Rob {
         System.out.println(rob(new int[]{1,2,3,1}));
 //        System.out.println(rob6(new int[]{1,2,3,1}));
         System.out.println(rob(new int[]{2,7,9,3,1}));
-        System.out.println(rob6(new int[]{2,7,9,3,1}));
     }
 
+    public int rob3__(int[] nums) {
+        int i1 = 0;
+        int i2 = nums[0];
+        int ans = nums[0];
+        for (int i = 2; i <= nums.length; i++) {
+            ans = Math.max(nums[i-1] + i1, i2);
+            i1 = i2;
+            i2 = ans;
+        }
+        return ans;
+    }
 
+    public int rob3_(int[] nums) {
+        int[] dfs = new int[nums.length + 1];
+        dfs[1] = nums[0];
+        for (int i = 2; i < dfs.length; i++) {
+            dfs[i] = Math.max(nums[i - 1] + dfs[i - 2], dfs[i - 1]);
+        }
+        return dfs[nums.length];
+    }
 
-    public int rob6(int[] nums) {
+    public int rob3(int[] nums) {
         return dfs(nums.length - 1, nums);
     }
 
@@ -63,6 +81,13 @@ public class Rob {
         return Math.max(dfs(i - 1, nums), nums[i] + dfs(i + 2, nums));
     }
 
+    public int rob2(int[] nums) {
+        int[] dfs = new int[nums.length + 2];
+        for (int i = 0; i < nums.length; i++) {
+            dfs[i + 2] = Math.max(nums[i] + dfs[i], dfs[i + 1]);
+        }
+        return dfs[nums.length + 1];
+    }
 
 
     public int rob(int[] nums) {
