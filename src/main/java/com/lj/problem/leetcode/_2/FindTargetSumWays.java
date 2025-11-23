@@ -2,9 +2,7 @@ package com.lj.problem.leetcode._2;
 
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 494. 目标和
@@ -42,16 +40,157 @@ public class FindTargetSumWays {
 
     @Test
     public void test() {
-        System.out.println(findTargetSumWays5(new int[]{1,1,1,1,1}, 3));
-        System.out.println(findTargetSumWays5(new int[]{1}, 1));
-        System.out.println(findTargetSumWays5(new int[]{0}, 0));
+        System.out.println(findTargetSumWays6(new int[]{1,1,1,1,1}, 3));
+        System.out.println(findTargetSumWays7___(new int[]{1,1,1,1,1}, 3));
 
-        System.out.println(findTargetSumWays4(new int[]{1,1,1,1,1}, 3));
-        System.out.println(findTargetSumWays4(new int[]{1}, 1));
-        System.out.println(findTargetSumWays4(new int[]{0}, 0));
+        System.out.println(findTargetSumWays6(new int[]{1,1,1,1,1}, 1));
+        System.out.println(findTargetSumWays7___(new int[]{1,1,1,1,1}, 1));
 
-        System.out.println(findTargetSumWays3(new int[]{1,1,1,1,1}, 3));
-        System.out.println(findTargetSumWays3(new int[]{1}, 1));
+        System.out.println(findTargetSumWays6(new int[]{1}, 1));
+        System.out.println(findTargetSumWays7___(new int[]{1}, 1));
+
+        System.out.println(findTargetSumWays6(new int[]{1, 0}, 1));
+        System.out.println(findTargetSumWays7___(new int[]{1, 0}, 1));
+    }
+
+    /**
+     * 最快的
+     */
+    public int findTargetSumWays7___(int[] nums, int target) {
+        int sum = 0;
+        for (int n : nums) sum += n;
+        sum -= Math.abs(target);
+        if (sum < 0 || sum % 2 != 0)  return 0;
+        sum /= 2;
+        int[] dp = new int[sum + 1];
+        dp[0] = 1;
+        for (int num : nums) {
+            for (int j = sum; j >= 0; j--) {
+                if (j >= num) dp[j] += dp[j - num];
+            }
+        }
+        return dp[sum];
+    }
+
+    /**
+     * 这个和下面知识遍历的顺序变一下，这种情况下，并不影响结果，又方便转换成滚动数组
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int findTargetSumWays7__(int[] nums, int target) {
+        int sum = 0;
+        for (int n : nums) sum += n;
+        sum -= Math.abs(target);
+        if (sum < 0 || sum % 2 != 0)  return 0;
+        sum /= 2;
+        int[][] dp = new int[nums.length + 1][sum + 1];
+        dp[0][0] = 1;
+        for (int i = 1; i < dp.length; i++) {
+            for (int j = 0; j < dp[0].length; j++) {
+                dp[i][j] = dp[i - 1][j];
+                if (j >= nums[i - 1]) dp[i][j] += dp[i - 1][j - nums[i - 1]];
+            }
+        }
+        return dp[nums.length][sum];
+    }
+
+    /**
+     * 这种写法应该也可以转换成滚动数组
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int findTargetSumWays7_(int[] nums, int target) {
+        int sum = 0;
+        for (int n : nums) sum += n;
+        sum -= Math.abs(target);
+        if (sum < 0 || sum % 2 != 0)  return 0;
+        sum /= 2;
+        int[][] dp = new int[nums.length + 1][sum + 1];
+        dp[0][0] = 1;
+        for (int j = 0; j < dp[0].length; j++) {
+            for (int i = 1; i < dp.length; i++) {
+                dp[i][j] = dp[i - 1][j];
+                if (j >= nums[i - 1]) dp[i][j] += dp[i - 1][j - nums[i - 1]];
+            }
+        }
+        return dp[nums.length][sum];
+    }
+
+    public int findTargetSumWays7(int[] nums, int target) {
+        int sum = 0;
+        for (int n : nums) sum += n;
+        sum -= Math.abs(target);
+        if (sum < 0 || sum % 2 != 0)  return 0;
+        sum /= 2;
+        int[][] cache = new int[nums.length][sum + 1];
+        for (int[] tmp: cache) Arrays.fill(tmp, -1);
+        return dfs7(nums.length - 1, sum, nums, cache);
+    }
+
+    public int dfs7(int i, int target, int[] nums, int[][] cache) {
+        if (i < 0) return target == 0 ? 1 : 0;
+        if (target < 0) return 0;
+        if (cache[i][target] != -1) return cache[i][target];
+        cache[i][target] = dfs7(i - 1, target, nums, cache) + dfs7(i - 1, target - nums[i], nums, cache);
+        return cache[i][target];
+    }
+
+    public int findTargetSumWays6_(int[] nums, int target) {
+        int[][] cache = new int[nums.length][2001];
+        for (int[] tmp: cache) Arrays.fill(tmp, -1);
+        return dfs(nums.length - 1, target, nums, cache);
+    }
+
+    private int dfs(int i, int target, int[] nums, int[][] cache) {
+        if (i < 0) {
+            return target == 0 ? 1 : 0;
+        }
+        if (target + 1000 < 0 || target + 1000 > 2000) {
+            return 0;
+        }
+        if (cache[i][target + 1000] != - 1) {
+            return cache[i][target + 1000];
+        }
+        cache[i][target + 1000] = dfs(i - 1, target - nums[i], nums, cache) + dfs(i - 1, target + nums[i], nums, cache);
+        return cache[i][target + 1000];
+    }
+
+    public int findTargetSumWays6(int[] nums, int target) {
+        return dfs(nums.length - 1, target, nums);
+    }
+
+    private int dfs(int i, int target, int[] nums) {
+        if (i < 0) {
+            return target == 0 ? 1 : 0;
+        }
+        return dfs(i - 1, target - nums[i], nums) + dfs(i - 1, target + nums[i], nums);
+    }
+
+    public int findTargetSumWays6__(int[] nums, int target) {
+        int[][] dfs = new int[nums.length][2001];
+        Queue<Integer> que = new LinkedList<>();
+        dfs[0][0 - nums[0] + 1000 ] = 1;
+        dfs[0][0 + nums[0] + 1000] = 1;
+        que.add(1000 - nums[0]);
+        que.add(1000 + nums[0]);
+        for (int i = 1; i < nums.length; i++) {
+            int size = que.size();
+            while (size-- > 0) {
+                int t = que.poll();
+                dfs[i][t - nums[i]] += dfs[i - 1][t];
+                dfs[i][t + nums[i]] += dfs[i - 1][t];
+                if (!que.contains(t-nums[i])) {
+                    que.add(t - nums[i]);
+                }
+                if (!que.contains(t+nums[i])) {
+                    que.add(t + nums[i]);
+                }
+
+            }
+        }
+        return dfs[nums.length - 1][target + 1000];
     }
 
 
