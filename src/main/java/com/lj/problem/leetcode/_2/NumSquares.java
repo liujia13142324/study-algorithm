@@ -35,6 +35,25 @@ public class NumSquares {
     }
 
 
+    static int[] dp = null;
+    private void init2() {
+        if (dp == null) {
+            dp = new int[10001];
+            int tmp = 0;
+            for (int i = 0; i < dp.length; i++) dp[i] = i;
+            for (int t = 1; t <= 10000; t++) {
+                for (int i = 2; (tmp = i * i) <= t; i++) {
+                    dp[t] = Math.min(1 + dp[t - tmp], dp[t]);
+                }
+            }
+        }
+    }
+    public int numSquares5(int n) {
+        init2();
+        return dp[n];
+    }
+
+
     private static final int N = 10000;
     private static final int[] f = new int[N + 1];
     private static boolean initialized = false;
