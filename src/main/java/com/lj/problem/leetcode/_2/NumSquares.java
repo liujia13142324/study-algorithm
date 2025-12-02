@@ -22,7 +22,7 @@ import java.util.Arrays;
  *
  * 提示：
  * 1 <= n <= 104
- * tmp
+ *
  */
 public class NumSquares {
 
