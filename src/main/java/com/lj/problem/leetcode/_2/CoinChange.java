@@ -35,16 +35,106 @@ public class CoinChange {
 
     @Test
     public void test1() {
-        System.out.println(coinChange(new int[]{1,2,5}, 11));
-        System.out.println(coinChange(new int[]{2}, 3));
-        System.out.println(coinChange(new int[]{1}, 0));
-        System.out.println(coinChange(new int[]{186,419,83,408}, 6249));
+//        System.out.println(coinChange(new int[]{1,2,5}, 11));
+//        System.out.println(coinChange(new int[]{2}, 3));
+//        System.out.println(coinChange(new int[]{1}, 0));
+//        System.out.println(coinChange(new int[]{186,419,83,408}, 6249));
+//
+//        System.out.println(coinChange6(new int[]{1,2,5}, 11));
+//        System.out.println(coinChange6(new int[]{2}, 3));
+//        System.out.println(coinChange6(new int[]{1}, 0));
+//        System.out.println(coinChange6(new int[]{186,419,83,408}, 6249));
 
-        System.out.println(coinChange6(new int[]{1,2,5}, 11));
-        System.out.println(coinChange6(new int[]{2}, 3));
-        System.out.println(coinChange6(new int[]{1}, 0));
-        System.out.println(coinChange6(new int[]{186,419,83,408}, 6249));
+
+//        System.out.println(coinChange7(new int[]{357,239,73,52}, 9832));
+//        System.out.println(coinChange7(new int[]{484,395,346,103,329}, 4259));
+        System.out.println(coinChange7___(new int[]{1}, 1));
     }
+
+    public int coinChange7___(int[] coins, int amount) {
+        int[] dp = new int[amount + 1];
+        Arrays.fill(dp, 100000);
+        dp[0] = 0;
+        for (int coin : coins) {
+            for (int j = 1; j <= amount; j++) {
+                if (j >= coin) {
+                    dp[j] = Math.min(1 + dp[j - coin], dp[j]);
+                }
+            }
+        }
+        return dp[amount] >= 100000 ? -1 : dp[amount];
+    }
+
+    public int coinChange7__(int[] coins, int amount) {
+        int[][] dp = new int[coins.length + 1][amount + 1];
+        Arrays.fill(dp[0], 100000);
+        for (int i = 1; i <= coins.length; i++) {
+            for (int j = 1; j <= amount; j++) {
+                if (j >= coins[i - 1]) {
+                    dp[i][j] = Math.min(1 + dp[i][j - coins[i - 1]], dp[i - 1][j]);
+                }else {
+                    dp[i][j] = dp[i - 1][j];
+                }
+            }
+        }
+        return dp[coins.length][amount] >= 100000 ? -1 : dp[coins.length][amount];
+    }
+
+
+    public int coinChange7_(int[] coins, int amount) {
+        int[][] cache = new int[coins.length][amount + 1];
+        Arrays.sort(coins);
+        int ans = dfs(coins.length - 1, coins, amount, cache);
+        return ans >= 100000 ? -1 : ans;
+    }
+
+    private int dfs(int i, int[] coins, int amount, int[][] cache) {
+        if (amount == 0) {
+            return 0;
+        }
+        if (amount < 0 || i < 0) {
+            return 100000;
+        }
+
+        if (cache[i][amount] != 0) {
+            return cache[i][amount];
+        }
+
+        cache[i][amount] = Math.min(1 + dfs(i, coins, amount - coins[i], cache), dfs(i - 1, coins, amount, cache));
+
+        return cache[i][amount];
+    }
+
+
+    public int coinChange7(int[] coins, int amount) {
+        int ans = dfs(0, coins, amount);
+        return ans >= 100000 ? -1 : ans;
+    }
+
+    private int dfs(int i, int[] coins, int amount) {
+        if (amount == 0) {
+            return 0;
+        }
+        if (amount < 0 || i == coins.length) {
+            return 100000;
+        }
+
+        return Math.min(1 + dfs(i, coins, amount - coins[i]), dfs(i + 1, coins, amount));
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     int NULL = 100000;
 
