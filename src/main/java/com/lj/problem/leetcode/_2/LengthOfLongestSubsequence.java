@@ -46,6 +46,111 @@ public class LengthOfLongestSubsequence {
 
     }
 
+    public int lengthOfLongestSubsequence5___(List<Integer> nums, int target) {
+        int[] dp = new int[target + 1];
+        Arrays.fill(dp, -100000);
+        dp[0] = 0;
+
+        // 还是把 nums 转换成数组，在进行迭代，速度会快一些
+        for (int num: nums) {
+            for (int j = target; j >= 0; j--) {
+                if (j >= num) {
+                    dp[j] = Math.max(dp[j], 1 + dp[j - num]);
+                }
+            }
+        }
+
+        return dp[target] < 0 ? -1 : dp[target];
+    }
+
+    public int lengthOfLongestSubsequence5__(List<Integer> nums, int target) {
+        int i = 0;
+        int[] array = new int[nums.size()];
+        for (int num: nums) array[i++] = num;
+        int[][] dp = new int[i + 1][target + 1];
+        Arrays.fill(dp[0], -100000);
+        dp[0][0] = 0;
+
+        for (i = 1; i <= array.length; i++) {
+            for (int j = 1; j <= target; j++) {
+                if (j >= array[i-1]) {
+                    dp[i][j] = Math.max(dp[i-1][j], dp[i-1][j-array[i-1]] + 1);
+                }else {
+                    dp[i][j] = dp[i-1][j];
+                }
+            }
+        }
+
+        return dp[nums.size()][target] < 0 ? -1 : dp[nums.size()][target];
+    }
+
+    public int lengthOfLongestSubsequence5_(List<Integer> nums, int target) {
+        int[] array = new int[nums.size()];
+        int i = 0;
+        int[][] cache = new int[array.length][target + 1];
+        for (int num: nums) array[i++] = num;
+        int ans = dfs(i - 1, array, target, cache);
+        return ans < 0 ? -1 : ans;
+    }
+
+
+    private int dfs(int i, int[] array, int target, int[][] cache) {
+        if (target == 0) return 0;
+        if (i < 0 || target < 0) {
+            return -100000;
+        }
+        if (cache[i][target] != 0) {
+            return cache[i][target];
+        }
+
+        cache[i][target] = Math.max(dfs(i - 1, array, target, cache), dfs(i - 1, array, target - array[i], cache) + 1);
+        return cache[i][target];
+    }
+
+
+    public int lengthOfLongestSubsequence5(List<Integer> nums, int target) {
+        int[] array = new int[nums.size()];
+        int i = 0;
+        for (int num: nums) array[i++] = num;
+        int ans = dfs(i - 1, array, target);
+        return ans < 0 ? -1 : ans;
+    }
+
+
+    private int dfs(int i, int[] array, int target) {
+        if (target == 0) return 0;
+        if (i < 0 || target < 0) {
+            return -100000;
+        }
+
+        return Math.max(dfs(i - 1, array, target), dfs(i - 1, array, target - array[i]) + 1);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public int lengthOfLongestSubsequence4(List<Integer> nums, int target) {
         int[] array = new int[nums.size()];
         int i = 0;
