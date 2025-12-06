@@ -19,7 +19,7 @@ import java.util.Arrays;
  * 输入：n = 13
  * 输出：2
  * 解释：13 = 4 + 9
- * tmp
+ *
  * 提示：
  * 1 <= n <= 104
  *
