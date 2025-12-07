@@ -33,6 +33,39 @@ public class CanPartition {
         System.out.println(canPartition4(new int[]{1, 1}));
     }
 
+
+
+
+
+    public boolean canPartition_(int[] nums) {
+        int sum = 0;
+        for (int num: nums) sum += num;
+        if ((sum & 1) != 0) return false;
+
+        return dfs(nums.length - 1, sum/2, nums);
+    }
+
+    private boolean dfs(int i, int target, int[] nums) {
+        if (target == 0) {
+            return true;
+        }
+        if (i < 0 || target < 0) {
+            return false;
+        }
+        return dfs(i - 1, target - nums[i], nums) || dfs(i - 1, target, nums);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
     public boolean canPartition4(int[] nums) {
         int sum = 0;
         for (int num : nums) {
