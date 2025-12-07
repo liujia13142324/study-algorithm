@@ -34,10 +34,31 @@ public class CanPartition {
     }
 
 
+    public boolean canPartition5__(int[] nums) {
+        int sum = 0;
+        for (int num: nums) sum += num;
+        if ((sum & 1) != 0) return false;
+        Boolean[][] cache = new Boolean[nums.length][sum/2 + 1];
+        return dfs(nums.length - 1, sum/2, nums, cache);
+    }
+
+    private boolean dfs(int i, int target, int[] nums, Boolean[][] cache) {
+        if (target == 0) {
+            return true;
+        }
+        if (i < 0 || target < 0) {
+            return false;
+        }
+        if (cache[i][target] != null) {
+            return cache[i][target];
+        }
+
+        cache[i][target] = dfs(i - 1, target - nums[i], nums, cache) || dfs(i - 1, target, nums, cache);
+        return cache[i][target];
+    }
 
 
-
-    public boolean canPartition_(int[] nums) {
+    public boolean canPartition5_(int[] nums) {
         int sum = 0;
         for (int num: nums) sum += num;
         if ((sum & 1) != 0) return false;
