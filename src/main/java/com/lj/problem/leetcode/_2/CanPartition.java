@@ -60,6 +60,7 @@ public class CanPartition {
         return cache[i][target];
     }
 
+    // 一个剪纸优化，一个避免赋值计算
     public boolean canPartition5_____(int[] nums) {
         int sum = 0;
         for (int num: nums) sum += num;
