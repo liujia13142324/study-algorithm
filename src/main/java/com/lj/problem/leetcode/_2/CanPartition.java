@@ -36,30 +36,7 @@ public class CanPartition {
         System.out.println(canPartition4(new int[]{1, 1}));
     }
 
-
-    public boolean canPartition5___(int[] nums) {
-        int sum = 0;
-        for (int num: nums) sum += num;
-        if ((sum & 1) != 0) return false;
-
-        int target = sum/2;
-        boolean[][] dp = new boolean[nums.length + 1][target + 1];
-        Arrays.fill(dp[0], false);
-        dp[0][0] = true;
-
-        for (int i = 1; i <= nums.length; i++) {
-            for (int j = 1; j <= target; j++) {
-                if (j >= nums[i - 1]) {
-                    dp[i][j] = dp[i - 1][j - nums[i - 1]] || dp[i - 1][j];
-                }else {
-                    dp[i][j] = dp[i - 1][j];
-                }
-            }
-        }
-
-        return dp[nums.length][target];
-    }
-
+    // 这个记忆搜索最快
     public boolean canPartition5__(int[] nums) {
         int sum = 0;
         for (int num: nums) sum += num;
@@ -83,6 +60,73 @@ public class CanPartition {
         return cache[i][target];
     }
 
+    public boolean canPartition5_____(int[] nums) {
+        int sum = 0;
+        for (int num: nums) sum += num;
+        if ((sum & 1) != 0) return false;
+
+        int target = sum/2;
+        boolean[] dp = new boolean[target + 1];
+        Arrays.fill(dp, false);
+        dp[0] = true;
+
+        outer:
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = target; j >= 1; j--) {
+                if (j >= nums[i] && !dp[j]) {
+                    dp[j] = dp[j - nums[i]];
+                }
+                if (dp[target] || i == nums.length - 1) {
+                    break outer;
+                }
+            }
+        }
+        return dp[target];
+    }
+
+    public boolean canPartition5____(int[] nums) {
+        int sum = 0;
+        for (int num: nums) sum += num;
+        if ((sum & 1) != 0) return false;
+
+        int target = sum/2;
+        boolean[] dp = new boolean[target + 1];
+        Arrays.fill(dp, false);
+        dp[0] = true;
+
+        for (int num: nums) {
+            for (int j = target; j >= 1; j--) {
+                if (j >= num) {
+                    dp[j] = dp[j - num] || dp[j];
+                }
+            }
+        }
+
+        return dp[target];
+    }
+
+    public boolean canPartition5___(int[] nums) {
+        int sum = 0;
+        for (int num: nums) sum += num;
+        if ((sum & 1) != 0) return false;
+
+        int target = sum/2;
+        boolean[][] dp = new boolean[nums.length + 1][target + 1];
+        Arrays.fill(dp[0], false);
+        dp[0][0] = true;
+
+        for (int i = 1; i <= nums.length; i++) {
+            for (int j = 1; j <= target; j++) {
+                if (j >= nums[i - 1]) {
+                    dp[i][j] = dp[i - 1][j - nums[i - 1]] || dp[i - 1][j];
+                }else {
+                    dp[i][j] = dp[i - 1][j];
+                }
+            }
+        }
+
+        return dp[nums.length][target];
+    }
 
     public boolean canPartition5_(int[] nums) {
         int sum = 0;
