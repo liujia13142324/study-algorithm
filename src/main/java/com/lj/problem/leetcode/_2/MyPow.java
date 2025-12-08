@@ -6,6 +6,7 @@ import org.junit.Test;
 /**
  *
  * 50. 快速幂
+ * LCR 134. Pow(x, n)
  * 实现 pow(x, n) ，即计算 x 的整数 n 次幂函数（即，xn ）。
  *
  * 示例 1：
@@ -39,6 +40,28 @@ public class MyPow {
         System.out.println(myPow2(2, 8));
         System.out.println(myPow2(2, -3));
     }
+
+
+    public double myPow3(double x, int n) {
+        return n < 0 ? myPow3_(1/x, -n) : myPow3_(x, n);
+    }
+
+    private double myPow3_(double x, int n) {
+        if (n == 0) return 1;
+        double val = myPow3_(x, n >>> 1);
+        return (n & 1) == 0 ? val * val : val * val * x;
+    }
+
+
+
+
+
+
+
+
+
+
+
     public double myPow2(double x, int n) {
         return n >= 0 ? dfs(x, n) : 1/dfs(x, n);
     }
