@@ -3,6 +3,7 @@ package com.lj.problem.leetcode._2;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 
 /**
  * 2787. 将一个数字表示成幂的和的方案数
@@ -43,7 +44,115 @@ public class NumberOfWays {
         System.out.println(numberOfWays4(4, 1));
         System.out.println(numberOfWays4(64, 3));
         System.out.println(numberOfWays4(125, 3));
+
+        System.out.println(numberOfWays7_(74, 5));
     }
+
+    // 预处理
+    static int[][] dp;
+    private void init() {
+        if (dp == null) {
+            dp = new int[6][301];
+            for (int i = 0; i < 6; i++) dp[i][0] = 1;
+            for (int x = 1; x < 6; x++) {
+                for (int i = 1; i <= 300; i++) {
+                    for (int j = 300; j > 0; j--) {
+                        long val = j - pow(i, x);
+                        if (val >= 0) {
+                            dp[x][j] = (dp[x][j] + dp[x][(int)val]) % (1_000_000_000 + 7);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    public int numberOfWays7____(int n, int x) {
+        init();
+        return dp[x][n];
+    }
+
+    // 递推大多数情况下，并没有递归快，因为递归只需要计算需要算的节点，但是递推需要计算全部节点
+    // 但如果使用预处理就不一样了，
+    public int numberOfWays7___(int n, int x) {
+        int[] dp = new int[n + 1];
+        dp[0] = 1;
+        for (int i = 1; i <= n; i++) {
+            for (int j = n; j > 0; j--) {
+                long val = j - pow(i, x);
+                if (val >= 0) {
+                    dp[j] = (dp[j] + dp[(int)val]) % (1_000_000_000 + 7);
+                }
+            }
+        }
+        return dp[n];
+    }
+
+    public int numberOfWays7__(int n, int x) {
+        int[][] dp = new int[n + 1][n + 1];
+        for (int i = 0; i <= n; i++) dp[i][0] = 1;
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= n; j++) {
+                long val = j - pow(i, x);
+                if (val >= 0) {
+                    dp[i][j] = (dp[i - 1][j] + dp[i - 1][(int)val]) % (1_000_000_000 + 7);
+                }else {
+                    dp[i][j] = dp[i - 1][j] % (1_000_000_000 + 7);
+                }
+            }
+        }
+        return dp[n][n];
+    }
+
+    public int numberOfWays7_(int n, int x) {
+        int[][] cache = new int[n + 1][n + 1];
+        for (int[] arr: cache) Arrays.fill(arr, -1);
+        return (int) dfs(n, n, x, cache);
+    }
+
+    private long dfs(int i, int target, int x, int[][] cache) {
+        if (target == 0) return 1;
+        if (i < 0 || target < 0) return 0;
+        if (cache[i][target] != -1) return cache[i][target];
+        long val = target - pow(i, x);
+        cache[i][target] = (int) (dfs(i - 1, val < 0 ? -1 : (int) val, x, cache) + dfs(i - 1 , target, x, cache) % (1_000_000_000 + 7));
+        return cache[i][target];
+    }
+
+    private long dfs2(int i, int target, int x, int[][] cache) {
+        if (target == 0) return 1;
+        if (i < 0) return 0;
+        if (cache[i][target] != -1) return cache[i][target];
+        long val = target - pow(i, x);
+        if (val < 0) {
+            cache[i][target] = (int) (dfs2(i - 1 , target, x, cache) % (1_000_000_000 + 7));
+        }else {
+            cache[i][target] = (int) ((dfs2(i - 1, (int) val, x, cache) + dfs2(i - 1 , target, x, cache)) % (1_000_000_000 + 7));
+        }
+        return cache[i][target];
+    }
+
+
+    public long numberOfWays7(int n, int x) {
+        return dfs(n, n, x);
+    }
+
+    private int dfs(int i, int target, int x) {
+        if (target == 0) return 1;
+        if (i < 0 || target < 0) return 0;
+        long val = pow(i, x);
+        return dfs(i - 1, (int) (target - val), x) + dfs(i - 1 , target, x);
+    }
+
+    private long pow(int x, int n) {
+        if (n == 0 || x == 1x   ) return 1;
+        long val = pow(x, n >>> 1);
+        return (n & 1) == 0 ? val * val : val * val * x;
+    }
+
+
+
+
+
 
     /**
      * https://leetcode.cn/problems/ways-to-express-an-integer-as-sum-of-powers/solutions/2354970/0-1-bei-bao-mo-ban-ti-by-endlesscheng-ap09/
