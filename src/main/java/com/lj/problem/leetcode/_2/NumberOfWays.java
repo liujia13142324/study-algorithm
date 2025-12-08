@@ -144,13 +144,10 @@ public class NumberOfWays {
     }
 
     private long pow(int x, int n) {
-        if (n == 0 || x == 1x   ) return 1;
+        if (n == 0 || x == 1) return 1;
         long val = pow(x, n >>> 1);
         return (n & 1) == 0 ? val * val : val * val * x;
     }
-
-
-
 
 
 
