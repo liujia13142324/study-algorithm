@@ -54,10 +54,8 @@ public class Change {
         int[] dp = new int[amount + 1];
         dp[0] = 1;
         for (int num: coins) {
-            for (int j = 1; j <= amount; j++) {
-                if (j - num >= 0) {
-                    dp[j] += dp[j - num];
-                }
+            for (int j = num; j <= amount; j++) {
+                dp[j] += dp[j - num];
             }
         }
         return dp[amount];
