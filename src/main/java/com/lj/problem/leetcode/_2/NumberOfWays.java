@@ -55,6 +55,7 @@ public class NumberOfWays {
             dp = new int[6][301];
             for (int i = 0; i < 6; i++) dp[i][0] = 1;
             for (int x = 1; x < 6; x++) {
+                // TODO 这个位置还可以优化
                 for (int i = 1; i <= 300; i++) {
                     long tmp = pow(i, x);
                     for (int j = 300; j >= tmp; j--) {
