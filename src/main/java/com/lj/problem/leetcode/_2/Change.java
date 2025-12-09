@@ -2,6 +2,8 @@ package com.lj.problem.leetcode._2;
 
 import org.junit.Test;
 
+import java.util.Arrays;
+
 /**
  * 518. 零钱兑换 II
  * 给你一个整数数组 coins 表示不同面额的硬币，另给一个整数 amount 表示总金额。
@@ -49,6 +51,19 @@ public class Change {
     }
 
 
+    public int change4_(int amount, int[] coins) {
+        int[][] cache = new int[coins.length][amount + 1];
+        for (int[] tmp: cache) Arrays.fill(tmp, -1);
+        return dfs(coins.length - 1, amount, coins, cache);
+    }
+
+    private int dfs(int i, int target, int[] coins, int[][] cache) {
+        if (target == 0) return 1;
+        if (target < 0 || i < 0) return 0;
+        if (cache[i][target] != -1) return cache[i][target];
+        cache[i][target] = dfs(i, target - coins[i], coins, cache) + dfs(i-1, target, coins, cache);
+        return cache[i][target];
+    }
 
 
     public int change4(int amount, int[] coins) {
