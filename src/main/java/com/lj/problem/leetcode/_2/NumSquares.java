@@ -31,8 +31,8 @@ public class NumSquares {
         System.out.println(numSquares2(12));
         System.out.println(numSquares2(13));
 
-        System.out.println(numSquares3_1(12));
-        System.out.println(numSquares3_1(13));
+        System.out.println(numSquares3(12));
+        System.out.println(numSquares3(13));
     }
 
 
@@ -49,28 +49,51 @@ public class NumSquares {
             }
         }
     }
-    public int numSquares5(int n) {
+    public int numSquares5__(int n) {
         init2();
         return dp[n];
     }
 
+    public int numSquares5_(int n) {
+        int[] dfs = new int[n + 1];
+        for (int i = 0; i < dfs.length; i++) dfs[i] = i;
+        int tmp = 0;
+        for (int t = 1; t <= n; t++) {
+            for (int i = 1; (tmp = i * i) <= t; i++) {
+                dfs[t] = Math.min(dfs[t], 1 + dfs[t - tmp]);
+            }
+        }
+        return dfs[n];
+    }
 
-    private static final int N = 10000;
-    private static final int[] f = new int[N + 1];
-    private static boolean initialized = false;
+    public int numSquares5(int n) {
+        int[] cache = new int[n + 1];
+        return dfs(1, n, cache);
+    }
 
+    public int dfs(int i, int target, int[] cache) {
+        if (target == 0) return 0;
+        if (cache[target] != 0) return cache[target];
+        int tmp = i * i;
+        if (target < tmp) return 100000;
+        cache[target] = Math.min(1 + dfs(i, target - tmp, cache), dfs(i + 1, target, cache));
+        return cache[target];
+    }
+
+
+
+    private static int[] f;
     // 这样写比 static block 更快
     private void init() {
-        if (initialized) {
+        if (f != null) {
             return;
         }
-        initialized = true;
-
-        Arrays.fill(f, Integer.MAX_VALUE);
-        f[0] = 0;
-        for (int i = 1; i * i <= N; i++) {
-            for (int j = i * i; j <= N; j++) {
-                f[j] = Math.min(f[j], f[j - i * i] + 1); // 不选 vs 选
+        f = new int[10001];
+        for (int i = 0; i < f.length; i++) f[i] = i;
+        for (int i = 2; i <= 100; i++) {
+            int tmp = i * i;
+            for (int j = tmp; j <= 10000; j++) {
+                f[j] = Math.min(f[j], f[j - tmp] + 1); // 不选 vs 选
             }
         }
     }
@@ -79,26 +102,6 @@ public class NumSquares {
     public int numSquares4(int n) {
         init();
         return f[n];
-    }
-
-
-    public int numSquares3_1(int n) {
-        numSquares3_2();
-        return f[n];
-    }
-
-    public void numSquares3_2() {
-        if (initialized) return;
-        initialized = true;
-        Arrays.fill(f, N);
-        f[0] = 0;
-        int square;
-        for (int i = 1; i*i <= N; i++) {
-            square = i * i;
-            for (int j = square; j <= N; j++) {
-                f[j] = Math.min(f[j], 1 + f[j - square]);
-            }
-        }
     }
 
 
