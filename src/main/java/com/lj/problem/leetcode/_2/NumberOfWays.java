@@ -56,11 +56,9 @@ public class NumberOfWays {
             for (int i = 0; i < 6; i++) dp[i][0] = 1;
             for (int x = 1; x < 6; x++) {
                 for (int i = 1; i <= 300; i++) {
-                    for (int j = 300; j > 0; j--) {
-                        long val = j - pow(i, x);
-                        if (val >= 0) {
-                            dp[x][j] = (dp[x][j] + dp[x][(int)val]) % (1_000_000_000 + 7);
-                        }
+                    long tmp = pow(i, x);
+                    for (int j = 300; j >= tmp; j--) {
+                        dp[x][j] = (dp[x][j] + dp[x][(int) (j - tmp)]) % (1_000_000_000 + 7);
                     }
                 }
             }
@@ -76,12 +74,11 @@ public class NumberOfWays {
     public int numberOfWays7___(int n, int x) {
         int[] dp = new int[n + 1];
         dp[0] = 1;
+        // 这个位置还可以优化
         for (int i = 1; i <= n; i++) {
-            for (int j = n; j > 0; j--) {
-                long val = j - pow(i, x);
-                if (val >= 0) {
-                    dp[j] = (dp[j] + dp[(int)val]) % (1_000_000_000 + 7);
-                }
+            long tmp = pow(i, x);
+            for (int j = n; j >= tmp; j--) {
+                dp[j] = (dp[j] + dp[(int) (j - tmp)]) % (1_000_000_000 + 7);
             }
         }
         return dp[n];
@@ -91,10 +88,10 @@ public class NumberOfWays {
         int[][] dp = new int[n + 1][n + 1];
         for (int i = 0; i <= n; i++) dp[i][0] = 1;
         for (int i = 1; i <= n; i++) {
+            long val = pow(i, x);
             for (int j = 1; j <= n; j++) {
-                long val = j - pow(i, x);
-                if (val >= 0) {
-                    dp[i][j] = (dp[i - 1][j] + dp[i - 1][(int)val]) % (1_000_000_000 + 7);
+                if (j - val >= 0) {
+                    dp[i][j] = (dp[i - 1][j] + dp[i - 1][j - (int)val]) % (1_000_000_000 + 7);
                 }else {
                     dp[i][j] = dp[i - 1][j] % (1_000_000_000 + 7);
                 }
