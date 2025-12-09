@@ -34,7 +34,15 @@ public class IsPowerOfTwo {
 
     public boolean isPowerOfTwo(int n) {
         if (n <= 0) return false;
-        n = Math.abs(n);
         return (n & (n - 1)) == 0;
+    }
+
+    public boolean isPowerOfTwo2(int n) {
+        int sum = 0;
+        while (n > 0) {
+            sum += (n & 1);
+            n >>>= 1;
+        }
+        return sum == 1;
     }
 }
