@@ -48,6 +48,21 @@ public class Change {
         System.out.println(change3(10, new int[]{10}));
     }
 
+
+
+
+    public int change4(int amount, int[] coins) {
+        return dfs(coins.length - 1, amount, coins);
+    }
+
+    private int dfs(int i, int target, int[] coins) {
+        if (target == 0) return 1;
+        if (target < 0 || i < 0) return 0;
+
+        return dfs(i, target - coins[i], coins) + dfs(i-1, target, coins);
+    }
+
+
     public int change3(int amount, int[] coins) {
         int[] f = new int[amount+1];
         f[0] = 1;
