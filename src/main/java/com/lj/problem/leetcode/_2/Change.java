@@ -50,6 +50,18 @@ public class Change {
         System.out.println(change3(10, new int[]{10}));
     }
 
+    public int change4__(int amount, int[] coins) {
+        int[] dp = new int[amount + 1];
+        dp[0] = 1;
+        for (int num: coins) {
+            for (int j = 1; j <= amount; j++) {
+                if (j - num >= 0) {
+                    dp[j] += dp[j - num];
+                }
+            }
+        }
+        return dp[amount];
+    }
 
     public int change4_(int amount, int[] coins) {
         int[][] cache = new int[coins.length][amount + 1];
