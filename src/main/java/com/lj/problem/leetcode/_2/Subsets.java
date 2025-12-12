@@ -35,6 +35,24 @@ public class Subsets {
         System.out.println(subsets3(new int[]{1,2,3,4}));
     }
 
+    public List<List<Integer>> subsets4(int[] nums) {
+        List<List<Integer>> ans = new ArrayList<>();
+        List<Integer> path = new ArrayList<>();
+        dfs4(0, nums, path, ans);
+        return ans;
+    }
+
+    public void dfs4(int i, int[] nums, List<Integer> path, List<List<Integer>> ans) {
+        ans.add(new ArrayList<>(path));
+        while (i < nums.length) {
+            path.add(nums[i]);
+            dfs4(i + 1, nums, path, ans);
+//            path.removeLast();
+            path.remove(path.size() - 1);
+            i++;
+        }
+    }
+
     /**
      * 从答案角度， 每次从里面选一个
      * @param nums
