@@ -93,4 +93,26 @@ public class Combine {
             path.remove(path.size() - 1);
         }
     }
+
+
+
+    public List<List<Integer>> combine3(int n, int k) {
+        List<List<Integer>> ans = new ArrayList<>();
+        List<Integer> path = new ArrayList<>();
+        dfs3(1, n, k, path, ans);
+        return ans;
+    }
+
+    private void dfs3(int i, int n, int k, List<Integer> path, List<List<Integer>> ans) {
+        if (path.size() == k) {
+            ans.add(new ArrayList<>(path));
+            return;
+        }
+        int curr = path.size();
+        for (int j = i; j <= n-k+curr+1; j++) {
+            path.add(j);
+            dfs3(j + 1, n, k, path, ans);
+            path.remove(path.size() - 1);
+        }
+    }
 }
