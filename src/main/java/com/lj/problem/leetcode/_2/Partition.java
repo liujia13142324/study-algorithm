@@ -122,12 +122,9 @@ public class Partition {
         dfs(str, start, end + 1, ans, path);
     }*/
 
-    public boolean isHuiWen(String str, int start, int end) {
-        if (start == end) return true;
-        int l = start;
-        int r = end;
-        while (l < r) {
-            if (str.charAt(l++) != str.charAt(r--)) return false;
+    private boolean isHuiWen(String str, int start, int end) {
+        while (start < end) {
+            if (str.charAt(start++) != str.charAt(end--)) return false;
         }
         return true;
     }
