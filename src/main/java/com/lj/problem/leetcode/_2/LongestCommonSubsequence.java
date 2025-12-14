@@ -39,17 +39,42 @@ public class LongestCommonSubsequence {
         System.out.println(longestCommonSubsequence("abcba", "abcbcba"));
     }
 
+    public int longestCommonSubsequence3(String text1, String text2) {
+        if (text1.length() < text2.length()) {
+            return dfs3(text1.length() - 1, text2.length() - 1, text1.toCharArray(), text2.toCharArray(), newArrayFilled(text1.length(), text2.length()));
+        }
+        return dfs3(text2.length() - 1, text1.length() - 1, text2.toCharArray(), text1.toCharArray(), newArrayFilled(text2.length(), text1.length()));
+    }
+
+    private int dfs3(int i1, int i2, char[] text1, char[] text2, int[][] cache) {
+        if (i1 < 0 || i2 < 0) {
+            return 0;
+        }
+
+        if (cache[i1][i2] != -1) {
+            return cache[i1][i2];
+        }
+
+        int ans = 0;
+        for (int i = i2; i >= ans; i--) {
+            if (text1[i1] == text2[i]) {
+                ans = Math.max(ans, 1 + dfs3(i1 - 1, i - 1, text1, text2, cache));
+            }
+            if (ans > i1) {
+                return ans;
+            }
+        }
+
+        cache[i1][i2] = Math.max(ans, dfs3(i1 - 1, i2, text1, text2, cache));
+
+        return cache[i1][i2];
+    }
+
     public int longestCommonSubsequence(String text1, String text2) {
         if (text1.length() < text2.length()) {
             return dfs2(0, 0, text1.toCharArray(), text2.toCharArray(), newArrayFilled(text1.length(), text2.length()));
         }
         return dfs2(0, 0, text2.toCharArray(), text1.toCharArray(), newArrayFilled(text2.length(), text1.length()));
-    }
-
-    private int[][] newArrayFilled(int i, int j) {
-        int[][] ans = new int[i][j];
-        for (int[] tmp: ans) Arrays.fill(tmp, -1);
-        return ans;
     }
 
     private int dfs2(int i1, int i2, char[] text1, char[] text2, int[][] cache) {
@@ -116,5 +141,11 @@ public class LongestCommonSubsequence {
         }
 
         return Math.max(ans, dfs(i1 + 1, i2, text1, text2));
+    }
+
+    private int[][] newArrayFilled(int i, int j) {
+        int[][] ans = new int[i][j];
+        for (int[] tmp: ans) Arrays.fill(tmp, -1);
+        return ans;
     }
 }
