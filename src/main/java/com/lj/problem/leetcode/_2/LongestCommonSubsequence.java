@@ -39,6 +39,24 @@ public class LongestCommonSubsequence {
         System.out.println(longestCommonSubsequence("abcba", "abcbcba"));
     }
 
+    public int longestCommonSubsequence4___(String text1, String text2) {
+        int[] dp = new int[text2.length() + 1];
+        char[] chars2 = text2.toCharArray();
+        for (char c: text1.toCharArray()) {
+            int pre = 0;
+            for (int j = 1; j <= chars2.length; j++) {
+                int tmp = dp[j];
+                if (c == chars2[j - 1]) {
+                    dp[j] = pre + 1;
+                } else {
+                    dp[j] = Math.max(dp[j], dp[j - 1]);
+                }
+                pre = tmp;
+            }
+        }
+        return dp[chars2.length];
+    }
+
     public int longestCommonSubsequence4__(String text1, String text2) {
         int[][] dp = new int[text1.length() + 1][text2.length() + 1];
         char[] chars1 = text1.toCharArray();
