@@ -39,6 +39,47 @@ public class LongestCommonSubsequence {
         System.out.println(longestCommonSubsequence("abcba", "abcbcba"));
     }
 
+    public int longestCommonSubsequence4_(String text1, String text2) {
+        int[][] cache = new int[text1.length()][text2.length()];
+        return dfs4_(text2.length() - 1, text1.length() - 1, text2.toCharArray(), text1.toCharArray(), cache);
+    }
+
+    private int dfs4_(int i, int j, char[] text1, char[] text2, int[][] cache) {
+        if (i < 0 || j < 0) {
+            return 0;
+        }
+
+        if (cache[i][j] != -1) {
+            return cache[i][j];
+        }
+        int ans;
+        if (text1[i] == text2[j]) {
+            ans = 1 + dfs4_(i - 1, j - 1, text1, text2, cache);
+        }else {
+            ans = Math.max(dfs4_(i - 1, j, text1, text2, cache), dfs4_(i, j - 1, text1, text2, cache));
+        }
+
+        cache[i][j] = ans;
+        return ans;
+    }
+
+    public int longestCommonSubsequence4(String text1, String text2) {
+        return dfs4(text1.length() - 1, text2.length() - 1, text1.toCharArray(), text2.toCharArray());
+    }
+
+    private int dfs4(int i, int j, char[] text1, char[] text2) {
+        if (i < 0 || j < 0) {
+            return 0;
+        }
+
+        if (text1[i] == text2[j]) {
+            return 1 + dfs4(i - 1, j - 1, text1, text2);
+        }
+
+        return Math.max(dfs4(i - 1, j, text1, text2), dfs4(i, j - 1, text1, text2));
+    }
+
+
     public int longestCommonSubsequence3(String text1, String text2) {
         if (text1.length() < text2.length()) {
             return dfs3(text1.length() - 1, text2.length() - 1, text1.toCharArray(), text2.toCharArray(), newArrayFilled(text1.length(), text2.length()));
