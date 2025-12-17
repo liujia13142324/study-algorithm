@@ -41,6 +41,40 @@ public class MinDistance {
     public void test() {
         System.out.println(minDistance("horse", "ros"));
         System.out.println(minDistance("intention", "execution"));
+
+        System.out.println(minDistance_("horse", "ros"));
+        System.out.println(minDistance_("intention", "execution"));
+        System.out.println(minDistance_("", ""));
+    }
+
+    public int minDistance_(String word1, String word2) {
+        /**
+         * s = horse
+         * t = ros
+         * 删除：dfs(s-1, t) --> 从 s 中删除某个字符
+         * 插入：dfs(s, t-1) --> 在 s 中插入某个 t 中的字符，从而可以消除 t 中的某个字符
+         * 替换：1 + dfs(s-1,t-1) --> 替换成 t 中某个字符，然后分别消除
+         */
+        char[] chars = word2.toCharArray();
+        int[] dp = new int[chars.length + 1];
+        for (int i = 1; i < dp.length; i++) dp[i] = i;
+        int row = 1;
+        for (char c: word1.toCharArray()) {
+            dp[0] = row++;
+            int pre = dp[0] - 1;
+            for (int j = 1; j <= chars.length; j++) {
+                int tmp = dp[j];
+                if (c == chars[j - 1]) {
+                    // 相等，直接消除, i-1,j-1 左上
+                    dp[j] = pre;
+                } else {
+                    // 不相等，从下面操作选一个最小值
+                    dp[j] = Math.min(Math.min(dp[j], dp[j-1]), pre) + 1;
+                }
+                pre = tmp;
+            }
+        }
+        return dp[chars.length];
     }
 
 
@@ -52,24 +86,6 @@ public class MinDistance {
          * 插入：dfs(s, t-1) --> 在 s 中插入某个 t 中的字符，从而可以消除 t 中的某个字符
          * 替换：1 + dfs(s-1,t-1) --> 替换成 t 中某个字符，然后分别消除
          */
-        /*char[] chars = word2.toCharArray();
-        int[] dp = new int[chars.length + 1];
-        Arrays.fill(dp, 1);
-        dp[0] = 0;
-        for (char c: word1.toCharArray()) {
-            int pre = 0;
-            for (int j = 1; j < dp.length; j++) {
-                int tmp = dp[j];
-                if (c == chars[j - 1]) {
-                    // 相等，直接消除, i-1,j-1 左上
-                    dp[j] = pre;
-                } else {
-                    // 不相等，从下面操作选一个最小值
-                    dp[j] = Math.min(dp[j], dp[])
-                }
-                pre = tmp;
-            }
-        }*/
         int[][] cache = new int[word1.length()][word2.length()];
         for (int[] tmp: cache) Arrays.fill(tmp, -1);
         return dfs(word1.length()-1, word2.length()-1, word1.toCharArray(), word2.toCharArray(), cache);
