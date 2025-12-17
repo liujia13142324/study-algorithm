@@ -60,7 +60,7 @@ public class MinDistance {
         for (int i = 1; i < dp.length; i++) dp[i] = i;
         int row = 1;
         for (char c: word1.toCharArray()) {
-            // j < 0 -> i+1 -> row
+            // j < 0 -> i+1, i从0开始 -> row, 从1开始
             dp[0] = row++;
             // dp[0] 上面就是 pre
             int pre = dp[0] - 1;
