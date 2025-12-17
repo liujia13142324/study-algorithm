@@ -60,15 +60,17 @@ public class MinDistance {
         for (int i = 1; i < dp.length; i++) dp[i] = i;
         int row = 1;
         for (char c: word1.toCharArray()) {
+            // j < 0 -> i+1 -> row
             dp[0] = row++;
+            // dp[0] 上面就是 pre
             int pre = dp[0] - 1;
             for (int j = 1; j <= chars.length; j++) {
                 int tmp = dp[j];
                 if (c == chars[j - 1]) {
-                    // 相等，直接消除, i-1,j-1 左上
+                    // 相等，直接消除, 左上
                     dp[j] = pre;
                 } else {
-                    // 不相等，从下面操作选一个最小值
+                    // 不相等，从下面操作选一个最小值(上，左，左上)
                     dp[j] = Math.min(Math.min(dp[j], dp[j-1]), pre) + 1;
                 }
                 pre = tmp;
