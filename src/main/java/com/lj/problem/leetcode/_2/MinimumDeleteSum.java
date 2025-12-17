@@ -33,10 +33,36 @@ public class MinimumDeleteSum {
     @Test
     public void test() {
         System.out.println(minimumDeleteSum("delete", "leet"));
+        System.out.println(minimumDeleteSum_("delete", "leet"));
+    }
+
+    public int minimumDeleteSum_(String s1, String s2) {
+        char[] chars1 = s1.toCharArray();
+        char[] chars2 = s2.toCharArray();
+        int[] sum1 = new int[chars1.length + 1];
+        int[] dp   = new int[chars2.length + 1];
+
+        for (int i = 1; i < sum1.length; i++) sum1[i] = sum1[i-1] + chars1[i-1];
+        for (int i = 1; i < dp.length; i++) dp[i] = dp[i-1] + chars2[i-1];
+
+        int row = 1;
+        for (char c: chars1) {
+            int pre = sum1[row-1];
+            dp[0] = sum1[row++];
+            for (int j = 1; j < dp.length; j++) {
+                int tmp = dp[j];
+                if (c == chars2[j-1]) {
+                    dp[j] = pre;
+                }else {
+                    dp[j] = Math.min(dp[j] + c, dp[j-1] + chars2[j-1]);
+                }
+                pre = tmp;
+            }
+        }
+        return dp[chars2.length];
     }
 
     public int minimumDeleteSum(String s1, String s2) {
-        if (s1.equals(s2)) return 0;
         char[] chars1 = s1.toCharArray();
         char[] chars2 = s2.toCharArray();
         int[] sum1 = new int[s1.length() + 1];
