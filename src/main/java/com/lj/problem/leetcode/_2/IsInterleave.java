@@ -37,6 +37,29 @@ import java.util.List;
  */
 public class IsInterleave {
 
+
+    public boolean isInterleave2(String s1, String s2, String s3) {
+        if (s1.length() + s2.length() != s3.length()) return false;
+        char[] chars = s3.toCharArray();
+        Boolean[][] cache = new Boolean[s1.length() + 1][s2.length() + 1];
+        return dfs2(s1.length(), s2.length(), s1.toCharArray(), s2.toCharArray(), chars, cache);
+    }
+
+    private boolean dfs2(int i, int j, char[] s1, char[] s2, char[] s3, Boolean[][] cache) {
+        if (i == 0 && j == 0) {
+            return true;
+        }
+        if (cache[i][j] != null) {
+            return cache[i][j];
+        }
+        char c = s3[i + j - 1];
+        cache[i][j] = (i > 0 && s1[i - 1] == c && dfs2(i - 1, j, s1, s2, s3, cache)) ||
+                      (j > 0 && s2[j - 1] == c && dfs2(i, j - 1, s1, s2, s3, cache));
+
+        return cache[i][j];
+    }
+
+
     public boolean isInterleave(String s1, String s2, String s3) {
         if (s1.length() + s2.length() != s3.length()) return false;
 
