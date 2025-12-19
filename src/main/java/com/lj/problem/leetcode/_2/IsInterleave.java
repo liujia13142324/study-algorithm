@@ -38,6 +38,9 @@ import java.util.List;
 public class IsInterleave {
 
 
+    /**
+     * 递归最快，有剪枝，跳过一些不必要的计算步骤
+     */
     public boolean isInterleave2(String s1, String s2, String s3) {
         if (s1.length() + s2.length() != s3.length()) return false;
         char[] chars = s3.toCharArray();
@@ -57,6 +60,56 @@ public class IsInterleave {
                       (j > 0 && s2[j - 1] == c && dfs2(i, j - 1, s1, s2, s3, cache));
 
         return cache[i][j];
+    }
+
+    /**
+     * 递推2，一纬数组
+     */
+    public boolean isInterleave2__(String s1, String s2, String s3) {
+        if (s1.length() + s2.length() != s3.length()) return false;
+        char[] ss1 = s1.toCharArray();
+        char[] ss2 = s2.toCharArray();
+        char[] ss3 = s3.toCharArray();
+        boolean[] dp = new boolean[ss2.length + 1];
+        dp[0] = true;
+        for (int i = 1; i <= ss2.length; i++) {
+            dp[i] = ss2[i - 1] == ss3[i - 1] && dp[i - 1];
+        }
+
+        for (int i = 1; i <= ss1.length; i++) {
+            dp[0] = ss1[i - 1] == ss3[i - 1] && dp[0];
+            for (int j = 1; j <= ss2.length; j++) {
+                char c = ss3[i + j - 1];
+                dp[j] = (ss1[i - 1] == c && dp[j]) || (ss2[j - 1] == c && dp[j - 1]);
+            }
+        }
+
+        return dp[ss2.length];
+    }
+
+    /**
+     *  递推1，没有剪枝，二维数组空间
+     */
+    public boolean isInterleave2_(String s1, String s2, String s3) {
+        if (s1.length() + s2.length() != s3.length()) return false;
+        char[] ss1 = s1.toCharArray();
+        char[] ss2 = s2.toCharArray();
+        char[] ss3 = s3.toCharArray();
+        boolean[][] dp = new boolean[ss1.length + 1][ss2.length + 1];
+        dp[0][0] = true;
+        for (int i = 1; i <= ss2.length; i++) {
+            dp[0][i] = ss2[i - 1] == ss3[i - 1] && dp[0][i - 1];
+        }
+
+        for (int i = 1; i <= ss1.length; i++) {
+            dp[i][0] = ss1[i - 1] == ss3[i - 1] && dp[i - 1][0];
+            for (int j = 1; j <= ss2.length; j++) {
+                char c = ss3[i + j - 1];
+                dp[i][j] = (ss1[i - 1] == c && dp[i - 1][j]) || (ss2[j - 1] == c && dp[i][j - 1]);
+            }
+        }
+
+        return dp[ss1.length][ss2.length];
     }
 
 
