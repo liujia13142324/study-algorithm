@@ -34,10 +34,55 @@ public class ShortestCommonSupersequence {
 
     @Test
     public void test() {
-        System.out.println("22".substring(2,2));
-        System.out.println("22".substring(2));
-        char[] tmp = Arrays.copyOfRange(new char[]{'a','b'}, 2, 2);
-        System.out.println(new String(tmp));
+        System.out.println(shortestCommonSupersequence__("abac", "cab"));
+        System.out.println(shortestCommonSupersequence__("aaaaaaaa", "aaaaaaaa"));
+    }
+
+    public String shortestCommonSupersequence__(String str1, String str2) {
+        char[] chars1 = str1.toCharArray();
+        char[] chars2 = str2.toCharArray();
+        int[][] dp = new int[str1.length() + 1][str2.length() + 1];
+        for (int i = 1; i <= chars2.length; i++) dp[0][i] = i;
+        for (int i = 1; i <= chars1.length; i++) dp[i][0] = i;
+
+        for (int i = 1; i <= chars1.length; i++) {
+            for (int j = 1; j <= chars2.length; j++) {
+                if (chars1[i - 1] == chars2[j - 1]) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                }else{
+                    dp[i][j] = Math.min(dp[i][j - 1], dp[i - 1][j]) + 1;
+                }
+            }
+        }
+
+        char[] ans = new char[dp[chars1.length][chars2.length]];
+        int idx = ans.length - 1;
+        int i = chars1.length;
+        int j = chars2.length;
+
+        while (i > 0 || j > 0) {
+            if (i == 0) {
+                ans[idx--] = chars2[j-1];
+                j--;
+                continue;
+            }
+            if (j == 0) {
+                ans[idx--] = chars1[i-1];
+                i--;
+                continue;
+            }
+            if (chars1[i - 1] == chars2[j - 1]) {
+                ans[idx --] = chars1[i - 1];
+                i--; j--;
+            }else if (dp[i - 1][j] < dp[i][j - 1]) {
+                ans[idx--] = chars1[i-1];
+                i--;
+            }else {
+                ans[idx--] = chars2[j-1];
+                j--;
+            }
+        }
+        return new String(ans);
     }
 
 
