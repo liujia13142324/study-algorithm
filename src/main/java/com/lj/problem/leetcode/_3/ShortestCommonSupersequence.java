@@ -28,7 +28,7 @@ import java.util.LinkedList;
  *
  * 1 <= str1.length, str2.length <= 1000
  * str1 和 str2 都由小写英文字母组成。
- *
+ * tmp
  */
 public class ShortestCommonSupersequence {
 
