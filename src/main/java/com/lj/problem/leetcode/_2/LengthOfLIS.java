@@ -5,36 +5,52 @@ package com.lj.problem.leetcode._2;
  * 给你一个整数数组 nums ，找到其中最长严格递增子序列的长度。
  *
  * 子序列 是由数组派生而来的序列，删除（或不删除）数组中的元素而不改变其余元素的顺序。例如，[3,6,2,7] 是数组 [0,3,1,6,2,2,7] 的
- * 子序列
- * 。
+ * 子序列。
  *
  *
  * 示例 1：
- *
  * 输入：nums = [10,9,2,5,3,7,101,18]
  * 输出：4
  * 解释：最长递增子序列是 [2,3,7,101]，因此长度为 4 。
- * 示例 2：
  *
+ * 示例 2：
  * 输入：nums = [0,1,0,3,2,3]
  * 输出：4
- * 示例 3：
  *
+ * 示例 3：
  * 输入：nums = [7,7,7,7,7,7,7]
  * 输出：1
  *
- *
  * 提示：
- *
  * 1 <= nums.length <= 2500
  * -104 <= nums[i] <= 104
  *
- *
  * 进阶：
- *
  * 你能将算法的时间复杂度降低到 O(n log(n)) 吗?
  */
 public class LengthOfLIS {
+
+    public int lengthOfLIS2__(int[] nums) {
+        int max = -100000;
+        int min = 100000;
+        for (int num: nums) {
+            max = Math.max(max, num);
+            min = Math.min(min, num);
+        }
+        int[][] dp = new int[nums.length + 1][max - min + 2];
+
+        for (int i = 1; i <= nums.length; i++) {
+            int tmp = nums[i] - min;
+            for (int j = 1; j <= max - min + 1; j++) {
+                dp[i][j] = dp[i-1][j];
+                if (dp[i-1][j] > tmp) {
+
+                }
+            }
+        }
+
+        return dp[nums.length][max - min];
+    }
 
     public int lengthOfLIS2_(int[] nums) {
         int max = -100000;
@@ -55,8 +71,9 @@ public class LengthOfLIS {
         }
 
         int val = 0;
-        if (nums[i] < j + min) {
-            val = dfs(i - 1, nums[i] - min, nums, cache, min) + 1;
+        int tmp = nums[i] - min;
+        if (tmp < j) {
+            val = dfs(i - 1, tmp, nums, cache, min) + 1;
         }
         cache[i][j] = Math.max(val, dfs(i - 1, j, nums, cache, min));
         return cache[i][j];
@@ -76,6 +93,18 @@ public class LengthOfLIS {
 
         return Math.max(val, dfs(i - 1, nums, pre));
     }
+
+
+
+
+
+
+
+
+
+
+
+
 
     public int lengthOfLIS(int[] nums) {
         int[] min = new int[2501];
