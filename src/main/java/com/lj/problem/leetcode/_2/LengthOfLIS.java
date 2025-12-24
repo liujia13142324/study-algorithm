@@ -30,6 +30,67 @@ package com.lj.problem.leetcode._2;
  */
 public class LengthOfLIS {
 
+
+    public int lengthOfLIS2____(int[] nums) {
+        int max = -100000;
+        int min = 100000;
+        for (int num: nums) {
+            max = Math.max(max, num);
+            min = Math.min(min, num);
+        }
+        int[] dp = new int[max - min + 2];
+        int r = max - min + 1;
+        for (int i = 1; i <= nums.length; i++) {
+            int tmp = nums[i - 1] - min;
+            // 找到第一个 j > tmp
+            for (int j = find(0,  r + 1, tmp); j <= r; j-- ) {
+                dp[j] = Math.max(dp[j], dp[tmp] + 1);
+            }
+        }
+        return dp[max - min + 1];
+    }
+
+    private int find(int l, int r, int tmp) {
+        while (l + 1 < r) {
+            int mid = (l + r) >>> 1;
+            if (mid > tmp) {
+                r = mid;
+            }else {
+                l = mid;
+            }
+        }
+        return r;
+    }
+
+
+    public int lengthOfLIS2___(int[] nums) {
+        int max = -100000;
+        int min = 100000;
+        for (int num: nums) {
+            max = Math.max(max, num);
+            min = Math.min(min, num);
+        }
+        int[] dp = new int[max - min + 2];
+        for (int i = 1; i <= nums.length; i++) {
+            int tmp = nums[i - 1] - min;
+            for (int j = max - min + 1; j >= 1; j-- ) {
+                if (tmp < j) {
+                    dp[j] = Math.max(dp[j], dp[tmp] + 1);
+                }
+            }
+        }
+        // 仔细看，这个也可以，因为这个 tmp < j 的逻辑能保证不回覆盖
+        /*for (int i = 1; i <= nums.length; i++) {
+            int tmp = nums[i - 1] - min;
+            for (int j = 1; j <= max - min + 1; j++) {
+                if (tmp < j) {
+                    dp[j] = Math.max(dp[j], dp[tmp] + 1);
+                }
+            }
+        }*/
+        return dp[max - min + 1];
+    }
+
     public int lengthOfLIS2__(int[] nums) {
         int max = -100000;
         int min = 100000;
@@ -42,9 +103,10 @@ public class LengthOfLIS {
         for (int i = 1; i <= nums.length; i++) {
             int tmp = nums[i - 1] - min;
             for (int j = 1; j <= max - min + 1; j++) {
-                dp[i][j] = dp[i-1][j];
-                if (dp[i-1][j] < tmp) {
-                    dp[i][j] = dp[i-1][tmp] + 1;
+                if (tmp < j) {
+                    dp[i][j] = Math.max(dp[i-1][j], dp[i-1][tmp] + 1);
+                }else {
+                    dp[i][j] = dp[i-1][j];
                 }
             }
         }
@@ -93,12 +155,6 @@ public class LengthOfLIS {
 
         return Math.max(val, dfs(i - 1, nums, pre));
     }
-
-
-
-
-
-
 
 
 
