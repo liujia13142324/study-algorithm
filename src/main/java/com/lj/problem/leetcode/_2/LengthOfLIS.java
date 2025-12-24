@@ -40,16 +40,16 @@ public class LengthOfLIS {
         int[][] dp = new int[nums.length + 1][max - min + 2];
 
         for (int i = 1; i <= nums.length; i++) {
-            int tmp = nums[i] - min;
+            int tmp = nums[i - 1] - min;
             for (int j = 1; j <= max - min + 1; j++) {
                 dp[i][j] = dp[i-1][j];
-                if (dp[i-1][j] > tmp) {
-
+                if (dp[i-1][j] < tmp) {
+                    dp[i][j] = dp[i-1][tmp] + 1;
                 }
             }
         }
 
-        return dp[nums.length][max - min];
+        return dp[nums.length][max - min + 1];
     }
 
     public int lengthOfLIS2_(int[] nums) {
@@ -64,7 +64,7 @@ public class LengthOfLIS {
     }
 
     private int dfs(int i, int j, int[] nums, int[][] cache, int min) {
-        if (i < 0) return 0;
+        if (i < 0 || j == 0) return 0;
 
         if (cache[i][j] != 0) {
             return cache[i][j];
