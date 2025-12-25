@@ -30,6 +30,19 @@ package com.lj.problem.leetcode._2;
  */
 public class LengthOfLIS {
 
+    public int lengthOfLIS3(int[] nums) {
+        return dfs3(nums.length - 1, nums);
+    }
+
+    private int dfs3(int i, int[] nums) {
+        int val = 1;
+        for (int j = i - 1; j >= 0; j--) {
+            if (nums[j] < nums[i]) {
+                val = Math.max(val, dfs3(j, nums) + 1);
+            }
+        }
+        return val;
+    }
 
     public int lengthOfLIS2____(int[] nums) {
         int max = -100000;
@@ -145,6 +158,9 @@ public class LengthOfLIS {
         return dfs(nums.length - 1, nums, Integer.MAX_VALUE);
     }
 
+    /**
+     * 这个 pre 也可以考虑用上一个元素的下标代替
+     */
     private int dfs(int i, int[] nums, int pre) {
         if (i < 0) return 0;
 
