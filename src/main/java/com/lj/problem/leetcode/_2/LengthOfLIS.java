@@ -30,6 +30,27 @@ package com.lj.problem.leetcode._2;
  */
 public class LengthOfLIS {
 
+    public int lengthOfLIS3__(int[] nums) {
+        int[] cache = new int[nums.length];
+        int max = 1;
+        for (int i = nums.length - 1; i > 0; i--) {
+            max = Math.max(max, dfs3(i, nums, cache));
+        }
+        return max;
+    }
+
+    private int dfs3(int i, int[] nums, int[] cache) {
+        if (cache[i] != 0) return cache[i];
+        int val = 1;
+        for (int j = i - 1; j >= 0; j--) {
+            if (nums[j] < nums[i]) {
+                val = Math.max(val, dfs3(j, nums, cache) + 1);
+            }
+        }
+        cache[i] = val;
+        return val;
+    }
+
     public int lengthOfLIS3(int[] nums) {
         return dfs3(nums.length - 1, nums);
     }
