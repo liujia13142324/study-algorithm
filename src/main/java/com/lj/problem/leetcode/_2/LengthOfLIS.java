@@ -1,5 +1,9 @@
 package com.lj.problem.leetcode._2;
 
+import org.junit.Test;
+
+import java.util.Arrays;
+
 /**
  * 300.最长递增子序列
  * 给你一个整数数组 nums ，找到其中最长严格递增子序列的长度。
@@ -29,6 +33,26 @@ package com.lj.problem.leetcode._2;
  * 你能将算法的时间复杂度降低到 O(n log(n)) 吗?
  */
 public class LengthOfLIS {
+
+    @Test
+    public void test() {
+        System.out.println(lengthOfLIS3___(new int[]{1,3,6,7,9,4,10,5,6}));
+    }
+
+    public int lengthOfLIS3___(int[] nums) {
+        int[] dp = new int[nums.length];
+        Arrays.fill(dp, 1);
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = 0; j < i; j++) {
+                if (nums[j] < nums[i]) {
+                    dp[i] = Math.max(dp[i], dp[j] + 1);
+                }
+            }
+        }
+        int max = 0;
+        for (int num: dp) max = Math.max(max, num);
+        return dp[nums.length - 1];
+    }
 
     public int lengthOfLIS3__(int[] nums) {
         int[] cache = new int[nums.length];
