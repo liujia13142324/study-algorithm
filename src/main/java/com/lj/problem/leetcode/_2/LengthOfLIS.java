@@ -37,9 +37,23 @@ public class LengthOfLIS {
     @Test
     public void test() {
 //        System.out.println(lengthOfLIS3___(new int[]{1,3,6,7,9,4,10,5,6}));
-        System.out.println(lengthOfLIS2___(new int[]{10, 9, 2, 5, 3, 7}));
+//        System.out.println(lengthOfLIS2___(new int[]{10, 9, 2, 5, 3, 7}));
+        System.out.println(lengthOfLIS4(new int[]{10, 9, 2, 5, 3, 7, 101, 18}));
     }
 
+    public int lengthOfLIS4(int[] nums) {
+        int[] g = new int[nums.length];
+        int idx = 0;
+        for (int num: nums) {
+            int i = find(-1, idx, num, g);
+            if (i == idx) {
+                g[idx++] = num;
+            }else {
+                g[i] = num;
+            }
+        }
+        return idx;
+    }
 
     public int lengthOfLIS2____(int[] nums) {
         int max = -100000;
@@ -63,7 +77,7 @@ public class LengthOfLIS {
     private int find(int l, int r, int tmp) {
         while (l + 1 < r) {
             int mid = (l + r) >>> 1;
-            if (mid > tmp) {
+            if (mid >= tmp) {
                 r = mid;
             }else {
                 l = mid;
@@ -72,19 +86,16 @@ public class LengthOfLIS {
         return r;
     }
 
-    public int lengthOfLIS3____(int[] nums) {
-        int[] dp = new int[nums.length];
-        Arrays.fill(dp, 1);
-        int max = 0;
-        for (int i = 0; i < nums.length; i++) {
-            for (int j = 0; j < i; j++) {
-                if (nums[j] < nums[i]) {
-                    dp[i] = Math.max(dp[i], dp[j] + 1);
-                }
+    private int find(int l, int r, int tmp, int[] nums) {
+        while (l + 1 < r) {
+            int mid = (l + r) >>> 1;
+            if (nums[mid] > tmp) {
+                r = mid;
+            }else {
+                l = mid;
             }
-            max = Math.max(max, dp[i]);
         }
-        return max;
+        return r;
     }
 
     public int lengthOfLIS3___(int[] nums) {
