@@ -36,22 +36,70 @@ public class LengthOfLIS {
 
     @Test
     public void test() {
-        System.out.println(lengthOfLIS3___(new int[]{1,3,6,7,9,4,10,5,6}));
+//        System.out.println(lengthOfLIS3___(new int[]{1,3,6,7,9,4,10,5,6}));
+        System.out.println(lengthOfLIS2___(new int[]{10, 9, 2, 5, 3, 7}));
     }
 
-    public int lengthOfLIS3___(int[] nums) {
+
+    public int lengthOfLIS2____(int[] nums) {
+        int max = -100000;
+        int min = 100000;
+        for (int num: nums) {
+            max = Math.max(max, num);
+            min = Math.min(min, num);
+        }
+        int[] dp = new int[max - min + 2];
+        int r = max - min + 1;
+        for (int i = 1; i <= nums.length; i++) {
+            int tmp = nums[i - 1] - min;
+            // 找到第一个 j > tmp
+            for (int j = find(0,  r + 1, tmp); j <= r; j++) {
+                dp[j] = Math.max(dp[j], dp[tmp] + 1);
+            }
+        }
+        return dp[max - min + 1];
+    }
+
+    private int find(int l, int r, int tmp) {
+        while (l + 1 < r) {
+            int mid = (l + r) >>> 1;
+            if (mid > tmp) {
+                r = mid;
+            }else {
+                l = mid;
+            }
+        }
+        return r;
+    }
+
+    public int lengthOfLIS3____(int[] nums) {
         int[] dp = new int[nums.length];
         Arrays.fill(dp, 1);
+        int max = 0;
         for (int i = 0; i < nums.length; i++) {
             for (int j = 0; j < i; j++) {
                 if (nums[j] < nums[i]) {
                     dp[i] = Math.max(dp[i], dp[j] + 1);
                 }
             }
+            max = Math.max(max, dp[i]);
         }
+        return max;
+    }
+
+    public int lengthOfLIS3___(int[] nums) {
+        int[] dp = new int[nums.length];
+        Arrays.fill(dp, 1);
         int max = 0;
-        for (int num: dp) max = Math.max(max, num);
-        return dp[nums.length - 1];
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = 0; j < i; j++) {
+                if (nums[j] < nums[i]) {
+                    dp[i] = Math.max(dp[i], dp[j] + 1);
+                }
+            }
+            max = Math.max(max, dp[i]);
+        }
+        return max;
     }
 
     public int lengthOfLIS3__(int[] nums) {
@@ -79,6 +127,9 @@ public class LengthOfLIS {
         return dfs3(nums.length - 1, nums);
     }
 
+    /**
+     * 以 i 结尾的最长有序子序列的长度
+     */
     private int dfs3(int i, int[] nums) {
         int val = 1;
         for (int j = i - 1; j >= 0; j--) {
@@ -87,37 +138,6 @@ public class LengthOfLIS {
             }
         }
         return val;
-    }
-
-    public int lengthOfLIS2____(int[] nums) {
-        int max = -100000;
-        int min = 100000;
-        for (int num: nums) {
-            max = Math.max(max, num);
-            min = Math.min(min, num);
-        }
-        int[] dp = new int[max - min + 2];
-        int r = max - min + 1;
-        for (int i = 1; i <= nums.length; i++) {
-            int tmp = nums[i - 1] - min;
-            // 找到第一个 j > tmp
-            for (int j = find(0,  r + 1, tmp); j <= r; j-- ) {
-                dp[j] = Math.max(dp[j], dp[tmp] + 1);
-            }
-        }
-        return dp[max - min + 1];
-    }
-
-    private int find(int l, int r, int tmp) {
-        while (l + 1 < r) {
-            int mid = (l + r) >>> 1;
-            if (mid > tmp) {
-                r = mid;
-            }else {
-                l = mid;
-            }
-        }
-        return r;
     }
 
 
@@ -129,23 +149,23 @@ public class LengthOfLIS {
             min = Math.min(min, num);
         }
         int[] dp = new int[max - min + 2];
-        for (int i = 1; i <= nums.length; i++) {
-            int tmp = nums[i - 1] - min;
+        /*for (int num: nums) {
+            int tmp = num - min;
             for (int j = max - min + 1; j >= 1; j-- ) {
                 if (tmp < j) {
                     dp[j] = Math.max(dp[j], dp[tmp] + 1);
                 }
             }
-        }
-        // 仔细看，这个也可以，因为这个 tmp < j 的逻辑能保证不回覆盖
-        /*for (int i = 1; i <= nums.length; i++) {
-            int tmp = nums[i - 1] - min;
+        }*/
+        // 仔细看，这个也可以，因为这个 tmp < j 的逻辑能保证不会覆盖
+        for (int num: nums) {
+            int tmp = num - min;
             for (int j = 1; j <= max - min + 1; j++) {
                 if (tmp < j) {
                     dp[j] = Math.max(dp[j], dp[tmp] + 1);
                 }
             }
-        }*/
+        }
         return dp[max - min + 1];
     }
 
@@ -205,6 +225,7 @@ public class LengthOfLIS {
 
     /**
      * 这个 pre 也可以考虑用上一个元素的下标代替
+     * 用下标是不是就不能使用二分了？
      */
     private int dfs(int i, int[] nums, int pre) {
         if (i < 0) return 0;
