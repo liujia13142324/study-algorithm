@@ -41,6 +41,19 @@ public class LengthOfLIS {
         System.out.println(lengthOfLIS4(new int[]{10, 9, 2, 5, 3, 7, 101, 18}));
     }
 
+    public int lengthOfLIS4_(int[] nums) {
+        int r = 0;
+        for (int num: nums) {
+            int i = find(-1, r, num, nums);
+            if (i == r) {
+                nums[r++] = num;
+            }else {
+                nums[i] = num;
+            }
+        }
+        return r;
+    }
+
     public int lengthOfLIS4(int[] nums) {
         int[] g = new int[nums.length];
         int idx = 0;
