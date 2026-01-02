@@ -1,5 +1,8 @@
 package com.lj.problem.leetcode._2;
 
+import org.junit.Test;
+
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -24,7 +27,7 @@ import java.util.List;
  * 输出：0
  * 解释：
  * nums 已是非递减顺序的。
- * tmp
+ *
  * 提示：
  *
  * 1 <= nums.length <= 100
@@ -33,6 +36,22 @@ import java.util.List;
  */
 public class MinimumOperations {
 
+    @Test
+    public void test() {
+        System.out.println(minimumOperations2(Arrays.asList(2,1,3,2,1)));
+        System.out.println(minimumOperations2(Arrays.asList(1,3,2,1,3,3)));
+        System.out.println(minimumOperations2(Arrays.asList(2,2,2,2,3,3)));
+    }
+
+    public int minimumOperations2(List<Integer> nums) {
+        int[] dp = new int[4];
+        for (int num: nums) {
+            for (int i = 3; i >= num && i > 0; i--) {
+                dp[i] = Math.max(dp[i], dp[num] + 1);
+            }
+        }
+        return nums.size() - dp[3];
+    }
 
 
     public int minimumOperations(List<Integer> nums) {
