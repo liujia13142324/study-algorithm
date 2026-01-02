@@ -33,6 +33,8 @@ import java.util.List;
  */
 public class MinimumOperations {
 
+
+
     public int minimumOperations(List<Integer> nums) {
         int[] arr = new int[nums.size()];
         int i = 0;
