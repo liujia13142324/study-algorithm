@@ -55,6 +55,29 @@ public class LongestSquareStreak {
         System.out.println(longestSquareStreak(array));
     }
 
+    // 没啥区别
+    public int longestSquareStreak2_(int[] nums) {
+        Arrays.sort(nums);
+        int ans = 1;
+        int[] cache = new int[nums.length];
+        for (int i = 0; i < nums.length && nums[i] < 317; i++) {
+            ans = Math.max(ans, dfs(i, nums, cache));
+        }
+        return ans == 1 ? -1 : ans;
+    }
+
+    private int dfs(int i, int[] nums, int[] cache) {
+        if (cache[i] != 0) return cache[i];
+        int ans = 1;
+        int square = nums[i] * nums[i];
+        int idx = find(i, nums.length, nums, square);
+        if (idx > i && idx < nums.length) {
+            ans = 1 + dfs(idx, nums, cache);
+        }
+        cache[i] = ans;
+        return ans;
+    }
+
     public int longestSquareStreak2(int[] nums) {
         Arrays.sort(nums);
         int ans = 1;
