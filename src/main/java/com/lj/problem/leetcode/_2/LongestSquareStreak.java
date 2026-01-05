@@ -1,5 +1,6 @@
 package com.lj.problem.leetcode._2;
 
+import cn.hutool.core.io.IoUtil;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -39,6 +40,38 @@ public class LongestSquareStreak {
     @Test
     public void test() {
         System.out.println(longestSquareStreak(new int[]{4,3,6,16,8,2}));
+        System.out.println(longestSquareStreak2(new int[]{4,3,6,16,8,2}));
+    }
+
+    @Test
+    public void test2() {
+        String arraysStr = IoUtil.read(this.getClass().getResourceAsStream("/array2"), "utf8").replace("[", "").replace("]", "");
+        int[] array = new int[arraysStr.split(",").length];
+        int i = 0;
+        for (String str : arraysStr.split(",")) {
+            array[i++] = Integer.parseInt(str.trim());
+        }
+        System.out.println(longestSquareStreak2(array));
+        System.out.println(longestSquareStreak(array));
+    }
+
+    public int longestSquareStreak2(int[] nums) {
+        Arrays.sort(nums);
+        int ans = 1;
+        for (int i = 0; i < nums.length && nums[i] < 316; i++) {
+            ans = Math.max(ans, dfs(i, nums));
+        }
+        return ans == 1 ? -1 : ans;
+    }
+
+    private int dfs(int i, int[] nums) {
+        int ans = 1;
+        int square = nums[i] * nums[i];
+        int idx = find(i, nums.length, nums, square);
+        if (idx > i && idx < nums.length) {
+            ans = 1 + dfs(idx, nums);
+        }
+        return ans;
     }
 
     public int longestSquareStreak(int[] nums) {
