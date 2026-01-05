@@ -81,7 +81,7 @@ public class LongestSquareStreak {
     public int longestSquareStreak2(int[] nums) {
         Arrays.sort(nums);
         int ans = 1;
-        for (int i = 0; i < nums.length && nums[i] < 316; i++) {
+        for (int i = 0; i < nums.length && nums[i] < 317; i++) {
             ans = Math.max(ans, dfs(i, nums));
         }
         return ans == 1 ? -1 : ans;
