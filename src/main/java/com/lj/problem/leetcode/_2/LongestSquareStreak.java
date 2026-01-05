@@ -51,11 +51,45 @@ public class LongestSquareStreak {
         for (String str : arraysStr.split(",")) {
             array[i++] = Integer.parseInt(str.trim());
         }
-        System.out.println(longestSquareStreak2(array));
+        System.out.println(longestSquareStreak3(array));
         System.out.println(longestSquareStreak(array));
     }
 
-    // 没啥区别
+    public int longestSquareStreak3_(int[] nums) {
+        int[] map = new int[100001];
+        for (int num: nums) {
+            map[num] = 1;
+        }
+        int ans = 1;
+        // 去重、或者加缓存会更快？
+        for (int num: nums) {
+            int tmp = 1;
+            while (num < 317 && map[num = (num * num)] == 1) {
+                tmp++;
+            }
+            ans = Math.max(ans, tmp);
+        }
+        return ans == 1 ? -1 : ans;
+    }
+
+    public int longestSquareStreak3(int[] nums) {
+        int[] map = new int[100001];
+        for (int num: nums) {
+            map[num] = 1;
+        }
+        int ans = 1;
+        for (int num: nums) {
+            int tmp = 1;
+            while (num < 317 && map[num = (num * num)] == 1) {
+                tmp++;
+            }
+            ans = Math.max(ans, tmp);
+        }
+        return ans == 1 ? -1 : ans;
+    }
+
+
+        // 没啥区别
     public int longestSquareStreak2_(int[] nums) {
         Arrays.sort(nums);
         int ans = 1;
