@@ -56,7 +56,7 @@ public class MinimumOperations {
     public int minimumOperations2(List<Integer> nums) {
         int[] dp = new int[4];
         for (int num: nums) {
-            for (int i = 3; i >= num && i > 0; i--) {
+            for (int i = 3; i >= num; i--) {
                 dp[i] = Math.max(dp[i], dp[num] + 1);
             }
         }
