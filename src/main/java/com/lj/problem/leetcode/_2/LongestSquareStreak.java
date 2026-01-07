@@ -58,6 +58,30 @@ public class LongestSquareStreak {
     }
 
     /**
+     * 5ms
+     * @param nums
+     * @return
+     */
+    public int longestSquareStreak3(int[] nums) {
+        int[] map = new int[100001];
+        for (int num: nums) {
+            map[num] = 1;
+        }
+        int ans = 1;
+        for (int num: nums) {
+            int tmp = 1;
+            while (num < 317 && map[num = (num * num)] == 1) {
+                tmp++;
+            }
+            ans = Math.max(ans, tmp);
+        }
+        return ans == 1 ? -1 : ans;
+    }
+
+
+    /**
+     * 使用 map数组做 cache
+     * 5ms
      * @param nums
      * @return
      */
@@ -83,24 +107,63 @@ public class LongestSquareStreak {
         return ans == 1 ? -1 : ans;
     }
 
-    public int longestSquareStreak3(int[] nums) {
+    /**
+     * 6ms
+     * @param nums
+     * @return
+     */
+    public int longestSquareStreak3_____(int[] nums) {
         int[] map = new int[100001];
         for (int num: nums) {
             map[num] = 1;
         }
         int ans = 1;
         for (int num: nums) {
-            int tmp = 1;
-            while (num < 317 && map[num = (num * num)] == 1) {
-                tmp++;
-            }
-            ans = Math.max(ans, tmp);
+            ans = Math.max(ans, dfs3(num, map));
         }
         return ans == 1 ? -1 : ans;
     }
 
+    private int dfs3(int num, int[] map) {
+        if (num > 316) return 1;
+        if (map[num] > 1) return map[num];
+        int tmp = num * num;
+        int ans = 1;
+        if (map[tmp] >= 1) {
+            ans = 1 + dfs3(tmp, map);
+        }
+        map[num] = ans;
+        return ans;
+    }
+
     /**
-     * 慢
+     * 6ms
+     * @param nums
+     * @return
+     */
+    public int longestSquareStreak3____(int[] nums) {
+        int[] map = new int[100001];
+        for (int num: nums) {
+            map[num] = 1;
+        }
+        int ans = 1;
+        for (int num: nums) {
+            ans = Math.max(ans, dfs2(num, map));
+        }
+        return ans == 1 ? -1 : ans;
+    }
+
+    private int dfs2(int num, int[] map) {
+        if (num > 316) return 1;
+        int tmp = num * num;
+        if (map[tmp] >= 1) {
+            return 1 + dfs2(tmp, map);
+        }
+        return 1;
+    }
+
+    /**
+     * 慢1
      * @param nums
      * @return
      */
@@ -128,7 +191,7 @@ public class LongestSquareStreak {
     }
 
     /**
-     * 慢
+     * 慢2
      * @param nums
      * @return
      */
