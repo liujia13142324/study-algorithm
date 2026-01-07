@@ -4,6 +4,8 @@ import cn.hutool.core.io.IoUtil;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 2501. 数组中最长的方波
@@ -40,7 +42,7 @@ public class LongestSquareStreak {
     @Test
     public void test() {
         System.out.println(longestSquareStreak(new int[]{4,3,6,16,8,2}));
-        System.out.println(longestSquareStreak2(new int[]{4,3,6,16,8,2}));
+        System.out.println(longestSquareStreak3__(new int[]{4,3,6,16,8,2}));
     }
 
     @Test
@@ -55,7 +57,11 @@ public class LongestSquareStreak {
         System.out.println(longestSquareStreak(array));
     }
 
-    public int longestSquareStreak3_(int[] nums) {
+    /**
+     * @param nums
+     * @return
+     */
+    public int longestSquareStreak3__(int[] nums) {
         int[] map = new int[100001];
         for (int num: nums) {
             map[num] = 1;
@@ -63,10 +69,15 @@ public class LongestSquareStreak {
         int ans = 1;
         // 去重、或者加缓存会更快？
         for (int num: nums) {
+            if (map[num] != 1) {
+                continue;
+            }
             int tmp = 1;
-            while (num < 317 && map[num = (num * num)] == 1) {
+            int tmp2 = num;
+            while (num < 317 && map[num = (num * num)] >= 1) {
                 tmp++;
             }
+            map[tmp2] = tmp;
             ans = Math.max(ans, tmp);
         }
         return ans == 1 ? -1 : ans;
@@ -87,6 +98,63 @@ public class LongestSquareStreak {
         }
         return ans == 1 ? -1 : ans;
     }
+
+    /**
+     * 慢
+     * @param nums
+     * @return
+     */
+    public int longestSquareStreak3___(int[] nums) {
+        int[] map = new int[100001];
+        for (int num: nums) {
+            map[num] = 1;
+        }
+        int[] cache = new int[100001];
+        int ans = 1;
+        // 去重、或者加缓存会更快？
+        for (int num: nums) {
+            if (cache[num] != 0) {
+                continue;
+            }
+            int tmp = 1;
+            int tmp2 = num;
+            while (num < 317 && map[num = (num * num)] >= 1) {
+                tmp++;
+            }
+            cache[tmp2] = tmp;
+            ans = Math.max(ans, tmp);
+        }
+        return ans == 1 ? -1 : ans;
+    }
+
+    /**
+     * 慢
+     * @param nums
+     * @return
+     */
+    public int longestSquareStreak3_(int[] nums) {
+        int[] map = new int[100001];
+        for (int num: nums) {
+            map[num] = 1;
+        }
+        int ans = 1;
+        Map<Integer, Integer> cache = new HashMap<>();
+        // 去重、或者加缓存会更快？
+        for (int num: nums) {
+            if (cache.containsKey(num)) {
+                continue;
+            }
+            int tmp = 1;
+            while (num < 317 && map[num = (num * num)] == 1) {
+                tmp++;
+            }
+            cache.put(num, tmp);
+            ans = Math.max(ans, tmp);
+        }
+        return ans == 1 ? -1 : ans;
+    }
+
+
 
 
         // 没啥区别
