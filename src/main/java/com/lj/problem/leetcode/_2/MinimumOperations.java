@@ -43,6 +43,21 @@ public class MinimumOperations {
         System.out.println(minimumOperations2(Arrays.asList(2,2,2,2,3,3)));
     }
 
+    public int minimumOperations3(List<Integer> nums) {
+        int[] dp = new int[4];
+        int max = 0;
+        for (int num: nums) {
+            int tmp = 0;
+            for (int i = 1; i <= num; i++) {
+                tmp = Math.max(tmp, dp[i]);
+            }
+            dp[num] = tmp + 1;
+            max = Math.max(max, dp[num]);
+        }
+
+        return nums.size() - max;
+    }
+
     public int minimumOperations2_(List<Integer> nums) {
         int[] dp = new int[4];
         for (int num: nums) {
