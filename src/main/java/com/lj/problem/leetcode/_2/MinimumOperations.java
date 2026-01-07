@@ -43,6 +43,18 @@ public class MinimumOperations {
         System.out.println(minimumOperations2(Arrays.asList(2,2,2,2,3,3)));
     }
 
+    /**
+     * 方法三：合法子序列 DP
+     * 这是一个固定的套路，见动态规划题单中的「§7.2 合法子序列 DP」。
+     * 一般定义 f[x] 表示以元素 x 结尾的合法子序列的最长长度/个数/元素和，从子序列的倒数第二个数转移过来。
+     * 本题倒数第二个数记作 j，那么必须满足 j ≤ x。
+     *
+     * 转移方程为
+     * f[x] = max(f[1~j]) + 1;
+     *
+     * @param nums
+     * @return
+     */
     public int minimumOperations3(List<Integer> nums) {
         int[] dp = new int[4];
         int max = 0;
