@@ -50,6 +50,22 @@ package com.lj.problem.leetcode._3;
  */
 public class LongestObstacleCourseAtEachPosition {
 
+    public int[] longestObstacleCourseAtEachPosition_(int[] obstacles) {
+        int[] ans = new int[obstacles.length];
+        int[] tmp = new int[obstacles.length];
+        int idx = 0;
+        for (int i = 0; i < obstacles.length; i++) {
+            int idx2 = find(-1, idx, obstacles[i], tmp);
+            if (idx2 == idx) {
+                tmp[idx++] = obstacles[i];
+            }else {
+                tmp[idx2] = obstacles[i];
+            }
+            ans[i] = idx2 + 1;
+        }
+        return ans;
+    }
+
     public int[] longestObstacleCourseAtEachPosition(int[] obstacles) {
         int[] ans = new int[obstacles.length];
         int[] tmp = new int[obstacles.length];
