@@ -45,49 +45,55 @@ public class MinimumMountainRemovals {
 //        System.out.println(minimumMountainRemovals(new int[]{2,1,1,5,6,2,3,1}));
 //        System.out.println(minimumMountainRemovals(new int[]{4,3,2,1,1,2,3,1}));
 //        System.out.println(minimumMountainRemovals(new int[]{1,2,3,4,4,3,2,1}));
-        System.out.println(minimumMountainRemovals(new int[]{2,9,19,45,41,96,72,40,100,37,36,13,7}));
+//        System.out.println(minimumMountainRemovals(new int[]{2,9,19,45,41,96,72,40,100,37,36,13,7}));
+//        System.out.println(minimumMountainRemovals(new int[]{1,3,3,3,3,2,1}));
+        System.out.println(minimumMountainRemovals(new int[]{4,5,13,17,1,7,6,11,2,8,10,15,3,9,12,14,16}));
     }
 
     public int minimumMountainRemovals(int[] nums) {
         int[] dp = new int[nums.length];
-        int i = 0;
-        int j = nums.length - 1;
 
-        int idx1 = i;
-        int idx2 = j;
+        int[] ans1 = new int[nums.length];
+        int[] ans2 = new int[nums.length];
+
+        int len = nums.length - 1;
+        int idx1 = 0;
+        int idx2 = len;
         int tmp;
 
-        int firstI = 0;
-        int firstJ = 0;
-
-        while (i < nums.length) {
+        for (int i = 0; i < nums.length; i++) {
             tmp = find1(-1, idx1, nums[i], dp);
             if (tmp == idx1) {
                 dp[idx1++] = nums[i];
-                firstI = i;
             }else {
                 dp[tmp] = nums[i];
             }
-            i++;
+            ans1[i] = tmp + 1;
         }
 
-        Arrays.fill(dp, 0);
-        while (j > firstI) {
+        for (int j = len; j >= 0; j--) {
             tmp = find2(idx2, nums.length, nums[j], dp);
             if (tmp == idx2) {
                 dp[idx2--] = nums[j];
-                firstJ = j;
             }else {
                 dp[tmp] = nums[j];
             }
-            j--;
+            ans2[j] = nums.length - tmp;
         }
 
-        int ans = nums.length - (idx1 + nums.length - 1 - idx2);
+        idx1 = find1(-1, ans1.length, ans1[len], ans1);
+        idx2 = find2(-1, ans2.length, ans2[0] , ans2);
 
-        // 反着还要在算一边
+        int max;
+        if (idx2 > idx1) {
+            max = ans1[idx1] + ans2[idx2] - (nums[idx1] == nums[idx2] ? 1 : 0);
+        }else if (idx2 == 0) {
+            max = ans1[idx1] + ans2[idx1 + 1];
+        }else {
+            max = Math.max(ans1[idx1] + ans2[idx1 + 1], ans2[idx2] + ans1[idx2 - 1]);
+        }
 
-        return nums[firstI] == nums[firstJ] ? ans + 1 : ans;
+        return nums.length - max;
     }
 
     private int find1(int l, int r, int target, int[] nums) {
