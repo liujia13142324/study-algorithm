@@ -50,6 +50,11 @@ package com.lj.problem.leetcode._3;
  */
 public class LongestObstacleCourseAtEachPosition {
 
+    /**
+     * 34ms
+     * @param obstacles
+     * @return
+     */
     public int[] longestObstacleCourseAtEachPosition_(int[] obstacles) {
         int[] ans = new int[obstacles.length];
         int[] tmp = new int[obstacles.length];
@@ -66,6 +71,11 @@ public class LongestObstacleCourseAtEachPosition {
         return ans;
     }
 
+    /**
+     * 35ms
+     * @param obstacles
+     * @return
+     */
     public int[] longestObstacleCourseAtEachPosition(int[] obstacles) {
         int[] ans = new int[obstacles.length];
         int[] tmp = new int[obstacles.length];
