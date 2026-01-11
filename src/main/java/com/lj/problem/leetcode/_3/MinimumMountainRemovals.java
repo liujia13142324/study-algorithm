@@ -13,7 +13,7 @@ import java.util.Arrays;
  * 存在某个下标 i （从 0 开始） 满足 0 < i < arr.length - 1 且：
  * arr[0] < arr[1] < ... < arr[i - 1] < arr[i]
  * arr[i] > arr[i + 1] > ... > arr[arr.length - 1]
- * 给你整数数组 nums​ ，请你返回将 nums 变成 山形状数组 的​ 最少 删除次数。
+ * 给你整数数组 nums ，请你返回将 nums 变成 山形状数组 的最少 删除次数。
  *
  * 示例 1：
  * 输入：nums = [1,3,1]
