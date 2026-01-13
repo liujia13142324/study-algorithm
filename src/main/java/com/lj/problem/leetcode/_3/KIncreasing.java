@@ -57,6 +57,29 @@ public class KIncreasing {
         System.out.println(kIncreasing(new int[]{5,4,3,2,1}, 1));
     }
 
+
+    public int kIncreasing2(int[] arr, int k) {
+        int[][] helps = new int[k][(int) Math.ceil(arr.length / (double) k)];
+        int[] idx = new int[k];
+        for (int i = 0; i < arr.length; i++) {
+            int rowIdx = i % k;
+            int tmpIdx = find(-1, idx[rowIdx], arr[i], helps[rowIdx]);
+            if (tmpIdx == idx[rowIdx]) {
+                helps[rowIdx][idx[rowIdx]++] = arr[i];
+            }else {
+                helps[rowIdx][tmpIdx] = arr[i];
+            }
+        }
+
+        int sum = 0;
+        for (int LIS: idx) {
+            sum+=LIS;
+        }
+
+        return arr.length - sum;
+    }
+
+
     public int kIncreasing(int[] arr, int k) {
         int[][] helps = new int[k][(int) Math.ceil(arr.length / (double) k)];
         int[] idx = new int[k];
