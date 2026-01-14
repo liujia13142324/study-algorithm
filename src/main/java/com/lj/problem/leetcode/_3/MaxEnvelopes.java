@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._3;
 
+import org.junit.Test;
+
 /**
  * 354. 俄罗斯套娃信封问题
  * 给你一个二维整数数组 envelopes ，其中 envelopes[i] = [wi, hi] ，表示第 i 个信封的宽度和高度。
@@ -27,8 +29,37 @@ package com.lj.problem.leetcode._3;
  */
 public class MaxEnvelopes {
 
+    @Test
+    public void test() {
+//        System.out.println(maxEnvelopes(new int[][]{{5,4},{6,4},{6,7},{2,3}}));
+        System.out.println(maxEnvelopes(new int[][]{{2,100},{3,200},{4,300},{5,500},{5,400},{5,250},{6,370},{6,360},{7,380}}));
+    }
+
     public int maxEnvelopes(int[][] envelopes) {
-        return 0;
+        boolean[] path = new boolean[envelopes.length];
+        int max = 0;
+        for (int i = 0; i < envelopes.length; i++) {
+            max = Math.max(max, dfs(i, path, envelopes));
+        }
+        return max;
+    }
+
+    private int dfs(int i, boolean[] path, int[][] envelopes) {
+        if (i < 0) return 0;
+
+        int ans = 1;
+        path[i] = true;
+        for (int j = 0; j <envelopes.length; j++) {
+            if (path[j]) {
+                continue;
+            }
+            if (envelopes[j][0] > envelopes[i][0] && envelopes[j][1] > envelopes[i][1]) {
+                ans = Math.max(ans, 1 + dfs(j, path, envelopes));
+            }
+        }
+        path[i] = false;
+
+        return ans;
     }
 
 }
