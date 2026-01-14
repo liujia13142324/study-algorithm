@@ -35,18 +35,25 @@ public class MaxEnvelopes {
         System.out.println(maxEnvelopes(new int[][]{{2,100},{3,200},{4,300},{5,500},{5,400},{5,250},{6,370},{6,360},{7,380}}));
     }
 
+
+    /**
+     * 加缓存好一点，可以跑到 85/87
+     * @param envelopes
+     * @return
+     */
     public int maxEnvelopes(int[][] envelopes) {
         boolean[] path = new boolean[envelopes.length];
+        int[] cache = new int[envelopes.length];
         int max = 0;
         for (int i = 0; i < envelopes.length; i++) {
-            max = Math.max(max, dfs(i, path, envelopes));
+            max = Math.max(max, dfs(i, path, envelopes, cache));
         }
         return max;
     }
 
-    private int dfs(int i, boolean[] path, int[][] envelopes) {
+    private int dfs(int i, boolean[] path, int[][] envelopes, int[] cache) {
         if (i < 0) return 0;
-
+        if (cache[i] != 0) return cache[i];
         int ans = 1;
         path[i] = true;
         for (int j = 0; j <envelopes.length; j++) {
@@ -54,11 +61,11 @@ public class MaxEnvelopes {
                 continue;
             }
             if (envelopes[j][0] > envelopes[i][0] && envelopes[j][1] > envelopes[i][1]) {
-                ans = Math.max(ans, 1 + dfs(j, path, envelopes));
+                ans = Math.max(ans, 1 + dfs(j, path, envelopes, cache));
             }
         }
         path[i] = false;
-
+        cache[i] = ans;
         return ans;
     }
 
