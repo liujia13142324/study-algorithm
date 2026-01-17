@@ -2,6 +2,9 @@ package com.lj.problem.leetcode._3;
 
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.Comparator;
+
 /**
  * 354. 俄罗斯套娃信封问题
  * 给你一个二维整数数组 envelopes ，其中 envelopes[i] = [wi, hi] ，表示第 i 个信封的宽度和高度。
@@ -31,8 +34,109 @@ public class MaxEnvelopes {
 
     @Test
     public void test() {
-//        System.out.println(maxEnvelopes(new int[][]{{5,4},{6,4},{6,7},{2,3}}));
-        System.out.println(maxEnvelopes(new int[][]{{2,100},{3,200},{4,300},{5,500},{5,400},{5,250},{6,370},{6,360},{7,380}}));
+//        System.out.println(maxEnvelopes2(new int[][]{{5,4},{6,4},{6,7},{2,3}}));
+        System.out.println(maxEnvelopes2(new int[][]{{2,100},{3,200},{4,300},{5,500},{5,400},{5,250},{6,370},{6,360},{7,380}}));
+//        System.out.println(maxEnvelopes2(new int[][]{{1,15},{7,18},{7,6},{7,100},{2,200},{17,30},{17,45},{3,5},{7,8},{3,6},{3,10},{7,20},{17,3},{17,45}}));
+    }
+
+    public int maxEnvelopes2(int[][] envelopes) {
+        Arrays.sort(envelopes, (e1, e2)-> {
+            if (e1[0] == e2[0]) {
+                return e1[1] - e2[1];
+            }else {
+                return e1[0] - e2[0];
+            }
+        });
+
+        int[] dp = new int[envelopes.length];
+        int max = 1;
+        for (int i = 0; i < envelopes.length; i++) {
+            int idx = find(-1, i, envelopes[i][0], envelopes, 0);
+            idx = Math.min(find(-1, i, envelopes[i][1], envelopes, 1), idx);
+            if (idx == 0) {
+                dp[i] = 1;
+                continue;
+            }
+            dp[i] = dp[idx - 1] + 1;
+            max = Math.max(max, dp[i]);
+        }
+
+        /*for (int i = 0; i < envelopes.length; i++) {
+            int idx = find(-1, i, envelopes[i][0], envelopes, 0);
+            if (idx == 0) {
+                dp[i] = 1;
+                continue;
+            }
+            if (envelopes[idx-1][1] < envelopes[i][1]) {
+                dp[i] = dp[idx - 1] + 1;
+            }else {
+                int idx2 = find(-1, i, envelopes[i][1], envelopes, 1);
+                dp[i] = dp[Math.max(Math.min(idx, idx2) - 1, 0)] + 1;
+            }
+            max = Math.max(max, dp[i]);
+        }*/
+
+        return max;
+    }
+
+    private int find(int l, int r, int target, int[][] nums, int fromIdx) {
+        while (l + 1 < r) {
+            int mid = (l + r) >>> 1;
+            if (nums[mid][fromIdx] >= target) {
+                r = mid;
+            }else {
+                l = mid;
+            }
+        }
+        return r;
+    }
+
+    private int find(int l, int r, int target, int[] arr) {
+        while (l + 1 < r) {
+            int mid = (l + r) >>> 1;
+            if (arr[mid] >= target) {
+                r = mid;
+            }else {
+                l = mid;
+            }
+        }
+        return r;
+    }
+
+    /**
+     * 想办法减枝, 依旧 85/87
+     * @param envelopes
+     * @return
+     */
+    public int maxEnvelopes_(int[][] envelopes) {
+        boolean[] path = new boolean[envelopes.length];
+        int[] cache = new int[envelopes.length];
+        boolean[] skip = new boolean[envelopes.length];
+        int max = 0;
+        for (int i = 0; i < envelopes.length; i++) {
+            if (skip[i]) continue;
+            max = Math.max(max, dfs_(i, path, envelopes, cache, skip));
+        }
+        return max;
+    }
+
+    private int dfs_(int i, boolean[] path, int[][] envelopes, int[] cache, boolean[] skip) {
+        if (i < 0) return 0;
+        if (cache[i] != 0) return cache[i];
+        int ans = 1;
+        path[i] = true;
+        for (int j = 0; j <envelopes.length; j++) {
+            if (path[j]) {
+                continue;
+            }
+            if (envelopes[j][0] > envelopes[i][0] && envelopes[j][1] > envelopes[i][1]) {
+                ans = Math.max(ans, 1 + dfs_(j, path, envelopes, cache, skip));
+                skip[j] = true;
+            }
+        }
+        path[i] = false;
+        cache[i] = ans;
+        return ans;
     }
 
 
