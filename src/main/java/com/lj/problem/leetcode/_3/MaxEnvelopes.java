@@ -40,42 +40,21 @@ public class MaxEnvelopes {
     }
 
     public int maxEnvelopes2(int[][] envelopes) {
-        Arrays.sort(envelopes, (e1, e2)-> {
-            if (e1[0] == e2[0]) {
-                return e1[1] - e2[1];
-            }else {
-                return e1[0] - e2[0];
-            }
-        });
-
+        Arrays.sort(envelopes, Comparator.comparing(e->e[0] + e[1]));
         int[] dp = new int[envelopes.length];
         int max = 1;
         for (int i = 0; i < envelopes.length; i++) {
-            int idx = find(-1, i, envelopes[i][0], envelopes, 0);
-            idx = Math.min(find(-1, i, envelopes[i][1], envelopes, 1), idx);
-            if (idx == 0) {
+            int j;
+            for (j = i - 1; j >= 0; j--) {
+                if (envelopes[j][0] < envelopes[i][0] && envelopes[j][1] < envelopes[i][1]) break;
+            }
+            if (j == -1) {
                 dp[i] = 1;
                 continue;
             }
-            dp[i] = dp[idx - 1] + 1;
+            dp[i] = dp[j] + 1;
             max = Math.max(max, dp[i]);
         }
-
-        /*for (int i = 0; i < envelopes.length; i++) {
-            int idx = find(-1, i, envelopes[i][0], envelopes, 0);
-            if (idx == 0) {
-                dp[i] = 1;
-                continue;
-            }
-            if (envelopes[idx-1][1] < envelopes[i][1]) {
-                dp[i] = dp[idx - 1] + 1;
-            }else {
-                int idx2 = find(-1, i, envelopes[i][1], envelopes, 1);
-                dp[i] = dp[Math.max(Math.min(idx, idx2) - 1, 0)] + 1;
-            }
-            max = Math.max(max, dp[i]);
-        }*/
-
         return max;
     }
 
