@@ -35,8 +35,9 @@ public class MaxEnvelopes {
     @Test
     public void test() {
 //        System.out.println(maxEnvelopes2(new int[][]{{5,4},{6,4},{6,7},{2,3}}));
-        System.out.println(maxEnvelopes2(new int[][]{{2,100},{3,200},{4,300},{5,500},{5,400},{5,250},{6,370},{6,360},{7,380}}));
+//        System.out.println(maxEnvelopes2(new int[][]{{2,100},{3,200},{4,300},{5,500},{5,400},{5,250},{6,370},{6,360},{7,380}}));
 //        System.out.println(maxEnvelopes2(new int[][]{{1,15},{7,18},{7,6},{7,100},{2,200},{17,30},{17,45},{3,5},{7,8},{3,6},{3,10},{7,20},{17,3},{17,45}}));
+        System.out.println(maxEnvelopes2(new int[][]{{6,10},{11,14},{6,1},{16,14},{13,2}}));
     }
 
     public int maxEnvelopes2(int[][] envelopes) {
