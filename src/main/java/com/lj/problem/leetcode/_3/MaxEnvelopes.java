@@ -30,7 +30,7 @@ import java.util.Comparator;
  * envelopes[i].length == 2
  * 1 <= wi, hi <= 105
  *
- * tmp
+ *
  */
 public class MaxEnvelopes {
 
