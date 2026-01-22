@@ -39,7 +39,8 @@ public class LengthOfLIS {
     public void test() {
 //        System.out.println(lengthOfLIS3___(new int[]{1,3,6,7,9,4,10,5,6}));
 //        System.out.println(lengthOfLIS2___(new int[]{10, 9, 2, 5, 3, 7}));
-        System.out.println(lengthOfLIS4(new int[]{10, 9, 2, 5, 3, 7, 101, 18}));
+//        System.out.println(lengthOfLIS4(new int[]{10, 9, 2, 5, 3, 7, 101, 18}));
+        System.out.println(lengthOfLIS4(new int[]{1,7,3,4,9,6,2,10}));
     }
 
     public int lengthOfLIS4_(int[] nums) {

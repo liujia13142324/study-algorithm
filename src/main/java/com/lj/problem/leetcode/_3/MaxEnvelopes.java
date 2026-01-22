@@ -42,21 +42,50 @@ public class MaxEnvelopes {
         System.out.println(maxEnvelopes2(new int[][]{{6,10},{11,14},{6,1},{16,14},{13,2}}));
     }
 
-    public int maxEnvelopes2(int[][] envelopes) {
-        Arrays.sort(envelopes, Comparator.comparing(e->e[0] + e[1]));
-        int[] dp = new int[envelopes.length];
+    /**
+     * 85/87
+     * @param envelopes
+     * @return
+     */
+    public int maxEnvelopes2_(int[][] envelopes) {
+        Arrays.sort(envelopes, Comparator.comparingInt(a -> a[0]));
+        int[] cache = new int[envelopes.length];
+        int max = Integer.MIN_VALUE;
+        for (int i = envelopes.length - 1; i >= 0; i--) {
+            max = Math.max(max, dfs2(i, envelopes, cache));
+        }
+        return max;
+    }
+
+    private int dfs2(int i, int[][] envelopes, int[] cache) {
+        if (cache[i] != 0) {
+            return cache[i];
+        }
         int max = 1;
-        for (int i = 0; i < envelopes.length; i++) {
-            int j;
-            for (j = i - 1; j >= 0; j--) {
-                if (envelopes[j][0] < envelopes[i][0] && envelopes[j][1] < envelopes[i][1]) break;
+        for (int j = i - 1; j >= 0; j--) {
+            if (envelopes[j][0] < envelopes[i][0] && envelopes[j][1] < envelopes[i][1]) {
+                max = Math.max(max, dfs2(j, envelopes, cache) + 1);
             }
-            if (j == -1) {
-                dp[i] = 1;
-                continue;
+        }
+        cache[i] = max;
+        return max;
+    }
+
+    public int maxEnvelopes2(int[][] envelopes) {
+        Arrays.sort(envelopes, Comparator.comparingInt(a -> a[0]));
+        int max = Integer.MIN_VALUE;
+        for (int i = envelopes.length - 1; i >= 0; i--) {
+            max = Math.max(max, dfs2(i, envelopes));
+        }
+        return max;
+    }
+
+    private int dfs2(int i, int[][] envelopes) {
+        int max = 1;
+        for (int j = i - 1; j >= 0; j--) {
+            if (envelopes[j][0] < envelopes[i][0] && envelopes[j][1] < envelopes[i][1]) {
+                max = Math.max(max, dfs2(j, envelopes) + 1);
             }
-            dp[i] = dp[j] + 1;
-            max = Math.max(max, dp[i]);
         }
         return max;
     }
