@@ -43,6 +43,25 @@ public class MaxEnvelopes {
     }
 
     /**
+     * 69 / 87
+     * @param envelopes
+     * @return
+     */
+    public int maxEnvelopes3(int[][] envelopes) {
+        Arrays.sort(envelopes, Comparator.comparingInt(a -> a[0]));
+        return dfs3(envelopes.length - 1, new int[]{10001, 10001}, envelopes);
+    }
+
+    private int dfs3(int i, int[] pre, int[][] envelopes) {
+        if (i < 0) return 0;
+        int val = 0;
+        if (envelopes[i][0] < pre[0] && envelopes[i][1] < pre[1]) {
+            val = 1 + dfs3(i - 1, envelopes[i], envelopes);
+        }
+        return Math.max(val, dfs3(i - 1, pre, envelopes));
+    }
+
+    /**
      * 85/87
      * @param envelopes
      * @return
