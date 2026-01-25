@@ -42,6 +42,39 @@ public class MaxEnvelopes {
         System.out.println(maxEnvelopes2(new int[][]{{6,10},{11,14},{6,1},{16,14},{13,2}}));
     }
 
+    public int maxEnvelopes4(int[][] envelopes) {
+        Arrays.sort(envelopes, Comparator.comparingInt(a -> a[0]));
+        int[][] dp = new int[envelopes.length][2];
+        int idx = 0;
+        for (int[] tmp: envelopes) {
+            int idx1 = find2(-1, idx, tmp[0], dp, 0);
+            if (idx1 == idx) {
+                dp[idx++] = tmp;
+                continue;
+            }
+            int idx2 = find2(-1, idx, tmp[1], dp, 1);
+            if (idx2 == idx) {
+                dp[idx++] = tmp;
+                continue;
+            }
+            dp[Math.max(idx1, idx2)] = tmp;
+        }
+        return idx;
+    }
+
+    private int find2(int l, int r, int target, int[][] nums, int z) {
+        while (l + 1 < r) {
+            int mid = (l + r) >>> 1;
+            if (nums[mid][z] >= target) {
+                r = mid;
+            }else {
+                l = mid;
+            }
+        }
+        return r;
+    }
+
+
     /**
      * 69 / 87
      * @param envelopes
