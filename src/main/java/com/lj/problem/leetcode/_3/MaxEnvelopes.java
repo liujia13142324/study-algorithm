@@ -36,30 +36,35 @@ public class MaxEnvelopes {
 
     @Test
     public void test() {
-//        System.out.println(maxEnvelopes2(new int[][]{{5,4},{6,4},{6,7},{2,3}}));
+//        System.out.println(maxEnvelopes4(new int[][]{{5,4},{6,4},{6,7},{2,3}}));
+        System.out.println(maxEnvelopes4(new int[][]{{4,5},{4,6},{6,7},{2,3},{1,1}}));
 //        System.out.println(maxEnvelopes2(new int[][]{{2,100},{3,200},{4,300},{5,500},{5,400},{5,250},{6,370},{6,360},{7,380}}));
 //        System.out.println(maxEnvelopes2(new int[][]{{1,15},{7,18},{7,6},{7,100},{2,200},{17,30},{17,45},{3,5},{7,8},{3,6},{3,10},{7,20},{17,3},{17,45}}));
-        System.out.println(maxEnvelopes2(new int[][]{{6,10},{11,14},{6,1},{16,14},{13,2}}));
+//        System.out.println(maxEnvelopes2(new int[][]{{6,10},{11,14},{6,1},{16,14},{13,2}}));
     }
 
     public int maxEnvelopes4(int[][] envelopes) {
         Arrays.sort(envelopes, Comparator.comparingInt(a -> a[0]));
-        int[][] dp = new int[envelopes.length][2];
+        int[][] tmp = new int[envelopes.length][2];
+        int[] dp = new int[envelopes.length];
         int idx = 0;
-        for (int[] tmp: envelopes) {
-            int idx1 = find2(-1, idx, tmp[0], dp, 0);
-            if (idx1 == idx) {
-                dp[idx++] = tmp;
-                continue;
+        int max = 0;
+        for (int i = 0; i < envelopes.length; i++) {
+            int idx1 = find2(-1, idx, envelopes[i][0], tmp, 0);
+            int idx2 = find2(-1, idx, envelopes[i][1], tmp, 1);
+            int tmpIdx = Math.max(idx1, idx2);
+            tmp[tmpIdx] = envelopes[i];
+            if (tmpIdx == idx) idx++;
+            tmpIdx = Math.min(idx1, idx2);
+            if (tmpIdx == 0) {
+                dp[i] = 1;
+            }else {
+                dp[i] = dp[tmpIdx - 1] + 1;
             }
-            int idx2 = find2(-1, idx, tmp[1], dp, 1);
-            if (idx2 == idx) {
-                dp[idx++] = tmp;
-                continue;
-            }
-            dp[Math.max(idx1, idx2)] = tmp;
+            max = Math.max(max, dp[i]);
         }
-        return idx;
+
+        return max;
     }
 
     private int find2(int l, int r, int target, int[][] nums, int z) {
