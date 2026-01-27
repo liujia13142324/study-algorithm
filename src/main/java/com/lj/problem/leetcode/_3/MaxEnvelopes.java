@@ -37,7 +37,7 @@ public class MaxEnvelopes {
     @Test
     public void test() {
 //        System.out.println(maxEnvelopes4(new int[][]{{5,4},{6,4},{6,7},{2,3}}));
-        System.out.println(maxEnvelopes4(new int[][]{{4,5},{4,6},{6,7},{2,3},{1,1}}));
+        System.out.println(maxEnvelopes4(new int[][]{{4,5},{4,6},{6,7},{2,3},{1,1},{1,1}}));
 //        System.out.println(maxEnvelopes2(new int[][]{{2,100},{3,200},{4,300},{5,500},{5,400},{5,250},{6,370},{6,360},{7,380}}));
 //        System.out.println(maxEnvelopes2(new int[][]{{1,15},{7,18},{7,6},{7,100},{2,200},{17,30},{17,45},{3,5},{7,8},{3,6},{3,10},{7,20},{17,3},{17,45}}));
 //        System.out.println(maxEnvelopes2(new int[][]{{6,10},{11,14},{6,1},{16,14},{13,2}}));
@@ -55,11 +55,11 @@ public class MaxEnvelopes {
             int tmpIdx = Math.max(idx1, idx2);
             tmp[tmpIdx] = envelopes[i];
             if (tmpIdx == idx) idx++;
-            tmpIdx = Math.min(idx1, idx2);
+//            tmpIdx = Math.min(idx1, idx2);
             if (tmpIdx == 0) {
                 dp[i] = 1;
             }else {
-                dp[i] = dp[tmpIdx - 1] + 1;
+                dp[i] = dp[tmpIdx-1] + 1;
             }
             max = Math.max(max, dp[i]);
         }
