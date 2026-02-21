@@ -39,9 +39,49 @@ public class MaxEnvelopes {
     public void test() {
 //        System.out.println(maxEnvelopes4(new int[][]{{5,4},{6,4},{6,7},{2,3}}));
 //        System.out.println(maxEnvelopes4(new int[][]{{4,5},{4,6},{6,7},{2,3},{1,1},{1,1}}));
-        System.out.println(maxEnvelopes4(new int[][]{{2,100},{3,200},{4,300},{5,500},{5,400},{5,250},{6,370},{6,360},{7,380}}));
+        System.out.println(maxEnvelopes5(new int[][]{{2,100},{3,200},{4,300},{5,500},{5,400},{5,250},{6,370},{6,360},{7,380}}));
 //        System.out.println(maxEnvelopes2(new int[][]{{1,15},{7,18},{7,6},{7,100},{2,200},{17,30},{17,45},{3,5},{7,8},{3,6},{3,10},{7,20},{17,3},{17,45}}));
 //        System.out.println(maxEnvelopes2(new int[][]{{6,10},{11,14},{6,1},{16,14},{13,2}}));
+    }
+
+
+    /**
+     * 根据 e[0] 递增，如果 e[0] 相同，根据e[1] 递减
+     * @param envelopes
+     * @return
+     */
+    public int maxEnvelopes5(int[][] envelopes) {
+        Arrays.sort(envelopes, (e1,e2)->{
+            if (e1[0] != e2[0]) {
+                return e1[0] - e2[0];
+            }else {
+                return e2[1] - e1[1];
+            }
+        });
+
+        int[] tmp = new int[envelopes.length];
+        int len = 0;
+        for (int i = 0; i < envelopes.length; i++) {
+            int idx = lowerBoundOfArray1(-1, len, envelopes[i][1], tmp);
+            if (idx == len) {
+                tmp[len++] = envelopes[i][1];
+            }else {
+                tmp[idx] = envelopes[i][1];
+            }
+        }
+        return len;
+    }
+
+    private int lowerBoundOfArray1(int l, int r, int target, int[] array) {
+        while (l + 1 < r) {
+            int mid = (l + r) / 2;
+            if (array[mid] >= target) {
+                r = mid;
+            }else {
+                l = mid;
+            }
+        }
+        return r;
     }
 
 
