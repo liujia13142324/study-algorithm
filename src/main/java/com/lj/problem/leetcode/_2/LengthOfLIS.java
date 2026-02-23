@@ -70,6 +70,24 @@ public class LengthOfLIS {
         return idx;
     }
 
+    public int lengthOfLIS2_____(int[] nums) {
+        int max = -100000;
+        int min = 100000;
+        for (int num: nums) {
+            max = Math.max(max, num);
+            min = Math.min(min, num);
+        }
+        int[] dp = new int[max - min + 2];
+        int r = max - min + 1;
+        for (int i = 1; i <= nums.length; i++) {
+            int tmp = nums[i - 1] - min;
+            for (int j = tmp + 1; j <= r; j++) {
+                dp[j] = Math.max(dp[j], dp[tmp] + 1);
+            }
+        }
+        return dp[max - min + 1];
+    }
+
     public int lengthOfLIS2____(int[] nums) {
         int max = -100000;
         int min = 100000;
@@ -89,10 +107,15 @@ public class LengthOfLIS {
         return dp[max - min + 1];
     }
 
+    @Test
+    public void testFind() {
+        System.out.println(find(0, 100, 50));
+    }
+
     private int find(int l, int r, int tmp) {
         while (l + 1 < r) {
             int mid = (l + r) >>> 1;
-            if (mid >= tmp) {
+            if (mid > tmp) {
                 r = mid;
             }else {
                 l = mid;
