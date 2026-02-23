@@ -70,6 +70,28 @@ public class LengthOfLIS {
         return idx;
     }
 
+
+    public int lengthOfLIS2______(int[] nums) {
+        int max = -100000;
+        int min = 100000;
+        for (int num: nums) {
+            max = Math.max(max, num);
+            min = Math.min(min, num);
+        }
+        int[] dp = new int[max - min + 2];
+        int ans = 0;
+        for (int i = 0; i < nums.length; i++) {
+            int tmp = nums[i] - min;
+            int tmpMax = 0;
+            for (int j = 0; j < tmp; j++) {
+                tmpMax = Math.max(tmpMax, dp[j]);
+            }
+            dp[tmp] = tmpMax + 1;
+            ans = Math.max(ans, dp[tmp]);
+        }
+        return ans;
+    }
+
     public int lengthOfLIS2_____(int[] nums) {
         int max = -100000;
         int min = 100000;
