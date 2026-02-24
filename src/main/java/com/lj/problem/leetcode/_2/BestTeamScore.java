@@ -44,6 +44,14 @@ public class BestTeamScore {
         System.out.println(bestTeamScore(new int[]{596,277,897,622,500,299,34,536,797,32,264,948,645,537,83,589,770}, new int[]{18,52,60,79,72,28,81,33,96,15,18,5,17,96,57,72,72}));
     }
 
+
+
+    /**
+     * 查找和最大的递增序列
+     * @param scores
+     * @param ages
+     * @return
+     */
     public int bestTeamScore(int[] scores, int[] ages) {
         int[][] tmp = new int[scores.length][2];
         for (int i = 0; i < scores.length; i++) {
@@ -61,32 +69,76 @@ public class BestTeamScore {
             return tmp[0][0] * tmp.length;
         }
 
-
         int ans = 0;
-        int[] dp = new int[scores.length + 1];
-        for (int i = 1; i < dp.length; i++) {
+        int[] dp = new int[scores.length];
+        for (int i = 0; i < dp.length; i++) {
             int max = 0;
-            for (int j = 1; j < i; j++) {
-                if (tmp[j - 1][1] <= tmp[i - 1][1]) {
+            for (int j = 0; j < i; j++) {
+                if (tmp[j][1] <= tmp[i][1]) {
                     max = Math.max(max, dp[j]);
                 }
-            } // 3287- 3139 = 148
-            dp[i] = max + tmp[i - 1][0];
+            }
+            dp[i] = max + tmp[i][0];
             ans = Math.max(ans, dp[i]);
         }
 
         return ans;
     }
 
-    private int lowerBound(int l, int r, int target, int[] arr) {
-        while (l + 1 < r) {
-            int mid = l + (r - l) / 2;
-            if (arr[mid] > target) {
-                r = mid;
-            }else {
-                l = mid;
-            }
+    /**
+     * 查找和最大的递增序列 --> 根据值域
+     * @param scores
+     * @param ages
+     * @return
+     */
+    public int bestTeamScore2(int[] scores, int[] ages) {
+        int[][] tmp = new int[scores.length][2];
+        int maxAge = 0;
+        for (int i = 0; i < scores.length; i++) {
+            tmp[i][0] = scores[i];
+            tmp[i][1] = ages[i];
+            maxAge = Math.max(maxAge, ages[i]);
         }
-        return r;
+        Arrays.sort(tmp, (e1,e2)->{
+            if (e1[0] != e2[0]) {
+                return e1[0] - e2[0];
+            }
+            return e1[1] - e2[1];
+        });
+
+        if (tmp[0][0] == tmp[tmp.length - 1][0]) {
+            return tmp[0][0] * tmp.length;
+        }
+
+        int[] dp = new int[maxAge + 1];
+        int maxSum = 0;
+        for (int i = 0; i < tmp.length; i++) {
+            for (int j = 1; j <= tmp[i][1]; j++) {
+                dp[tmp[i][1]] = Math.max(dp[tmp[i][1]], dp[j]);
+            }
+            dp[tmp[i][1]] += tmp[i][0];
+            maxSum = Math.max(maxSum, dp[tmp[i][1]]);
+        }
+        return maxSum;
     }
+
+
+    public int bestTeamScore_(int[] scores, int[] ages) {
+        int n = scores.length, ans = 0;
+        Integer[] ids = new Integer[n];
+        for (int i = 0; i < n; ++i)
+            ids[i] = i;
+        Arrays.sort(ids, (i, j) -> scores[i] != scores[j] ? scores[i] - scores[j] : ages[i] - ages[j]);
+
+        int[] f = new int[n];
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < i; ++j)
+                if (ages[ids[j]] <= ages[ids[i]])
+                    f[i] = Math.max(f[i], f[j]);
+            f[i] += scores[ids[i]];
+            ans = Math.max(ans, f[i]);
+        }
+        return ans;
+    }
+
 }
