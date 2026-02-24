@@ -78,7 +78,7 @@ public class LengthOfLIS {
             max = Math.max(max, num);
             min = Math.min(min, num);
         }
-        int[] dp = new int[max - min + 2];
+        int[] dp = new int[max - min + 1];
         int ans = 0;
         for (int i = 0; i < nums.length; i++) {
             int tmp = nums[i] - min;
