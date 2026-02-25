@@ -42,15 +42,58 @@ public class BestTeamScore {
 //        System.out.println(bestTeamScore(new int[]{4,5,6,5}, new int[]{2,1,2,1}));
 //        System.out.println(bestTeamScore(new int[]{1,3,7,3,2,4,10,7,5}, new int[]{4,5,2,1,1,2,4,1,4}));
 //        System.out.println(bestTeamScore(new int[]{596,277,897,622,500,299,34,536,797,32,264,948,645,537,83,589,770}, new int[]{18,52,60,79,72,28,81,33,96,15,18,5,17,96,57,72,72}));
+        System.out.println(bestTeamScore3(new int[]{9,2,8,8,2}, new int[]{4,1,3,3,5}));
 
-        int i = 7;
-//        i += i & 0;
-//        i &= i - 1;
-        // i = i & (i - 1);
-        i = i - (i & -i);
-        System.out.println(i);
     }
 
+
+    /**
+     * 树状数组优化
+     * @param scores
+     * @param ages
+     * @return
+     */
+    public int bestTeamScore3(int[] scores, int[] ages) {
+        int[][] tmp = new int[scores.length][2];
+        int maxAge = 0;
+        for (int i = 0; i < scores.length; i++) {
+            tmp[i][0] = scores[i];
+            tmp[i][1] = ages[i];
+            maxAge = Math.max(maxAge, ages[i]);
+        }
+        Arrays.sort(tmp, (e1,e2)->{
+            if (e1[0] != e2[0]) {
+                return e1[0] - e2[0];
+            }
+            return e1[1] - e2[1];
+        });
+
+        if (tmp[0][0] == tmp[tmp.length - 1][0]) {
+            return tmp[0][0] * tmp.length;
+        }
+
+        int[] dp = new int[maxAge + 1];
+
+        for (int i = 0; i < tmp.length; i++) {
+            update(tmp[i][1], query(tmp[i][1], dp) + tmp[i][0], dp);
+        }
+
+        return query(maxAge, dp);
+    }
+
+    private int query(int i, int[] arr) {
+        int result = 0;
+        for (; i > 0; i -= (i & -i)) {
+            result = Math.max(result, arr[i]);
+        }
+        return result;
+    }
+
+    private void update(int i, int value, int[] arr) {
+        for (; i < arr.length; i += (i & -i)) {
+            arr[i] = Math.max(arr[i], value);
+        }
+    }
 
 
     /**
@@ -90,48 +133,6 @@ public class BestTeamScore {
         }
 
         return ans;
-    }
-
-    public int bestTeamScore3(int[] scores, int[] ages) {
-        int[][] tmp = new int[scores.length][2];
-        int maxAge = 0;
-        for (int i = 0; i < scores.length; i++) {
-            tmp[i][0] = scores[i];
-            tmp[i][1] = ages[i];
-            maxAge = Math.max(maxAge, ages[i]);
-        }
-        Arrays.sort(tmp, (e1,e2)->{
-            if (e1[0] != e2[0]) {
-                return e1[0] - e2[0];
-            }
-            return e1[1] - e2[1];
-        });
-
-        if (tmp[0][0] == tmp[tmp.length - 1][0]) {
-            return tmp[0][0] * tmp.length;
-        }
-
-        int[] dp = new int[maxAge + 1];
-
-        for (int i = 0; i < tmp.length; i++) {
-            update(tmp[i][1], query(tmp[i][1], dp) + tmp[i][0], dp);
-        }
-
-        return dp[maxAge];
-    }
-
-    private int query(int i, int[] arr) {
-        int result = 0;
-        for (; i > 0; i -= (i & -i)) {
-            result = Math.max(result, arr[i]);
-        }
-        return result;
-    }
-
-    private void update(int i, int value, int[] arr) {
-        for (; i < arr.length; i += (i & -i)) {
-            arr[i] = Math.max(arr[i], value);
-        }
     }
 
     /**
