@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._3;
 
+import org.junit.Test;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,6 +36,59 @@ import java.util.Map;
  * tmp
  */
 public class MakeArrayIncreasing {
+
+    @Test
+    public void test() {
+        System.out.println(makeArrayIncreasing2(new int[]{4,5,6,7,8}, new int[]{9,10}));
+    }
+
+    private int[] a, b, memo;
+    private int m;
+
+    public int makeArrayIncreasing2(int[] a, int[] b) {
+        this.a = a;
+        this.b = b;
+        Arrays.sort(b);
+        for (int i = 1; i < b.length; ++i)
+            if (b[m] != b[i])
+                b[++m] = b[i]; // 原地去重
+        ++m;
+        int n = a.length;
+        memo = new int[n + 1]; // 0 表示还没有计算过
+        int ans = dfs(n);
+        return ans < 0 ? -1 : n + 1 - ans;
+    }
+
+    private int dfs(int i) {
+        if (memo[i] != 0) return memo[i]; // 之前计算过了
+        int x = i < a.length ? a[i] : Integer.MAX_VALUE;
+        int k = lowerBound(b, m, x);
+        int res = k < i ? Integer.MIN_VALUE : 0; // 小于 a[i] 的数全部替换
+        if (i > 0 && a[i - 1] < x) // 无替换
+            res = Math.max(res, dfs(i - 1));
+        for (int j = i - 2; j >= i - k - 1 && j >= 0; --j)
+            if (b[k - (i - j - 1)] > a[j])
+                // a[j+1] 到 a[i-1] 替换成 b[k-(i-j-1)] 到 b[k-1]
+                res = Math.max(res, dfs(j));
+        return memo[i] = ++res; // 把 +1 移到这里，表示 a[i] 不替换
+    }
+
+    private int lowerBound(int[] nums, int right, int target) {
+        int left = -1; // 开区间 (left, right)
+        while (left + 1 < right) { // 区间不为空
+            // 循环不变量：
+            // nums[left] < target
+            // nums[right] >= target
+            int mid = (left + right) >>> 1;
+            if (nums[mid] < target)
+                left = mid; // 范围缩小到 (mid, right)
+            else
+                right = mid; // 范围缩小到 (left, mid)
+        }
+        return right;
+    }
+
+
 
     private static int MAX = 1000000001;
 
