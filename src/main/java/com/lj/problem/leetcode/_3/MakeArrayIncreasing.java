@@ -39,7 +39,8 @@ public class MakeArrayIncreasing {
 
     @Test
     public void test() {
-        System.out.println(makeArrayIncreasing2(new int[]{4,5,6,7,8}, new int[]{9,10}));
+//        System.out.println(makeArrayIncreasing2(new int[]{4,5,6,7,8}, new int[]{9,10}));
+        System.out.println(makeArrayIncreasing2(new int[]{1,5,3,6,7}, new int[]{4,3,1}));
     }
 
     private int[] a, b, memo;
