@@ -39,9 +39,83 @@ public class MakeArrayIncreasing {
 
     @Test
     public void test() {
-//        System.out.println(makeArrayIncreasing2(new int[]{4,5,6,7,8}, new int[]{9,10}));
-        System.out.println(makeArrayIncreasing2(new int[]{1,5,3,6,7}, new int[]{4,3,1}));
+//        System.out.println(makeArrayIncreasing4(new int[]{4,5,6,7,8}, new int[]{9,10}));
+//        System.out.println(makeArrayIncreasing4(new int[]{1,5,3,6,7}, new int[]{4,3,1}));
+        System.out.println(makeArrayIncreasing4(new int[]{1,5,3,6,7}, new int[]{1,3,2,4}));
+        System.out.println(makeArrayIncreasing4(new int[]{1,5,3,6,7}, new int[]{4,3,1}));
+        System.out.println(makeArrayIncreasing4(new int[]{1,2,3,4}, new int[]{0,0,0,0}));
+
+//        System.out.println(Arrays.toString(test2(new int[]{1,2,3,3,3,4,5,5,6,7,7})));
     }
+
+    public int[] test2(int[] arr2) {
+        int r = 1;
+        for (int i = 1; i < arr2.length; i++) {
+            if (arr2[r - 1] != arr2[i]) {
+                arr2[r++] = arr2[i];
+            }
+        }
+        System.out.println(r);
+        return arr2;
+    }
+
+
+    public int makeArrayIncreasing4(int[] arr1, int[] arr2) {
+        Arrays.sort(arr2);
+        int r = 0;
+        for (int i = 1; i < arr2.length; i++) {
+            if (arr2[r] != arr2[i]) {
+                arr2[++r] = arr2[i];
+            }
+        }
+        int[] cache = new int[arr1.length + 1];
+        int max = dfs4(arr1.length, r + 1, arr1, arr2, cache);
+
+        return max < 0 ? -1 : arr1.length - max + 1;
+    }
+
+    /**
+     * arr1 中前 i-1 最大保留数 (第 i 位设为保留数 -> 成功1，失败且可以替换0，失败且无法替换 -无穷)
+     * j+1 ~ i-1  -> i - j - 1
+     * k = lowBound(b, a[i])
+     * j = i - 2
+     * a[j] < b[k - (i - j - 1)] -> 替换ok -> dfs(j)
+     * (j >= i - k - 1)
+     *
+     * @param i
+     * @param arr1
+     * @param arr2
+     * @param cache
+     * @return
+     */
+    private int dfs4(int i, int len1, int[] arr1, int[] arr2, int[] cache) {
+        if (cache[i] != 0) return cache[i];
+        int x = i == arr1.length ? Integer.MAX_VALUE : arr1[i];
+        int idx = lowerBound(arr2, len1, x);
+        int ans = idx >= i ? 0 : Integer.MIN_VALUE;
+        if (i > 0 && arr1[i - 1] < x) {
+            ans = Integer.max(ans, dfs4(i - 1, len1, arr1, arr2, cache));
+        }
+
+        for (int j = i - 2; j >= 0 && j >= i - idx - 1; j--) {
+            if (arr1[j] < arr2[idx - (i - j - 1)]) {
+                ans = Integer.max(ans, dfs4(j, len1, arr1, arr2, cache));
+            }
+        }
+        cache[i] = ans + 1;
+        return cache[i];
+    }
+
+
+
+
+
+
+
+
+
+
+
 
     private int[] a, b, memo;
     private int m;
@@ -122,6 +196,33 @@ public class MakeArrayIncreasing {
         return val;
     }
 
+    public int makeArrayIncreasing3(int[] arr1, int[] arr2) {
+        Arrays.sort(arr2);
+        int ans = dfs3(arr1.length - 1, Integer.MAX_VALUE, arr1, arr2, new HashMap());
+        return ans >= 100000 ? -1 : ans;
+    }
+
+
+    private int dfs3(int i, int pre, int[] arr1, int[] arr2, Map<String, Integer> cache) {
+        if (i < 0) {
+            return 0;
+        }
+        if (cache.get(i + "_" + pre) != null) {
+            return cache.get(i + "_" + pre);
+        }
+        int ans = 100000;
+        if (arr1[i] < pre) {
+            ans = dfs3(i - 1, arr1[i], arr1, arr2, cache);
+        }
+        int j = lowerBound(arr2, pre) - 1;
+        if (j >= 0) {
+            ans = Math.min(dfs3(i - 1, arr2[j], arr1, arr2, cache) + 1, ans);
+        }
+
+        cache.put(i + "_" + pre, ans);
+        return ans;
+    }
+
 
     public int makeArrayIncreasing(int[] arr1, int[] arr2) {
         Arrays.sort(arr2);
@@ -138,7 +239,7 @@ public class MakeArrayIncreasing {
         if (arr1[i] < pre) {
             val = dfs(i - 1, arr1[i], arr1, arr2);
         }
-        // 从 arr2 选择 第一个小于 pre 的值进行替换
+        // 从 arr2 选择 第一个小于 pre 的值进行替换，为什么取第一个？ -> 第二个满足，第一个肯定也满足
         int idx = lowerBound(arr2, pre) - 1;
         if (idx >= 0) {
             val = Math.min(val, dfs(i - 1, arr2[idx], arr1, arr2) + 1);
