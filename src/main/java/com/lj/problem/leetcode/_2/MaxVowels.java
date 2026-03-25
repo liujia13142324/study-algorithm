@@ -42,10 +42,33 @@ public class MaxVowels {
 
     @Test
     public void test1() {
-//        System.out.println(maxVowels("abciiidef", 3));
-//        System.out.println(maxVowels("leetcode", 3));
-        System.out.println(maxVowels("ibpbhixfiouhdljnjfflpapptrxgcomvnb", 33));
+        System.out.println(maxVowels2("abciiidef", 3));
+//        System.out.println(maxVowels2("leetcode", 3));
+//        System.out.println(maxVowels2("ibpbhixfiouhdljnjfflpapptrxgcomvnb", 33));
     }
+
+
+    public int maxVowels2(String s, int k) {
+        char[] chars = s.toCharArray();
+        int cnt = 0;
+        int ans = 0;
+        int l = 0;
+        for (int r = 0; r < chars.length; r++) {
+            if (isVowel(chars[r])) cnt++;
+            if (r < k) {
+                ans = Math.max(ans, cnt);
+                continue;
+            }
+            if (isVowel(chars[l++])) cnt--;
+            ans = Math.max(ans, cnt);
+        }
+        return ans;
+    }
+
+    private boolean isVowel(char c) {
+        return c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u';
+    }
+
 
     public int maxVowels(String s, int k) {
         int l = 0, r = 0, c = 0, len = s.length();
