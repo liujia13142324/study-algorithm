@@ -37,7 +37,24 @@ package com.lj.problem.leetcode._2;
  */
 public class MaxProfit2 {
 
-    public int maxProfit(int[] prices) {
+    public int maxProfit2(int[] prices) {
+        return dfs(prices.length - 1, 0, prices);
+    }
+
+    private int dfs(int i, int hold, int[] prices) {
+        if (i == 0) {
+            return hold == 0 ? 0 : -prices[i];
+        }
+        if (hold == 0) {
+            return Math.max(dfs(i - 1, 1, prices) + prices[i], dfs(i - 1, 0, prices));
+        }else {
+            return Math.max(dfs(i - 1, 1, prices), dfs(i - 1, 0, prices) - prices[i]);
+        }
+    }
+
+
+
+        public int maxProfit(int[] prices) {
         return Math.max(dfs(1, 0, 0, prices), dfs(1, 1, -prices[0], prices));
     }
 
