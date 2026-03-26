@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._2;
 
+import java.util.Arrays;
+
 /**
  * 122. 买卖股票的最佳时机 II
  * 给你一个整数数组 prices ，其中 prices[i] 表示某支股票第 i 天的价格。
@@ -36,6 +38,28 @@ package com.lj.problem.leetcode._2;
  * 0 <= prices[i] <= 104
  */
 public class MaxProfit2 {
+
+    public int maxProfit2_(int[] prices) {
+        int[][] cache = new int[2][prices.length];
+        // 用 -1 会误判，因为 -1 也是合法利润
+        for (int [] c: cache) Arrays.fill(c, Integer.MIN_VALUE);
+        return dfs(prices.length - 1, 0, prices, cache);
+    }
+
+    private int dfs(int i, int hold, int[] prices, int[][] cache) {
+        if (i == 0) {
+            return hold == 0 ? 0 : -prices[i];
+        }
+
+        if (cache[hold][i] != Integer.MIN_VALUE) return cache[hold][i];
+
+        if (hold == 0) {
+            cache[hold][i] = Math.max(dfs(i - 1, 1, prices, cache) + prices[i], dfs(i - 1, 0, prices, cache));
+        }else {
+            cache[hold][i] = Math.max(dfs(i - 1, 1, prices, cache), dfs(i - 1, 0, prices, cache) - prices[i]);
+        }
+        return cache[hold][i];
+    }
 
     public int maxProfit2(int[] prices) {
         return dfs(prices.length - 1, 0, prices);
