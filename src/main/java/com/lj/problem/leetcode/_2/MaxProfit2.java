@@ -39,7 +39,20 @@ import java.util.Arrays;
  */
 public class MaxProfit2 {
 
+    public int maxProfit3__(int[] prices) {
+        int[] dp = new int[2];
+        dp[1] = -prices[0];
+
+        for (int i = 1; i < prices.length; i++) {
+            int tmp = dp[0];
+            dp[0] = Math.max(dp[1] + prices[i], dp[0]);
+            dp[1] = Math.max(dp[1], tmp - prices[i]);
+        }
+        return dp[0];
+    }
+
     public int maxProfit2__(int[] prices) {
+        // 这种比 new int[prices.length][2] 效率会高点
         int[][] dp = new int[2][prices.length];
         dp[1][0] = -prices[0];
 
