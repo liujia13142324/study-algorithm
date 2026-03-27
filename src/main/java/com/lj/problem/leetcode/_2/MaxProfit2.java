@@ -39,6 +39,17 @@ import java.util.Arrays;
  */
 public class MaxProfit2 {
 
+    public int maxProfit2__(int[] prices) {
+        int[][] dp = new int[2][prices.length];
+        dp[1][0] = -prices[0];
+
+        for (int i = 1; i < prices.length; i++) {
+            dp[0][i] = Math.max(dp[1][i-1] + prices[i], dp[0][i-1]);
+            dp[1][i] = Math.max(dp[1][i-1], dp[0][i-1] - prices[i]);
+        }
+        return dp[0][prices.length-1];
+    }
+
     public int maxProfit2_(int[] prices) {
         int[][] cache = new int[2][prices.length];
         // 用 -1 会误判，因为 -1 也是合法利润
@@ -54,9 +65,9 @@ public class MaxProfit2 {
         if (cache[hold][i] != Integer.MIN_VALUE) return cache[hold][i];
 
         if (hold == 0) {
-            cache[hold][i] = Math.max(dfs(i - 1, 1, prices, cache) + prices[i], dfs(i - 1, 0, prices, cache));
+            cache[0][i] = Math.max(dfs(i - 1, 1, prices, cache) + prices[i], dfs(i - 1, 0, prices, cache));
         }else {
-            cache[hold][i] = Math.max(dfs(i - 1, 1, prices, cache), dfs(i - 1, 0, prices, cache) - prices[i]);
+            cache[1][i] = Math.max(dfs(i - 1, 1, prices, cache), dfs(i - 1, 0, prices, cache) - prices[i]);
         }
         return cache[hold][i];
     }
