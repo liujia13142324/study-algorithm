@@ -25,6 +25,21 @@ import java.util.Arrays;
  */
 public class MaxProfit3 {
 
+
+    public int maxProfit2(int[] prices) {
+        int[] dp = new int[2];
+        dp[1] = -prices[0];
+        int pre = 0;
+        for (int i = 1; i < prices.length; i++) {
+            int tmp = dp[0];
+            dp[0] = Math.max(dp[0], dp[1] + prices[i]);
+            dp[1] = Math.max(dp[1], pre - prices[i]);
+            pre = tmp;
+        }
+
+        return dp[0];
+    }
+
     public int maxProfit(int[] prices) {
         int[][] cache = new int[2][prices.length];
         for (int[] tmp: cache) {
