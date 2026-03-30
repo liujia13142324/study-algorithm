@@ -49,6 +49,22 @@ public class MaxProfit3 {
         return dfs(prices.length - 1, 0, prices, cache);
     }
 
+    /**
+     * 1  2  4
+     * 0  1  3
+     * -1 -1 -3
+     *
+     * 不含冷冻期
+     * 1,  2,  3,  0,  2
+     * 0   1   2   2   4
+     * -1  -1  -1  2
+     *
+     * 含冷冻期
+     * 1,  2,  3,  0,  2
+     * 0   1   2   2   3
+     * -1  -1  -1  1
+     * @return
+     */
     private int dfs(int i, int hold, int[] prices, int[][] cache) {
         if (i < 0) {
             return hold == 0 ? 0 : Integer.MIN_VALUE;
