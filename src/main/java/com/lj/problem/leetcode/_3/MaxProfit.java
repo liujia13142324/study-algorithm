@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._3;
 
+import org.junit.Test;
+
 import java.util.Arrays;
 
 /**
@@ -28,10 +30,42 @@ import java.util.Arrays;
  */
 public class MaxProfit {
 
+    @Test
+    public void test1() {
+        maxProfit2(2, new int[]{2,4,1});
+    }
+
+    /**
+     * debug 一下 maxProfit2(2, new int[]{2,4,1}); 就知道了
+     * @param k
+     * @param prices
+     * @return
+     */
+    public int maxProfit3(int k, int[] prices) {
+        int[] hold = new int[prices.length + 1];
+        Arrays.fill(hold, Integer.MIN_VALUE);
+        int ans = 0;
+        int pre;
+
+        for (int j = 1; j < k + 2; j++) {
+            ans = 0;
+            pre = Integer.MIN_VALUE;
+            for (int i = 1; i < prices.length + 1; i++) {
+                int tmp = ans;
+                ans = Math.max(ans, pre + prices[i - 1]);
+                pre = hold[i];
+                hold[i] = Math.max(hold[i-1], tmp - prices[i - 1]);
+            }
+        }
+        return ans;
+    }
+
+
     public int maxProfit2(int k, int[] prices) {
         int[][][] dp = new int[2][k + 2][prices.length + 1];
         for (int i = 0; i < prices.length + 1; i++) {
-            dp[0][0][i] = Integer.MIN_VALUE;
+            // 这样可以不要，debug 一下 maxProfit2(2, new int[]{2,4,1}); 就知道了
+//            dp[0][0][i] = Integer.MIN_VALUE;
             dp[1][0][i] = Integer.MIN_VALUE;
         }
         for (int i = 0; i < k + 2; i++) {
