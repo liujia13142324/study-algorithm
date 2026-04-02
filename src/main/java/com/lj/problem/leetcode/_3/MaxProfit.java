@@ -47,6 +47,7 @@ public class MaxProfit {
         int ans = 0;
         int pre;
 
+        // 遍历的方向和状态转移的方向相同，每次遍历一轮后，要重新初始化“零值”
         for (int j = 1; j < k + 2; j++) {
             ans = 0;
             pre = Integer.MIN_VALUE;
@@ -67,8 +68,9 @@ public class MaxProfit {
             dp[1][i] = Integer.MIN_VALUE;
         }
 
-        for (int j = 1; j < k + 2; j++) {
-            for (int i = 1; i < prices.length + 1; i++) {
+        // 这种遍历的方向和状态转移的方向应该要相反，才能直接这么写，
+        for (int i = 1; i < prices.length + 1; i++) {
+            for (int j = k + 1; j >= 1; j--) {
                 dp[1][j] = Math.max(dp[1][j], dp[0][j] - prices[i - 1]);
                 dp[0][j] = Math.max(dp[0][j], dp[1][j - 1] + prices[i - 1]);
             }
@@ -90,6 +92,8 @@ public class MaxProfit {
         }
 
         // 这一块按行遍历，还是按列遍历都是可以的，
+        // 下面这种是按照行遍历，遍历顺序和状态转移的顺序相同，状态从左上（“上依赖”仅限hold=1数组，dp[0][j][i] = Math.max(dp[0][j][i - 1], dp[1][j - 1][i - 1] + prices[i - 1]);）往右传递，只要左上初始值正确即可
+        // 如果按照列遍历，遍历顺序和状态转移的顺序相反，状态也是从左上往右传递，只要左上初始值正确即可
         for (int j = 1; j < k + 2; j++) {
             for (int i = 1; i < prices.length + 1; i++) {
                 dp[0][j][i] = Math.max(dp[0][j][i - 1], dp[1][j - 1][i - 1] + prices[i - 1]);
