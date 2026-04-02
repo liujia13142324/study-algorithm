@@ -61,6 +61,23 @@ public class MaxProfit {
     }
 
 
+    public int maxProfit3_1(int k, int[] prices) {
+        int[][] dp = new int[2][k + 2];
+        for (int i = 0; i < k + 2; i++) {
+            dp[1][i] = Integer.MIN_VALUE;
+        }
+
+        for (int j = 1; j < k + 2; j++) {
+            for (int i = 1; i < prices.length + 1; i++) {
+                dp[1][j] = Math.max(dp[1][j], dp[0][j] - prices[i - 1]);
+                dp[0][j] = Math.max(dp[0][j], dp[1][j - 1] + prices[i - 1]);
+            }
+        }
+
+        return dp[0][k + 1];
+    }
+
+
     public int maxProfit2(int k, int[] prices) {
         int[][][] dp = new int[2][k + 2][prices.length + 1];
         for (int i = 0; i < prices.length + 1; i++) {
@@ -72,6 +89,7 @@ public class MaxProfit {
             dp[1][i][0] = Integer.MIN_VALUE;
         }
 
+        // 这一块按行遍历，还是按列遍历都是可以的，
         for (int j = 1; j < k + 2; j++) {
             for (int i = 1; i < prices.length + 1; i++) {
                 dp[0][j][i] = Math.max(dp[0][j][i - 1], dp[1][j - 1][i - 1] + prices[i - 1]);
