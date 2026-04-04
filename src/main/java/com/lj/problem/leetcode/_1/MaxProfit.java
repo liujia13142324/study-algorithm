@@ -31,6 +31,16 @@ package com.lj.problem.leetcode._1;
  */
 public class MaxProfit {
 
+    public int maxProfit3(int[] prices) {
+        int min = Integer.MAX_VALUE;
+        int ans = 0;
+        for (int price : prices) {
+            ans = Math.max(ans, price - min);
+            min = Math.min(min, price);
+        }
+        return ans;
+    }
+
 
     public int maxProfit2(int[] prices) {
         int min = Integer.MAX_VALUE;
