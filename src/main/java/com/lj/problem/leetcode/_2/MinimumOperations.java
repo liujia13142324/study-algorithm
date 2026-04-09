@@ -43,6 +43,20 @@ public class MinimumOperations {
         System.out.println(minimumOperations2(Arrays.asList(2,2,2,2,3,3)));
     }
 
+
+    public int minimumOperations5(List<Integer> nums) {
+        int[] dp = new int[4];
+        int max = 0;
+        for (int num: nums) {
+            for (int i = num; i > 0; i--) {
+                dp[num] = Math.max(dp[num], dp[i] + 1);
+            }
+            max = Math.max(max, dp[num]);
+        }
+        return nums.size() - max;
+    }
+
+
     /**
      * 方法三：合法子序列 DP
      * 这是一个固定的套路，见动态规划题单中的「§7.2 合法子序列 DP」。
@@ -111,6 +125,36 @@ public class MinimumOperations {
         while (l + 1 < r) {
             int mid = (l + r) >>> 1;
             if (nums[mid] > target) {
+                r = mid;
+            }else {
+                l = mid;
+            }
+        }
+        return r;
+    }
+
+    public int minimumOperations4(List<Integer> nums) {
+        int[] arr = new int[nums.size()];
+        for (int i = 0; i < nums.size(); i++) {
+            arr[i] = nums.get(i);
+        }
+        int[] tmp = new int[arr.length];
+        int r = 0;
+        for (int num: arr) {
+            int idx = lowerBound(-1, r, tmp, num);
+            if (idx == r) {
+                tmp[r++] = num;
+            }else {
+                tmp[idx] = num;
+            }
+        }
+        return arr.length - r;
+    }
+
+    private int lowerBound(int l, int r, int[] arr, int target) {
+        while (l + 1 < r) {
+            int mid = (l + r) >>> 1;
+            if (arr[mid] > target) {
                 r = mid;
             }else {
                 l = mid;
