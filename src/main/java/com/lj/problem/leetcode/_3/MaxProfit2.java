@@ -36,6 +36,23 @@ import java.util.Arrays;
  */
 public class MaxProfit2 {
 
+
+    public int maxProfit2(int[] prices) {
+        int[][] dp = new int[2][4];
+        for (int i = 0; i < 4; i++) {
+            dp[1][i] = Integer.MIN_VALUE;
+        }
+
+        // 这种遍历的方向和状态转移的方向应该要相反，才能直接这么写，
+        for (int i = 1; i < prices.length + 1; i++) {
+            for (int j = 3; j >= 1; j--) {
+                dp[1][j] = Math.max(dp[1][j], dp[0][j] - prices[i - 1]);
+                dp[0][j] = Math.max(dp[0][j], dp[1][j - 1] + prices[i - 1]);
+            }
+        }
+        return dp[0][3];
+    }
+
     public int maxProfit(int[] prices) {
         return maxProfit3(2, prices);
     }
