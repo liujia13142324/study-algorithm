@@ -38,6 +38,13 @@ public class MaxScore2 {
 
     @Test
     public void test() {
+//        System.out.println(maxScore(new int[]{2,3,6,1,9,2}, 5));
+//        System.out.println(maxScore(new int[]{2,4,6,8}, 3));
+        /**
+         * 8,50,65,85,8,73,55,50,29,95,5,68,52,79
+         * 8
+         */
+        System.out.println(maxScore(new int[]{8,50,65,85,8,73,55,50,29,95,5,68,52,79}, 74));
     }
 
     public long maxScore(int[] nums, int x) {
@@ -49,17 +56,17 @@ public class MaxScore2 {
 
     private long dfs(int x, int j, int i, int[] nums, long[][] cache) {
         if (i == 0) {
-            return (nums[i] & 1) == j ? nums[0] : 0;
+            return (nums[i] & 1) == j ? nums[i] : nums[i] - x;
         }
 
         if (cache[j][i] != Integer.MIN_VALUE / 2) {
             return cache[j][i];
         }
 
-        if ((nums[i] & 1) == j) {
-            cache[j][i] = dfs(x, j, i - 1, nums, cache) + nums[i];
+        if (j != (nums[i] & 1)) {
+            cache[j][i] = dfs(x, j, i - 1, nums, cache);
         }else {
-            cache[j][i] = dfs(x, j, i - 1, nums, cache) + nums[i] - x;
+            cache[j][i] = Math.max(dfs(x, j, i - 1, nums, cache) + nums[i], dfs(x, j^1, i - 1, nums, cache) + nums[i] - x);
         }
 
         return cache[j][i];
