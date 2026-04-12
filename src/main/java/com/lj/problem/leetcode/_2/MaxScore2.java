@@ -41,22 +41,32 @@ public class MaxScore2 {
         System.out.println(maxScore(new int[]{8,50,65,85,8,73,55,50,29,95,5,68,52,79}, 74));
     }
 
-    public long maxScore_1(int[] nums, int x) {
+    // 从后往前递推
+    public long maxScore2_(int[] nums, int x) {
+        long[] dp = new long[2];
+        int parity;
+        for (int i = nums.length - 1; i >= 0; i--) {
+            parity = nums[i] & 1;
+            dp[parity] = Math.max(dp[parity], dp[parity ^ 1] - x) + nums[i];
+        }
+        return dp[nums[0] & 1];
+    }
+
+
+    public long maxScore_(int[] nums, int x) {
        long[] dp = new long [2];
        int parity = nums[0] & 1;
         dp[parity] = nums[0];
         dp[parity ^ 1] = nums[0] - x;
         for (int i = 1; i < nums.length; i++) {
-            if ((nums[i] & 1) == 0) {
-                dp[0] = Math.max(dp[0] + nums[i], dp[1] + nums[i] - x);
-            }else {
-                dp[1] = Math.max(dp[1] + nums[i], dp[0] + nums[i] - x);
-            }
+            parity = nums[i] & 1;
+            dp[parity] = Math.max(dp[parity], dp[parity ^ 1] - x) + nums[i];
         }
 
         return Math.max(dp[0], dp[1]);
     }
 
+    // 从前往后递推
     public long maxScore(int[] nums, int x) {
         long [][]cache = new long[2][nums.length];
         Arrays.fill(cache[0], Integer.MIN_VALUE / 2);
@@ -74,9 +84,36 @@ public class MaxScore2 {
         }
 
         if (j != (nums[i] & 1)) {
+            // 奇偶性不同，直接继承 j, i-1 的值
             cache[j][i] = dfs(x, j, i - 1, nums, cache);
         }else {
             cache[j][i] = Math.max(dfs(x, j, i - 1, nums, cache) + nums[i], dfs(x, j^1, i - 1, nums, cache) + nums[i] - x);
+        }
+
+        return cache[j][i];
+    }
+
+    // 从后往前递推
+    public long maxScore2(int[] nums, int x) {
+        long [][]cache = new long[2][nums.length];
+        Arrays.fill(cache[0], Integer.MIN_VALUE / 2);
+        Arrays.fill(cache[1], Integer.MIN_VALUE / 2);
+        return dfs2(x, nums[0] & 1, 0, nums, cache);
+    }
+
+    private long dfs2(int x, int j, int i, int[] nums, long[][] cache) {
+        if (i == nums.length) {
+            return 0;
+        }
+
+        if (cache[j][i] != Integer.MIN_VALUE / 2) {
+            return cache[j][i];
+        }
+
+        if (j != (nums[i] & 1)) {
+            cache[j][i] = dfs2(x, j, i + 1, nums, cache);
+        }else {
+            cache[j][i] = Math.max(dfs2(x, j, i + 1, nums, cache) + nums[i], dfs2(x, j^1, i + 1, nums, cache) + nums[i] - x);
         }
 
         return cache[j][i];
