@@ -34,6 +34,7 @@ import java.util.Arrays;
  *
  * 1 <= nums.length <= 105
  * 1 <= nums[i] <= 105
+ * ~s
  */
 public class MaxAlternatingSum {
 
