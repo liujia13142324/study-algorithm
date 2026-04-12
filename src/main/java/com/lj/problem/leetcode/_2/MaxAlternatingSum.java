@@ -43,6 +43,7 @@ public class MaxAlternatingSum {
         System.out.println(maxAlternatingSum(new int[]{4,2,5,3}));
     }
 
+    // 正推
     public long maxAlternatingSum3(int[] nums) {
         long [] dp = {0, Integer.MIN_VALUE/2};
         for (int num: nums) {
@@ -53,7 +54,7 @@ public class MaxAlternatingSum {
         return dp[1];
     }
 
-
+    // 倒推
     public long maxAlternatingSum2_(int[] nums) {
         long [] dp = new long[2];
         for (int i = nums.length - 1; i >= 0; i--) {
