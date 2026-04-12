@@ -52,6 +52,19 @@ public class MaxScore2 {
         return dp[nums[0] & 1];
     }
 
+    public long maxScore__(int[] nums, int x) {
+        long[] dp = new long [2];
+        int parity = nums[0] & 1;
+        dp[parity] = 0;
+        dp[parity ^ 1] = -x;
+        for (int num: nums) {
+            parity = num & 1;
+            dp[parity] = Math.max(dp[parity], dp[parity ^ 1] - x) + num;
+        }
+
+        return Math.max(dp[0], dp[1]);
+    }
+
 
     public long maxScore_(int[] nums, int x) {
        long[] dp = new long [2];
