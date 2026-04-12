@@ -38,13 +38,23 @@ public class MaxScore2 {
 
     @Test
     public void test() {
-//        System.out.println(maxScore(new int[]{2,3,6,1,9,2}, 5));
-//        System.out.println(maxScore(new int[]{2,4,6,8}, 3));
-        /**
-         * 8,50,65,85,8,73,55,50,29,95,5,68,52,79
-         * 8
-         */
         System.out.println(maxScore(new int[]{8,50,65,85,8,73,55,50,29,95,5,68,52,79}, 74));
+    }
+
+    public long maxScore_1(int[] nums, int x) {
+       long[] dp = new long [2];
+       int parity = nums[0] & 1;
+        dp[parity] = nums[0];
+        dp[parity ^ 1] = nums[0] - x;
+        for (int i = 1; i < nums.length; i++) {
+            if ((nums[i] & 1) == 0) {
+                dp[0] = Math.max(dp[0] + nums[i], dp[1] + nums[i] - x);
+            }else {
+                dp[1] = Math.max(dp[1] + nums[i], dp[0] + nums[i] - x);
+            }
+        }
+
+        return Math.max(dp[0], dp[1]);
     }
 
     public long maxScore(int[] nums, int x) {
