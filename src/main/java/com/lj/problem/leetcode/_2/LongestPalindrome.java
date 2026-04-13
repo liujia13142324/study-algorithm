@@ -41,7 +41,9 @@ public class LongestPalindrome {
             int r = charArray.length - 1;
             int secondLMatched = -1;
             boolean firstLMatched = false;
+            // 遍历方式是固定左窗口，不断缩小右窗口
             while (l < r) {
+                // 记录下次可能开始的 r
                 if (charArray[r] == charArray[i]) {
                     if (secondLMatched == -1 && firstLMatched) secondLMatched = r;
                     if (!firstLMatched) firstLMatched = true;
@@ -63,6 +65,7 @@ public class LongestPalindrome {
             if (l == r && (l - i) * 2 + 1 > maxR - maxL) {
                 maxL = i;
                 maxR = i + (l - i) * 2;
+                // 没有汇聚一点，(l - i) * 2 是回文串长度，为负数说明没有回文字串
             }else if ((l - i) * 2 > maxR - maxL){
                 maxL = i;
                 maxR = i + (l - i) * 2 - 1;
