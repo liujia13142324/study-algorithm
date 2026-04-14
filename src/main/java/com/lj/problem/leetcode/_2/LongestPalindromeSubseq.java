@@ -23,7 +23,21 @@ package com.lj.problem.leetcode._2;
  */
 public class LongestPalindromeSubseq {
 
-
+    public int longestPalindromeSubseq2(String s) {
+        char[] chars = s.toCharArray();
+        int[][] dp = new int[chars.length][chars.length];
+        for (int i = chars.length - 1; i >= 0; i--) {
+            dp[i][i] = 1;
+            for (int j = i + 1; j < chars.length; j++) {
+                if (chars[i] == chars[j]) {
+                    dp[i][j] = dp[i + 1][j - 1] + 2;
+                }else {
+                    dp[i][j] = Math.max(dp[i + 1][j], dp[i][j - 1]);
+                }
+            }
+        }
+        return dp[0][chars.length - 1];
+    }
 
     public int longestPalindromeSubseq(String s) {
         int[][] cache = new int[s.length()][s.length()];
