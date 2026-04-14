@@ -23,11 +23,15 @@ package com.lj.problem.leetcode._2;
  */
 public class LongestPalindromeSubseq {
 
+
+
     public int longestPalindromeSubseq(String s) {
-        return dfs(0, s.length() - 1, s.toCharArray());
+        int[][] cache = new int[s.length()][s.length()];
+        return dfs(0, s.length() - 1, s.toCharArray(), cache);
     }
 
-    private int dfs(int i, int j, char[] charArray) {
+    private int dfs(int i, int j, char[] charArray, int[][] cache) {
+        if (cache[i][j] != 0) return cache[i][j];
         if (i == j) {
             return 1;
         }
@@ -35,8 +39,8 @@ public class LongestPalindromeSubseq {
             return 0;
         }
         if (charArray[i] == charArray[j]) {
-            return dfs(i + 1, j - 1, charArray) + 2;
+            return cache[i][j] = dfs(i + 1, j - 1, charArray, cache) + 2;
         }
-        return Math.max(dfs(i + 1, j , charArray), dfs(i, j - 1, charArray));
+        return cache[i][j] = Math.max(dfs(i + 1, j , charArray, cache), dfs(i, j - 1, charArray, cache));
     }
 }
