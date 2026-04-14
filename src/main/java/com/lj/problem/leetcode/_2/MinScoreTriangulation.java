@@ -16,7 +16,27 @@ package com.lj.problem.leetcode._2;
 public class MinScoreTriangulation {
 
     public int minScoreTriangulation(int[] values) {
-        // n - 2 个三角形，需要
+        int[][] cache = new int[values.length][values.length];
+        return dfs(0, values.length-1, values, cache);
+    }
+
+    /**
+     * 从 i ~ j, 顺时针枚举 k，分割子问题
+     * @param i
+     * @param j
+     * @param values
+     * @return
+     */
+    private int dfs(int i, int j, int[] values, int[][] cache) {
+        if (i + 1 == j) {
+            return 0;
+        }
+        if (cache[i][j] != 0) return cache[i][j];
+        cache[i][j] = Integer.MAX_VALUE;
+        for (int k = i + 1; k < j; k++) {
+            cache[i][j] = Math.min(cache[i][j], dfs(i, k ,values, cache) + dfs(k, j, values, cache) + values[i] * values[j] * values[k]);
+        }
+        return cache[i][j];
     }
 
 }
