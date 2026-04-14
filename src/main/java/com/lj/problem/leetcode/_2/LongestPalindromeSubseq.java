@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._2;
 
+import java.util.Arrays;
+
 /**
  * 516. 最长回文子序列
  *
@@ -22,6 +24,26 @@ package com.lj.problem.leetcode._2;
  * s 仅由小写英文字母组成
  */
 public class LongestPalindromeSubseq {
+
+    public int longestPalindromeSubseq2_(String s) {
+        char[] chars = s.toCharArray();
+        int[] dp = new int[chars.length];
+        for (int i = chars.length - 1; i >= 0; i--) {
+            int bl = 0;
+            dp[i] = 1;
+            for (int j = i + 1; j < chars.length; j++) {
+                int tmp = dp[j];
+                if (chars[i] == chars[j]) {
+                    dp[j] = bl + 2;
+                }else {
+                    dp[j] = Math.max(dp[j], dp[j - 1]);
+                }
+                bl = tmp;
+            }
+        }
+        return dp[chars.length - 1];
+    }
+
 
     public int longestPalindromeSubseq2(String s) {
         char[] chars = s.toCharArray();
