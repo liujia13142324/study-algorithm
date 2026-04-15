@@ -15,6 +15,11 @@ package com.lj.problem.leetcode._2;
  */
 public class MinScoreTriangulation {
 
+    public int minScoreTriangulation2(int[] values) {
+        int[][] cache = new int[values.length][];
+    }
+
+
     public int minScoreTriangulation(int[] values) {
         int[][] cache = new int[values.length][values.length];
         return dfs(0, values.length-1, values, cache);
