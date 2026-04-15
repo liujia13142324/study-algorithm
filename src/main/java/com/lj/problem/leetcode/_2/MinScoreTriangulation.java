@@ -18,20 +18,6 @@ import java.util.Arrays;
 public class MinScoreTriangulation {
 
 
-    public int minScoreTriangulation_(int[] values) {
-        int[][] dp = new int[values.length][values.length];
-        for (int i = values.length - 3; i >= 0; i--) {
-            for (int j = i + 2; j < values.length; j++) {
-                dp[i][j] = Integer.MAX_VALUE;
-                for (int k = i + 1; k < j; k++) {
-                    dp[i][j] = Math.min(dp[i][j], dp[i][k] + dp[k][j] + values[i] * values[k] * values[j]);
-                }
-            }
-        }
-        return dp[0][values.length-1];
-    }
-
-
     public int minScoreTriangulation(int[] values) {
         int[][] cache = new int[values.length][values.length];
         return dfs(0, values.length-1, values, cache);
@@ -56,4 +42,21 @@ public class MinScoreTriangulation {
         return cache[i][j];
     }
 
+    /**
+     * 这个递推跑的比上面慢（leetcode结果）
+      * @param values
+     * @return
+     */
+    public int minScoreTriangulation_(int[] values) {
+        int[][] dp = new int[values.length][values.length];
+        for (int i = values.length - 3; i >= 0; i--) {
+            for (int j = i + 2; j < values.length; j++) {
+                dp[i][j] = Integer.MAX_VALUE;
+                for (int k = i + 1; k < j; k++) {
+                    dp[i][j] = Math.min(dp[i][j], dp[i][k] + dp[k][j] + values[i] * values[k] * values[j]);
+                }
+            }
+        }
+        return dp[0][values.length-1];
+    }
 }
