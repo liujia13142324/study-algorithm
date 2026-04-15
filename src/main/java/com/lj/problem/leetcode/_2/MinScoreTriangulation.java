@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._2;
 
+import java.util.Arrays;
+
 /**
  * 1039. 多边形三角剖分的最低得分
  * 提示
@@ -15,8 +17,24 @@ package com.lj.problem.leetcode._2;
  */
 public class MinScoreTriangulation {
 
-    public int minScoreTriangulation2(int[] values) {
-        int[][] cache = new int[values.length][];
+
+    public int minScoreTriangulation__(int[] values) {
+
+    }
+
+    public int minScoreTriangulation_(int[] values) {
+        int[][] dp = new int[values.length][values.length];
+        for (int i = values.length - 2; i >= 0; i--) {
+            dp[i][i + 1] = 0;
+            for (int j = i + 2; j < values.length; j++) {
+                int tmp = Integer.MAX_VALUE;
+                for (int k = i + 1; k < j; k++) {
+                    tmp = Math.min(tmp, dp[i][k] + dp[k][j] + values[i] * values[k] * values[j]);
+                }
+                dp[i][j] = tmp;
+            }
+        }
+        return dp[0][values.length-1];
     }
 
 
