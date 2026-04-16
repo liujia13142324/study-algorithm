@@ -69,10 +69,10 @@ public class MinInsertions {
         char[] chars = s.toCharArray();
         int[][] cache = new int[chars.length][chars.length];
         for (int[] c: cache) Arrays.fill(c, -1);
-        return dfs(0, chars.length - 1, chars, cache);
+        return dfs2_(0, chars.length - 1, chars, cache);
     }
 
-    private int dfs(int i, int j, char[] chars, int[][] cache) {
+    private int dfs2_(int i, int j, char[] chars, int[][] cache) {
         if (i >= j) {
             return 0;
         }
@@ -80,9 +80,9 @@ public class MinInsertions {
         if (cache[i][j] != -1) return cache[i][j];
 
         if (chars[i] == chars[j]) {
-            return cache[i][j] = dfs(i + 1, j - 1, chars, cache);
+            return cache[i][j] = dfs2_(i + 1, j - 1, chars, cache);
         }
-        return cache[i][j] = Math.min(dfs(i + 1, j, chars, cache), dfs(i, j - 1, chars, cache)) + 1;
+        return cache[i][j] = Math.min(dfs2_(i + 1, j, chars, cache), dfs2_(i, j - 1, chars, cache)) + 1;
     }
 
 
@@ -90,6 +90,8 @@ public class MinInsertions {
         char[] chars = s.toCharArray();
         return dfs2(0, chars.length - 1, chars);
     }
+
+
     private int dfs2(int i, int j, char[] chars) {
 
         if (i >= j) {
