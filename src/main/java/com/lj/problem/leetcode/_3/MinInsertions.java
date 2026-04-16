@@ -36,19 +36,19 @@ public class MinInsertions {
 
     @Test
     public void test() {
-        System.out.println(minInsertions("leetcode"));
+        System.out.println(minInsertions2_("zjveiiwvc"));
     }
 
+    /*
+    错误的递归终点，收敛的中心是不确定的
     public int minInsertions(String s) {
         char[] chars = s.toCharArray();
-        if ((chars.length & 1) == 0) {
-            return dfs(chars.length / 2 - 1, chars.length / 2, chars);
-        }else {
-            return dfs(chars.length / 2, chars.length / 2, chars);
-        }
+        int[][] cache = new int[chars.length][chars.length];
+        for (int[] c: cache) Arrays.fill(c, -1);
+        return Math.min(dfs(chars.length/2 - 1, chars.length/2, chars, cache), Math.min(dfs(chars.length/2, chars.length/2, chars, cache), dfs(chars.length/2, chars.length/2 + 1, chars, cache)));
     }
 
-    private int dfs(int i, int j, char[] chars) {
+    private int dfs(int i, int j, char[] chars, int[][] cache) {
 
         if (i < 0) {
             return chars.length - j;
@@ -58,11 +58,13 @@ public class MinInsertions {
             return i + 1;
         }
 
+        if (cache[i][j] != -1) return cache[i][j];
+
         if (chars[i] == chars[j]) {
-            return dfs(i - 1, j + 1, chars);
+            return cache[i][j] = dfs(i - 1, j + 1, chars, cache);
         }
-        return Math.min(dfs(i - 1, j, chars), dfs(i, j + 1, chars)) + 1;
-    }
+        return cache[i][j] = Math.min(dfs(i - 1, j, chars, cache), dfs(i, j + 1, chars, cache)) + 1;
+    }*/
 
 
     public int minInsertions2_(String s) {
