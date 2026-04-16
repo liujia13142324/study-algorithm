@@ -2,6 +2,8 @@ package com.lj.problem.leetcode._3;
 
 import org.junit.Test;
 
+import java.util.Arrays;
+
 /**
  * 1312. 让字符串成为回文串的最少插入次数
  * 提示
@@ -63,7 +65,28 @@ public class MinInsertions {
     }
 
 
-    public int minInsertion2s(String s) {
+    public int minInsertions2_(String s) {
+        char[] chars = s.toCharArray();
+        int[][] cache = new int[chars.length][chars.length];
+        for (int[] c: cache) Arrays.fill(c, -1);
+        return dfs(0, chars.length - 1, chars, cache);
+    }
+
+    private int dfs(int i, int j, char[] chars, int[][] cache) {
+        if (i >= j) {
+            return 0;
+        }
+
+        if (cache[i][j] != -1) return cache[i][j];
+
+        if (chars[i] == chars[j]) {
+            return cache[i][j] = dfs(i + 1, j - 1, chars, cache);
+        }
+        return cache[i][j] = Math.min(dfs(i + 1, j, chars, cache), dfs(i, j - 1, chars, cache)) + 1;
+    }
+
+
+    public int minInsertions2(String s) {
         char[] chars = s.toCharArray();
         return dfs2(0, chars.length - 1, chars);
     }
