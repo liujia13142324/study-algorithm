@@ -36,8 +36,67 @@ public class MinInsertions {
 
     @Test
     public void test() {
-        System.out.println(minInsertions2_("zjveiiwvc"));
+        System.out.println(minInsertions_("zjveiiwvc"));
     }
+
+    public int minInsertions__(String s) {
+        char[] chars = s.toCharArray();
+        int[] dp = new int[chars.length];
+        for (int i = chars.length - 2; i >= 0; i--) {
+            int pre = 0;
+            for (int j = i + 1; j < chars.length; j++) {
+                int tmp = dp[j];
+                if (chars[i] == chars[j]) {
+                    dp[j] = pre;
+                }else {
+                    dp[j] = Math.min(dp[j], dp[j - 1]) + 1;
+                }
+                pre = tmp;
+            }
+        }
+        return dp[chars.length - 1];
+    }
+
+
+    public int minInsertions_(String s) {
+        char[] chars = s.toCharArray();
+        int[][] cache = new int[chars.length][chars.length];
+        for (int[] c: cache) Arrays.fill(c, -1);
+        return dfs_(0, chars.length - 1, chars, cache);
+    }
+
+    private int dfs_(int i, int j, char[] chars, int[][] cache) {
+        if (i >= j) {
+            return 0;
+        }
+        if (cache[i][j] != -1) return cache[i][j];
+
+        if (chars[i] == chars[j]) {
+            return cache[i][j] = dfs_(i + 1, j - 1, chars, cache);
+        }
+        return cache[i][j] = Math.min(dfs_(i + 1, j, chars, cache), dfs_(i, j - 1, chars, cache)) + 1;
+    }
+
+
+    public int minInsertions(String s) {
+        char[] chars = s.toCharArray();
+        return dfs(0, chars.length - 1, chars);
+    }
+
+
+    private int dfs(int i, int j, char[] chars) {
+
+        if (i >= j) {
+            return 0;
+        }
+
+        if (chars[i] == chars[j]) {
+            return dfs(i + 1, j - 1, chars);
+        }
+        return Math.min(dfs(i + 1, j, chars), dfs(i, j - 1, chars)) + 1;
+    }
+
+
 
     /*
     错误的递归终点，收敛的中心是不确定的
@@ -65,44 +124,4 @@ public class MinInsertions {
         }
         return cache[i][j] = Math.min(dfs(i - 1, j, chars, cache), dfs(i, j + 1, chars, cache)) + 1;
     }*/
-
-
-    public int minInsertions2_(String s) {
-        char[] chars = s.toCharArray();
-        int[][] cache = new int[chars.length][chars.length];
-        for (int[] c: cache) Arrays.fill(c, -1);
-        return dfs2_(0, chars.length - 1, chars, cache);
-    }
-
-    private int dfs2_(int i, int j, char[] chars, int[][] cache) {
-        if (i >= j) {
-            return 0;
-        }
-
-        if (cache[i][j] != -1) return cache[i][j];
-
-        if (chars[i] == chars[j]) {
-            return cache[i][j] = dfs2_(i + 1, j - 1, chars, cache);
-        }
-        return cache[i][j] = Math.min(dfs2_(i + 1, j, chars, cache), dfs2_(i, j - 1, chars, cache)) + 1;
-    }
-
-
-    public int minInsertions2(String s) {
-        char[] chars = s.toCharArray();
-        return dfs2(0, chars.length - 1, chars);
-    }
-
-
-    private int dfs2(int i, int j, char[] chars) {
-
-        if (i >= j) {
-            return 0;
-        }
-
-        if (chars[i] == chars[j]) {
-            return dfs2(i + 1, j - 1, chars);
-        }
-        return Math.min(dfs2(i + 1, j, chars), dfs2(i, j - 1, chars)) + 1;
-    }
 }
