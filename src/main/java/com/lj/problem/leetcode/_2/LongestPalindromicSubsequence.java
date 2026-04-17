@@ -39,24 +39,29 @@ public class LongestPalindromicSubsequence {
     }
 
     public int longestPalindromicSubsequence(String s, int k) {
-        return dfs(0, s.length() - 1, k, s.toCharArray());
+        int[][][] cache = new int[s.length()][s.length()][k];
+        return dfs(0, s.length() - 1, k, s.toCharArray(), cache);
     }
 
-    private int dfs(int i, int j, int k, char[] charArray) {
+    private int dfs(int i, int j, int k, char[] charArray, int[][][] cache) {
         if (i == j) return 1;
         if (i > j) return 0;
 
+        if (cache[i][j][k] != 0) {
+            return cache[i][j][k];
+        }
+
         if (charArray[i] == charArray[j]) {
-            return dfs(i + 1, j - 1, k, charArray) + 2;
+            return cache[i][j][k] = dfs(i + 1, j - 1, k, charArray, cache) + 2;
         }
 
         int ans = 0;
         int x = Math.min(Math.abs(charArray[i] - charArray[j]), 26 - Math.abs(charArray[i] - charArray[j]));
         if (k >= x) {
-            ans = dfs(i + 1, j - 1, k - x, charArray) + 2;
+            ans = dfs(i + 1, j - 1, k - x, charArray, cache) + 2;
         }
 
-        return Math.max(ans, Math.max(dfs(i + 1, j, k, charArray), dfs(i, j - 1, k, charArray)));
+        return cache[i][j][k] = Math.max(ans, Math.max(dfs(i + 1, j, k, charArray, cache), dfs(i, j - 1, k, charArray, cache)));
     }
 
 }
