@@ -38,6 +38,11 @@ public class LongestPalindromicSubsequence {
         System.out.println((Math.abs(('b' - 'c')) + 26) % 26);
     }
 
+    public int longestPalindromicSubsequence_(String s, int k) {
+
+    }
+
+
     public int longestPalindromicSubsequence(String s, int k) {
         int[][][] cache = new int[s.length()][s.length()][k];
         return dfs(0, s.length() - 1, k, s.toCharArray(), cache);
