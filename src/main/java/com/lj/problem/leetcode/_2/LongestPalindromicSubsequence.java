@@ -39,7 +39,7 @@ public class LongestPalindromicSubsequence {
     }
 
     public int longestPalindromicSubsequence_(String s, int k) {
-
+        return -1;
     }
 
 
