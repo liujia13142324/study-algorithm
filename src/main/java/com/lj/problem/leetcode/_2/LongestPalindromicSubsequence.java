@@ -2,6 +2,8 @@ package com.lj.problem.leetcode._2;
 
 import org.junit.Test;
 
+import java.util.Arrays;
+
 /**
  * 3472. 至多 K 次操作后的最长回文子序列
  * 给你一个字符串 s 和一个整数 k。
@@ -35,11 +37,38 @@ public class LongestPalindromicSubsequence {
 
     @Test
     public void test() {
-        System.out.println((Math.abs(('b' - 'c')) + 26) % 26);
+        System.out.println(longestPalindromicSubsequence_("vgjtj", 14));
     }
 
     public int longestPalindromicSubsequence_(String s, int k) {
-        return -1;
+        int[][] dp = new int[k + 1][s.length()];
+        for(int[] tmp: dp) {
+            Arrays.fill(tmp, 1);
+        }
+        char[] chars = s.toCharArray();
+        for (int i = chars.length - 2; i >= 0; i--) {
+            int[] prev = new int[k + 1];
+            for (int j = i + 1; j < chars.length; j++) {
+                int[] tmp = new int[k + 1];
+                for (int k_ = 0; k_ <= k; k_++) {
+                    tmp[k_] = dp[k_][j];
+                    if (chars[i] == chars[j]) {
+                        dp[k_][j] = prev[k_] + 2;
+                    }else {
+                        int x;
+                        int abs = Math.abs(chars[i] - chars[j]);
+                        if (k_ >= (x = Math.min(abs, 26 - abs))) {
+                            dp[k_][j] = Math.max(dp[k_][j], prev[k_ - x] + 2);
+                        }
+                        if (dp[k_][j-1] > dp[k_][j] ){
+                            dp[k_][j] = dp[k_][j-1];
+                        }
+                    }
+                }
+                System.arraycopy(tmp, 0, prev, 0, k + 1);
+            }
+        }
+        return dp[k][s.length()-1];
     }
 
 
