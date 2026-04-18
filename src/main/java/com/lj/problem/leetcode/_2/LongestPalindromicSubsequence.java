@@ -41,11 +41,21 @@ public class LongestPalindromicSubsequence {
     }
 
     public int longestPalindromicSubsequence_(String s, int k) {
+        char[] chars = s.toCharArray();
+        // 优化，如果能在 k 次内变成回文串，就直接返回
+        int cnt = 0;
+        for (int i = 0; i < chars.length / 2; i++) {
+            int d = Math.abs(chars[i] - chars[chars.length - 1 - i]);
+            cnt += Math.min(d, 26 - d);
+        }
+        if (cnt <= k) {
+            return chars.length;
+        }
+
         int[][] dp = new int[k + 1][s.length()];
         for(int[] tmp: dp) {
             Arrays.fill(tmp, 1);
         }
-        char[] chars = s.toCharArray();
         for (int i = chars.length - 2; i >= 0; i--) {
             int[] prev = new int[k + 1];
             for (int j = i + 1; j < chars.length; j++) {
