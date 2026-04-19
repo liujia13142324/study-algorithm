@@ -41,7 +41,7 @@ public class MxOperations {
 
     @Test
     public void test() {
-        System.out.println(maxOperations(new int[]{1,9,7,3,2,7,4,12,2,6}));
+        System.out.println(maxOperations__(new int[]{3,2,1,2,3,4}));
     }
 
     public int maxOperations_(int[] nums) {
@@ -90,6 +90,45 @@ public class MxOperations {
         return cache;
     }
 
+    /**
+     * 递推
+     * @param nums
+     * @return
+     */
+    public int maxOperations__(int[] nums) {
+        Map<Integer, int[][]> map = new HashMap<>();
+        map.put(nums[0] + nums[1], new int[nums.length + 1][nums.length + 1]);
+        map.computeIfAbsent(nums[nums.length - 1] + nums[nums.length - 2], k -> new int[nums.length + 1][nums.length + 1]);
+        map.computeIfAbsent(nums[0] + nums[nums.length - 1], k -> new int[nums.length + 1][nums.length + 1]);
+
+        int[] ks = new int[]{nums[0] + nums[1], nums[nums.length - 1] + nums[nums.length - 2], nums[0] + nums[nums.length - 1]};
+
+        for (int k: ks) {
+            for (int i = nums.length - 2; i >= 0; i--) {
+                for (int j = i + 2; j <= nums.length; j++) {
+                    if (nums[i] + nums[i + 1] == k ) {
+                        int[][] dp = map.get(k);
+                        dp[i][j] = 1 + dp[i + 2][j];
+                    }
+                    if (nums[i] + nums[j - 1] == k) {
+                        int[][] dp = map.get(k);
+                        dp[i][j] = Math.max(dp[i][j], 1 + dp[i+1][j-1]);
+                    }
+                    if (nums[j - 1] + nums[j - 2] == k) {
+                        int[][] dp = map.get(k);
+                        dp[i][j] = Math.max(dp[i][j], 1 + dp[i][j - 2]);
+                    }
+                }
+            }
+        }
+
+        int ans = 0;
+        for (int[][] dp: map.values()) {
+            ans = Math.max(ans, dp[0][nums.length]);
+        }
+
+        return ans;
+    }
 
     public int maxOperations(int[] nums) {
         int ans1 = 1 + dfs(2, nums.length - 1, nums[0] + nums[1], nums);
