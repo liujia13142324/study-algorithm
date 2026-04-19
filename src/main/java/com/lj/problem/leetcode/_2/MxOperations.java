@@ -2,6 +2,10 @@ package com.lj.problem.leetcode._2;
 
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 3040. 相同分数的最大操作数目 II
  * 给你一个整数数组 nums ，如果 nums 至少 包含 2 个元素，你可以执行以下操作中的 任意 一个：
@@ -40,14 +44,64 @@ public class MxOperations {
         System.out.println(maxOperations(new int[]{1,9,7,3,2,7,4,12,2,6}));
     }
 
-    public int maxOperations(int[] nums) {
+    public int maxOperations_(int[] nums) {
+        Map<Integer, int[][]> map = new HashMap<>();
+
+        map.put(nums[0] + nums[1], init(nums.length));
+        if (map.get(nums[nums.length - 1] + nums[nums.length - 2]) == null) {
+            map.put(nums[nums.length - 1] + nums[nums.length - 2], init(nums.length));
+        }
+        if (map.get(nums[0] + nums[nums.length - 1]) == null) {
+            map.put(nums[0] + nums[nums.length - 1], init(nums.length));
+        }
         return 1 + Math.max(
-                dfs(2, nums.length - 1, nums[0] + nums[1], nums),
+                dfs_(2, nums.length - 1, nums[0] + nums[1], nums, map.get(nums[0] + nums[1])),
                 Math.max(
-                        dfs(0, nums.length - 3, nums[nums.length - 1] + nums[nums.length - 2], nums),
-                        dfs(1, nums.length - 2, nums[0] + nums[nums.length - 1], nums)
+                        dfs_(0, nums.length - 3, nums[nums.length - 1] + nums[nums.length - 2], nums, map.get(nums[nums.length - 1] + nums[nums.length - 2])),
+                        dfs_(1, nums.length - 2, nums[0] + nums[nums.length - 1], nums, map.get(nums[0] + nums[nums.length - 1]))
                 )
         );
+    }
+    private int dfs_(int i, int j, int k, int[] nums, int[][] cache) {
+        if (i >= j) return 0;
+        if (cache[i][j] != -1) return cache[i][j];
+        int ans = 0;
+        if (i + 1 <= j && nums[i] + nums[i + 1] == k) {
+            ans = cache[i][j] = dfs_(i + 2, j, k, nums, cache) + 1 ;
+        }
+        if (ans >= nums.length / 2) {
+            return ans;
+        }
+        if (j - 1 >= i && nums[j] + nums[j - 1] == k) {
+            ans = Math.max(ans, dfs_(i, j - 2, k, nums, cache) + 1);
+        }
+        if (ans >= nums.length / 2) {
+            return cache[i][j] = ans;
+        }
+        if (nums[i] + nums[j] == k) {
+            ans = Math.max(ans, dfs_(i + 1, j - 1, k, nums, cache) + 1);
+        }
+        return cache[i][j] = ans;
+    }
+
+    private int[][] init(int length) {
+        int[][] cache = new int[length][length];
+        for (int[] tmp: cache) Arrays.fill(tmp, -1);
+        return cache;
+    }
+
+
+    public int maxOperations(int[] nums) {
+        int ans1 = 1 + dfs(2, nums.length - 1, nums[0] + nums[1], nums);
+        if (ans1 >= nums.length / 2) {
+            return ans1;
+        }
+        int ans2 = 1 + dfs(0, nums.length - 3, nums[nums.length - 1] + nums[nums.length - 2], nums);
+        if (ans2 >= nums.length / 2) {
+            return ans2;
+        }
+        int ans3 = 1 + dfs(1, nums.length - 2, nums[0] + nums[nums.length - 1], nums);
+        return Math.max(ans1, Math.max(ans2, ans3));
     }
 
     private int dfs(int i, int j, int k, int[] nums) {
@@ -56,12 +110,19 @@ public class MxOperations {
         if (i + 1 <= j && nums[i] + nums[i + 1] == k) {
             ans = dfs(i + 2, j, k, nums) + 1 ;
         }
+        if (ans >= nums.length / 2) {
+            return ans;
+        }
         if (j - 1 >= i && nums[j] + nums[j - 1] == k) {
             ans = Math.max(ans, dfs(i, j - 2, k, nums) + 1);
+        }
+        if (ans >= nums.length / 2) {
+            return ans;
         }
         if (nums[i] + nums[j] == k) {
             ans = Math.max(ans, dfs(i + 1, j - 1, k, nums) + 1);
         }
         return ans;
     }
+
 }
