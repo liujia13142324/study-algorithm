@@ -106,17 +106,19 @@ public class MxOperations {
         for (int k: ks) {
             for (int i = nums.length - 2; i >= 0; i--) {
                 for (int j = i + 2; j <= nums.length; j++) {
+                    int[][] dp = map.get(k);
                     if (nums[i] + nums[i + 1] == k ) {
-                        int[][] dp = map.get(k);
                         dp[i][j] = 1 + dp[i + 2][j];
                     }
                     if (nums[i] + nums[j - 1] == k) {
-                        int[][] dp = map.get(k);
                         dp[i][j] = Math.max(dp[i][j], 1 + dp[i+1][j-1]);
                     }
                     if (nums[j - 1] + nums[j - 2] == k) {
-                        int[][] dp = map.get(k);
                         dp[i][j] = Math.max(dp[i][j], 1 + dp[i][j - 2]);
+                    }
+                    // 提前退出优化
+                    if (dp[i][j] >= nums.length / 2) {
+                        return dp[i][j];
                     }
                 }
             }
@@ -129,6 +131,8 @@ public class MxOperations {
 
         return ans;
     }
+
+
 
     public int maxOperations(int[] nums) {
         int ans1 = 1 + dfs(2, nums.length - 1, nums[0] + nums[1], nums);
