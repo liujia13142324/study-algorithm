@@ -44,6 +44,37 @@ public class MxOperations {
         System.out.println(maxOperations__(new int[]{3,2,1,2,3,4}));
     }
 
+    boolean done = true;
+
+    public int maxOperations2(int[] nums) {
+        int[][] cache = new int[nums.length][nums.length];
+        return 1 + Math.max(
+                dfs2(2, nums.length - 1, nums[0] + nums[1], nums, cache),
+                Math.max(
+                        dfs2(0, nums.length - 3, nums[nums.length - 1] + nums[nums.length - 2], nums, cache),
+                        dfs2(1, nums.length - 2, nums[0] + nums[nums.length - 1], nums, cache)
+                )
+        );
+    }
+    private int dfs2(int i, int j, int k, int[] nums, int[][] cache) {
+        if (done) return 0;
+        if (i >= j) {
+            done = true;
+            return 0;
+        }
+        if (cache[i][j] != 0) return cache[i][j];
+        if (i + 1 <= j && nums[i] + nums[i + 1] == k) {
+            cache[i][j] = cache[i][j] = dfs2(i + 2, j, k, nums, cache) + 1 ;
+        }
+        if (j - 1 >= i && nums[j] + nums[j - 1] == k) {
+            cache[i][j] = Math.max(cache[i][j], dfs2(i, j - 2, k, nums, cache) + 1);
+        }
+        if (nums[i] + nums[j] == k) {
+            cache[i][j] = Math.max(cache[i][j], dfs2(i + 1, j - 1, k, nums, cache) + 1);
+        }
+        return cache[i][j];
+    }
+
     public int maxOperations_(int[] nums) {
         Map<Integer, int[][]> map = new HashMap<>();
 
