@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._2;
 
+import org.junit.Test;
+
 /**
  * 1130. 叶值的最小代价生成树
  * 中等
@@ -26,7 +28,39 @@ package com.lj.problem.leetcode._2;
  * 答案保证是一个 32 位带符号整数，即小于 231 。
  */
 public class MctFromLeafValues {
+
+    @Test
+    public void test() {
+        System.out.println(mctFromLeafValues(new int[]{11,12,12}));
+//        System.out.println(mctFromLeafValues(new int[]{4, 11}));
+//        System.out.println(mctFromLeafValues(new int[]{7, 12, 8, 10}));
+    }
+
     public int mctFromLeafValues(int[] arr) {
+        return dfs(0, arr.length - 1, arr, new boolean[arr.length]);
+    }
+
+    private int dfs(int i, int j, int[] arr, boolean[] disabled) {
+        int ans = Integer.MAX_VALUE / 2;
+        for (int k = i; k < j; k++) {
+            if (disabled[k]) continue;
+            int tmp = k;
+            while (k + 1 <= j && disabled[k + 1]) {
+                k++;
+            }
+            if (k + 1 <= j) {
+                int idx;
+                if (arr[tmp] < arr[k + 1]) {
+                    idx = tmp;
+                } else {
+                    idx = k + 1;
+                }
+                disabled[idx] = true;
+                ans = Math.min(ans, dfs(i, j, arr, disabled) + arr[tmp] * arr[k+1]);
+                disabled[idx] = false;
+            }
+        }
+        return ans == Integer.MAX_VALUE / 2 ? 0 : ans;
 
     }
 }
