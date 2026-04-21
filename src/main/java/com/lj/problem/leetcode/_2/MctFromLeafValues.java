@@ -49,14 +49,14 @@ public class MctFromLeafValues {
     }
 
     private int dfs2(int i, int j, int[] arr, int[][] helper, int[][] cache) {
-        if (cache[i][j] != 0) {
-            return cache[i][j];
-        }
         if (i == j) {
             return 0;
         }
+        if (cache[i][j] != 0) {
+            return cache[i][j];
+        }
         if (i + 1 == j) {
-            return arr[i] * arr[j];
+            return cache[i][j] = arr[i] * arr[j];
         }
         cache[i][j] = Integer.MAX_VALUE / 2;
         for (int k = i; k < j; k++) {
