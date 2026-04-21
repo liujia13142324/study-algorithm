@@ -37,21 +37,28 @@ public class MctFromLeafValues {
     }
 
     public int mctFromLeafValues2(int[] arr) {
-        int[] helper = new int[arr.length];
-        helper[0] = arr[0];
-        for (int i = 1; i < arr.length; i++) {
-            helper[i] = Math.max(helper[i - 1], arr[i]);
+        int[][] helper = new int[arr.length][arr.length];
+        for (int i = 0; i < arr.length; i++) {
+            helper[i][i] = arr[i];
+            for (int j = i + 1; j < arr.length; j++) {
+                helper[i][j] = Math.max(helper[i][j-1], arr[j]);
+            }
         }
         return dfs2(0, arr.length - 1, arr, helper);
     }
 
-    private int dfs2(int i, int j, int[] arr, int[] helper) {
+    private int dfs2(int i, int j, int[] arr, int[][] helper) {
         if (i == j) {
             return 0;
         }
         if (i + 1 == j) {
             return arr[i] * arr[j];
         }
+        int ans = Integer.MAX_VALUE / 2;
+        for (int k = i; k < j; k++) {
+            ans = Math.min(ans, dfs2(i, k, arr, helper) + dfs2(k + 1, j, arr, helper) + helper[i][k] * helper[k + 1][j]);
+        }
+        return ans;
     }
 
 
