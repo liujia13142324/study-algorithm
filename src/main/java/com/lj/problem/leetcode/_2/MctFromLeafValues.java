@@ -2,6 +2,8 @@ package com.lj.problem.leetcode._2;
 
 import org.junit.Test;
 
+import java.util.Stack;
+
 /**
  * 1130. 叶值的最小代价生成树
  * 中等
@@ -31,9 +33,33 @@ public class MctFromLeafValues {
 
     @Test
     public void test() {
-        System.out.println(mctFromLeafValues(new int[]{11,12,12}));
+        System.out.println(mctFromLeafValues3(new int[]{6,15,5,2}));
 //        System.out.println(mctFromLeafValues(new int[]{4, 11}));
 //        System.out.println(mctFromLeafValues(new int[]{7, 12, 8, 10}));
+    }
+
+    /**
+     * 单调栈
+     * @param arr
+     * @return
+     */
+    public int mctFromLeafValues3(int[] arr) {
+        Stack<Integer> stack = new Stack<>();
+        stack.push(Integer.MAX_VALUE);
+
+        int ans = 0;
+        for (int num: arr) {
+            while (num > stack.peek()) {
+                ans += stack.pop() * Math.min(stack.peek(), num);
+            }
+            stack.push(num);
+        }
+
+        while (stack.size() > 2) {
+            ans += stack.pop() * stack.peek();
+        }
+
+        return ans;
     }
 
     public int mctFromLeafValues2(int[] arr) {
