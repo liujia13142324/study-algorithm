@@ -52,6 +52,12 @@ public class MaximumScore {
         );
     }
 
+    /**
+     * 还是超时
+     * @param nums
+     * @param multipliers
+     * @return
+     */
     public int maximumScore_(int[] nums, int[] multipliers) {
         int[][] dp = new int[nums.length][multipliers.length + 1];
         int[] tmp = new int[nums.length];
