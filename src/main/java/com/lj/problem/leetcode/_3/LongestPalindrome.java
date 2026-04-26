@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._3;
 
+import java.util.Arrays;
+
 /**
  * 1771. 由子序列构造的最长回文串的长度
  * 提示
@@ -39,4 +41,40 @@ package com.lj.problem.leetcode._3;
  * word1 和 word2 由小写英文字母组成
  */
 public class LongestPalindrome {
+
+    int t1;
+    int t2;
+    public int longestPalindrome(String word1, String word2) {
+        char[] chars = (word1 + word2).toCharArray();
+        t1 = word1.length();
+        t2 = word2.length();
+
+        int[][][] cache = new int[2][chars.length][chars.length];
+        for (int[] tmp: cache[0]) Arrays.fill(tmp, -1);
+        for (int[] tmp: cache[1]) Arrays.fill(tmp, -1);
+        return dfs(0, chars.length-1, 0, chars, cache);
+    }
+
+    private int dfs(int i, int j, int pass, char[] chars, int[][][] cache) {
+        if (pass == 0 && (chars.length - j > t2 || i >= t1)) {
+            return 0;
+        }
+        if (i == j) {
+            return 1;
+        }
+        if (i > j) {
+            return 0;
+        }
+        if (cache[pass][i][j] != -1) {
+            return cache[pass][i][j];
+        }
+
+        if (chars[i] == chars[j]) {
+            return cache[pass][i][j] = dfs(i + 1, j - 1, 1, chars, cache) + 2;
+        }
+
+        return cache[pass][i][j] = Math.max(dfs(i + 1, j, pass, chars, cache), dfs(i, j - 1, pass, chars, cache));
+    }
+
+
 }
