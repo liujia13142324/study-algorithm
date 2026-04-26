@@ -41,6 +41,14 @@ import java.util.Arrays;
  * word1 和 word2 由小写英文字母组成
  */
 public class LongestPalindrome {
+
+    public int longestPalindrome3(String word1, String word2) {
+
+
+        return -1;
+    }
+
+
     int[][] cache1;
     int[][] cache2;
 
