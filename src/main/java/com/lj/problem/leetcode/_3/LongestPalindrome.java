@@ -52,6 +52,32 @@ public class LongestPalindrome {
         System.out.println(longestPalindrome3("cfe", "ef"));
     }
 
+    public int longestPalindrome4(String word1, String word2) {
+
+        char[] chars = (word1 + word2).toCharArray();
+        int len = word1.length();
+        int[] dp = new int[chars.length];
+        int ans = 0;
+        for (int i = chars.length - 2; i >=0; i--) {
+            dp[i] = 1;
+            int prev = 0;
+            for (int j = i + 1; j < chars.length; j++) {
+                int tmp = dp[j];
+                if (chars[i] == chars[j]) {
+                    dp[j] =prev + 2;
+                    if (i < len && j >= len) {
+                        ans = Math.max(ans, dp[j]);
+                    }
+                } else if (dp[j - 1] > dp[j]){
+                    dp[j] = dp[j-1];
+                }
+                prev = tmp;
+            }
+        }
+
+        return ans;
+    }
+
     public int longestPalindrome3(String word1, String word2) {
         char[] chars1 = word1.toCharArray();
         char[] chars2 = word2.toCharArray();
