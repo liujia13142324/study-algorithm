@@ -37,18 +37,22 @@ public class MinCost {
         int[] tmp = new int[cuts.length + 2];
         System.arraycopy(cuts, 0, tmp, 1, cuts.length);
         tmp[tmp.length - 1] = n;
-        return dfs(1, tmp.length-2, tmp);
+        int[][] cache = new int[tmp.length][tmp.length];
+        return dfs(1, tmp.length-2, tmp, cache);
     }
 
-    private int dfs(int i, int j, int[] tmp) {
+    private int dfs(int i, int j, int[] tmp, int[][] cache) {
         if (i > j) {
             return 0;
+        }
+        if (cache[i][j] != 0) {
+            return cache[i][j];
         }
         int ans = Integer.MAX_VALUE;
         int val = tmp[j + 1] - tmp[i - 1];
         for (int k = i; k <= j; k++) {
-            ans = Math.min(ans, dfs(i, k-1, tmp) + dfs(k+1, j, tmp) + val);
+            ans = Math.min(ans, dfs(i, k-1, tmp, cache) + dfs(k+1, j, tmp, cache) + val);
         }
-        return ans;
+        return cache[i][j] = ans;
     }
 }
