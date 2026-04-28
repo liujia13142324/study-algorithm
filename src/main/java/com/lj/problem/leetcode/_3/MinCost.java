@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._3;
 
+import java.util.Arrays;
+
 /**
  * 1547. 切棍子的最小成本
  * 提示
@@ -29,7 +31,24 @@ package com.lj.problem.leetcode._3;
  * cuts 数组中的所有整数都 互不相同
  */
 public class MinCost {
-    public int minCost(int n, int[] cuts) {
 
+    public int minCost(int n, int[] cuts) {
+        Arrays.sort(cuts);
+        int[] tmp = new int[cuts.length + 2];
+        System.arraycopy(cuts, 0, tmp, 1, cuts.length);
+        tmp[tmp.length - 1] = n;
+        return dfs(1, tmp.length-2, tmp);
+    }
+
+    private int dfs(int i, int j, int[] tmp) {
+        if (i > j) {
+            return 0;
+        }
+        int ans = Integer.MAX_VALUE;
+        int val = tmp[j + 1] - tmp[i - 1];
+        for (int k = i; k <= j; k++) {
+            ans = Math.min(ans, dfs(i, k-1, tmp) + dfs(k+1, j, tmp) + val);
+        }
+        return ans;
     }
 }
