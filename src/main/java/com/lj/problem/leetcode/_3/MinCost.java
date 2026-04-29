@@ -32,27 +32,6 @@ import java.util.Arrays;
  */
 public class MinCost {
 
-    public int minCost3(int n, int[] cuts) {
-        Arrays.sort(cuts);
-        int m = cuts.length + 2;
-        int[] newCuts = new int[m];
-        System.arraycopy(cuts, 0, newCuts, 1, m - 2);
-        newCuts[m - 1] = n;
-
-        int[][] f = new int[m][m];
-        for (int i = m - 3; i >= 0; i--) {
-            for (int j = i + 2; j < m; j++) {
-                int res = Integer.MAX_VALUE;
-                for (int k = i + 1; k < j; k++) {
-                    res = Math.min(res, f[i][k] + f[k][j]);
-                }
-                f[i][j] = res + newCuts[j] - newCuts[i];
-            }
-        }
-        return f[0][m - 1];
-    }
-
-
     public int minCost(int n, int[] cuts) {
         Arrays.sort(cuts);
         int[] tmp = new int[cuts.length + 2];
@@ -75,31 +54,6 @@ public class MinCost {
             ans = Math.min(ans, dfs(i, k-1, tmp, cache) + dfs(k+1, j, tmp, cache) + val);
         }
         return cache[i][j] = ans;
-    }
-
-    public int minCost2(int n, int[] cuts) {
-        Arrays.sort(cuts);
-        int m = cuts.length + 2;
-        int[] newCuts = new int[m];
-        System.arraycopy(cuts, 0, newCuts, 1, m - 2);
-        newCuts[m - 1] = n;
-
-        int[][] memo = new int[m][m];
-        return dfs2(0, m - 1, newCuts, memo);
-    }
-
-    private int dfs2(int i, int j, int[] cuts, int[][] memo) {
-        if (i + 1 == j) { // 无需切割
-            return 0;
-        }
-        if (memo[i][j] > 0) { // 之前计算过
-            return memo[i][j];
-        }
-        int res = Integer.MAX_VALUE;
-        for (int k = i + 1; k < j; k++) {
-            res = Math.min(res, dfs2(i, k, cuts, memo) + dfs2(k, j, cuts, memo));
-        }
-        return memo[i][j] = res + cuts[j] - cuts[i];
     }
 
 }
