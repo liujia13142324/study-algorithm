@@ -55,4 +55,30 @@ public class MinCost {
         }
         return cache[i][j] = ans;
     }
+
+    public int minCost2(int n, int[] cuts) {
+        Arrays.sort(cuts);
+        int m = cuts.length + 2;
+        int[] newCuts = new int[m];
+        System.arraycopy(cuts, 0, newCuts, 1, m - 2);
+        newCuts[m - 1] = n;
+
+        int[][] memo = new int[m][m];
+        return dfs2(0, m - 1, newCuts, memo);
+    }
+
+    private int dfs2(int i, int j, int[] cuts, int[][] memo) {
+        if (i + 1 == j) { // 无需切割
+            return 0;
+        }
+        if (memo[i][j] > 0) { // 之前计算过
+            return memo[i][j];
+        }
+        int res = Integer.MAX_VALUE;
+        for (int k = i + 1; k < j; k++) {
+            res = Math.min(res, dfs2(i, k, cuts, memo) + dfs2(k, j, cuts, memo));
+        }
+        return memo[i][j] = res + cuts[j] - cuts[i];
+    }
+
 }
