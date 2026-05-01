@@ -27,23 +27,17 @@ public class DiameterOfBinaryTree {
 
 
     public int diameterOfBinaryTree(TreeNode root) {
-        Map<TreeNode, Integer> cache = new HashMap<>();
         Map<TreeNode, Integer> depthCache = new HashMap<>();
-        return dfs(root, cache, depthCache);
+        return dfs(root, depthCache);
     }
 
-    private int dfs(TreeNode node, Map<TreeNode, Integer> cache, Map<TreeNode, Integer> depthCache) {
+    private int dfs(TreeNode node,  Map<TreeNode, Integer> depthCache) {
         if (node == null) {
             return 0;
         }
-        if (cache.get(node) != null) {
-            return cache.get(node);
-        }
         int left = depth(node.left, depthCache);
         int right = depth(node.right, depthCache);
-        int ans = Math.max(Math.max(left + right, dfs(node.left, cache, depthCache)), dfs(node.right, cache, depthCache));
-        cache.put(node, ans);
-        return ans;
+        return Math.max(Math.max(left + right, dfs(node.left, depthCache)), dfs(node.right, depthCache));
     }
 
     private int depth(TreeNode node, Map<TreeNode, Integer> depthCache) {
