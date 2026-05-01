@@ -1,5 +1,8 @@
 package com.lj.problem.leetcode._1;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 543. 二叉树的直径
  * 给你一棵二叉树的根节点，返回该树的 直径 。
@@ -22,12 +25,37 @@ package com.lj.problem.leetcode._1;
  */
 public class DiameterOfBinaryTree {
 
-    public int diameterOfBinaryTree(TreeNode root) {
 
+    public int diameterOfBinaryTree(TreeNode root) {
+        Map<TreeNode, Integer> cache = new HashMap<>();
+        Map<TreeNode, Integer> depthCache = new HashMap<>();
+        return dfs(root, cache, depthCache);
+    }
+
+    private int dfs(TreeNode node, Map<TreeNode, Integer> cache, Map<TreeNode, Integer> depthCache) {
+        if (node == null) {
+            return 0;
+        }
+        if (cache.get(node) != null) {
+            return cache.get(node);
+        }
+        int left = depth(node.left, depthCache);
+        int right = depth(node.right, depthCache);
+        int ans = Math.max(Math.max(left + right, dfs(node.left, cache, depthCache)), dfs(node.right, cache, depthCache));
+        cache.put(node, ans);
+        return ans;
+    }
+
+    private int depth(TreeNode node, Map<TreeNode, Integer> depthCache) {
+        if (node == null) return 0;
+        if (depthCache.get(node) != null) return depthCache.get(node);
+        int ans = Math.max(depth(node.left, depthCache), depth(node.right, depthCache)) + 1;
+        depthCache.put(node, ans);
+        return ans;
     }
 
 
-   public class TreeNode {
+    public class TreeNode {
        int val;
        TreeNode left;
        TreeNode right;
