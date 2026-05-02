@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._3;
 
+import org.junit.Test;
+
 import java.util.Arrays;
 
 /**
@@ -31,6 +33,31 @@ import java.util.Arrays;
  * cuts 数组中的所有整数都 互不相同
  */
 public class MinCost {
+
+    @Test
+    public void test() {
+        System.out.println(minCost2(7, new int[]{1,3,4,5}));
+    }
+
+    public int minCost2(int n, int[] cuts) {
+        Arrays.sort(cuts);
+        int[] tmp = new int[cuts.length + 2];
+        System.arraycopy(cuts, 0, tmp, 1, cuts.length);
+        tmp[tmp.length - 1] = n;
+        int[][] dp = new int[tmp.length][tmp.length];
+
+        for (int i = cuts.length; i > 0; i--) {
+            for (int j = i; j <= cuts.length; j++) {
+                int val = tmp[j + 1] - tmp[i - 1];
+                int ans = Integer.MAX_VALUE;
+                for (int k = i; k <= j; k++) {
+                    ans = Math.min(ans, dp[i][k-1] + dp[k+1][j] + val);
+                }
+                dp[i][j] = ans;
+            }
+        }
+        return dp[1][cuts.length];
+    }
 
     public int minCost(int n, int[] cuts) {
         Arrays.sort(cuts);
