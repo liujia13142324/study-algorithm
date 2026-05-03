@@ -57,7 +57,21 @@ package com.lj.problem.leetcode._1;
 public class GetIntersectionNode2 {
 
     public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        ListNode a = headA;
+        ListNode b = headB;
+        ListNode ans = null;
+        while (a != null || b != null) {
+            if (a == null) a = headB;
+            if (b == null) b = headA;
 
+            if (a == b) {
+                ans = a;
+                break;
+            }
+            a = a.next;
+            b = b.next;
+        }
+        return ans;
     }
 
 
