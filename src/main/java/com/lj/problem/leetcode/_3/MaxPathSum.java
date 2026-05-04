@@ -22,11 +22,28 @@ package com.lj.problem.leetcode._3;
  */
 public class MaxPathSum {
 
-    public int maxPathSum(TreeNode root) {
+    int ans = Integer.MIN_VALUE;
 
-        return -1;
+    public int maxPathSum(TreeNode root) {
+        // 后跟遍历
+        dfs(root);
+        return ans;
     }
 
+    private int dfs(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        // 左边往根部传递最大值
+        int lm = dfs(root.left);
+        // 右边往根部传递最大值
+        int rm = dfs(root.right);
+        // 本节点需要往上传递的最大值
+        int val = Math.max(0, Math.max(lm, rm)) + root.val;
+        // 更新结果，有两种选择，1.往叶子节点传递  2.往根部传递
+        ans = Math.max(Math.max(ans, lm + rm + root.val), val);
+        return val;
+    }
 
 
     public class TreeNode {
