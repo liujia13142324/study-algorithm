@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._1;
 
+import org.junit.Test;
+
 /**
  * 190. 颠倒二进制位
  * 颠倒给定的 32 位有符号整数的二进制位。
@@ -31,7 +33,20 @@ package com.lj.problem.leetcode._1;
  */
 public class ReverseBits {
 
-    public int reverseBits(int n) {
+    @Test
+    public void test() {
+//        System.out.println(reverseBits(6));
+        System.out.println(reverseBits(43261596));
+        System.out.println(reverseBits(2147483644));
+    }
 
+    public int reverseBits(int n) {
+        int ans = 0;
+        for(int i = 0; i < 32; i++) {
+            ans <<= 1;
+            ans += n & 1;
+            n >>>= 1;
+        }
+        return ans;
     }
 }
