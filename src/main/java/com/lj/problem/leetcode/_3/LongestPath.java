@@ -29,6 +29,5 @@ package com.lj.problem.leetcode._3;
 public class LongestPath {
 
     public int longestPath(int[] parent, String s) {
-
     }
 }
