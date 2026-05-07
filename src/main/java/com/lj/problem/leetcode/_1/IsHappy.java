@@ -1,5 +1,8 @@
 package com.lj.problem.leetcode._1;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 202. 快乐数
 
@@ -29,7 +32,18 @@ package com.lj.problem.leetcode._1;
 public class IsHappy {
 
     public boolean isHappy(int n) {
-
+        Map<Integer, Boolean> map = new HashMap<>();
+        map.put(1, true);
+        while (!map.containsKey(n)) {
+            map.put(n, false);
+            int tmp = 0;
+            for (int k = n; k > 0; k/=10) {
+                n = k % 10;
+                tmp += (n*n);
+            }
+            n = tmp;
+        }
+        return map.get(n);
     }
 
 }
