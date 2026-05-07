@@ -31,6 +31,27 @@ import java.util.Map;
  */
 public class IsHappy {
 
+    public boolean isHappy2(int n) {
+        int n1 = n;
+        int n2 = n;
+        do {
+            n1 = calc(n1);
+            n2 = calc(n2);
+            n2 = calc(n2);
+        }while (n1 != n2);
+
+        return n1 == 1;
+    }
+
+    private int calc(int n) {
+        int tmp = 0;
+        for (int k = n; k > 0; k/=10) {
+            n = k % 10;
+            tmp += (n*n);
+        }
+        return tmp;
+    }
+
     public boolean isHappy(int n) {
         Map<Integer, Boolean> map = new HashMap<>();
         map.put(1, true);
