@@ -58,7 +58,7 @@ public class LongestPath {
             }
         }
 
-        ans = Math.max(ans, Math.max(singleMax, maxTow[0] + maxTow[1]));
+        ans = Math.max(ans, Math.max(singleMax, maxTow[0] + maxTow[1] + 1));
         return result;
     }
 
