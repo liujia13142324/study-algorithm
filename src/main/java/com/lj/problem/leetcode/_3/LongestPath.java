@@ -45,7 +45,7 @@ public class LongestPath {
             int[] tmp = dfs(k, parent, chars);
             singleMax = Math.max(singleMax, tmp[0]);
             // 和根节点不相等
-            if (tmp[1] != chars[parent[i]]) {
+            if (tmp[1] != chars[i]) {
                 if (maxTow[0] < tmp[0]) {
                     maxTow[0] = tmp[0];
                 }else if (maxTow[1] < tmp[0]) {
@@ -53,7 +53,7 @@ public class LongestPath {
                 }
             }
             // 单链路且和父节点不重复最长
-            if (tmp[1] != chars[parent[i]] && tmp[0] + 1 > result[0]) {
+            if (tmp[1] != chars[i] && tmp[0] + 1 > result[0]) {
                 result = tmp;
             }
         }
