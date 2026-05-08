@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._3;
 
+import org.junit.Test;
+
 /**
  * 2246. 相邻字符不同的最长路径
  * 给你一棵 树（即一个连通、无向、无环图），根节点是节点 0 ，这棵树由编号从 0 到 n - 1 的 n 个节点组成。用下标从 0 开始、长度为 n 的数组 parent 来表示这棵树，其中 parent[i] 是节点 i 的父节点，由于节点 0 是根节点，所以 parent[0] == -1 。
@@ -30,6 +32,11 @@ public class LongestPath {
 
     int ans = 0;
 
+    @Test
+    public void test() {
+        System.out.println(longestPath(new int[]{-1, 0 ,1}, "aab"));
+    }
+
     public int longestPath(int[] parent, String s) {
         char[] chars = s.toCharArray();
         dfs(0, parent, chars);
@@ -37,11 +44,11 @@ public class LongestPath {
     }
 
     private int[] dfs(int i, int[] parent, char[] chars) {
-        int idx = lowerBound(i, parent, parent[i]);
+        int idx = lowerBound(i, parent, i);
         int[] result = new int[]{1, chars[i]};
         int singleMax = 0;
         int[] maxTow = new int[2];
-        for (int k = idx; k < parent.length; k++) {
+        for (int k = idx; k < parent.length && parent[k] == i; k++) {
             int[] tmp = dfs(k, parent, chars);
             singleMax = Math.max(singleMax, tmp[0]);
             // 和根节点不相等
@@ -54,7 +61,7 @@ public class LongestPath {
             }
             // 单链路且和父节点不重复最长
             if (tmp[1] != chars[i] && tmp[0] + 1 > result[0]) {
-                result = tmp;
+                result[0] = tmp[0] + 1;
             }
         }
 
