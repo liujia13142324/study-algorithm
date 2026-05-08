@@ -28,6 +28,50 @@ package com.lj.problem.leetcode._3;
  */
 public class LongestPath {
 
+    int ans = 0;
+
     public int longestPath(int[] parent, String s) {
+        char[] chars = s.toCharArray();
+        dfs(0, parent, chars);
+        return ans;
+    }
+
+    private int[] dfs(int i, int[] parent, char[] chars) {
+        int idx = lowerBound(i, parent, parent[i]);
+        int[] result = new int[]{1, chars[i]};
+        int singleMax = 0;
+        int[] maxTow = new int[2];
+        for (int k = idx; k < parent.length; k++) {
+            int[] tmp = dfs(k, parent, chars);
+            singleMax = Math.max(singleMax, tmp[0]);
+            // 和根节点不相等
+            if (tmp[1] != chars[parent[i]]) {
+                if (maxTow[0] < tmp[0]) {
+                    maxTow[0] = tmp[0];
+                }else if (maxTow[1] < tmp[0]) {
+                    maxTow[1] = tmp[0];
+                }
+            }
+            // 单链路且和父节点不重复最长
+            if (tmp[1] != chars[parent[i]] && tmp[0] + 1 > result[0]) {
+                result = tmp;
+            }
+        }
+
+        ans = Math.max(ans, Math.max(singleMax, maxTow[0] + maxTow[1]));
+        return result;
+    }
+
+    private int lowerBound(int l, int[] parent, int target) {
+        int r = parent.length;
+        while (l + 1 < r) {
+            int mid = (l + r) >>> 1;
+            if (parent[mid] >= target) {
+                r = mid;
+            }else {
+                l = mid;
+            }
+        }
+        return r;
     }
 }
