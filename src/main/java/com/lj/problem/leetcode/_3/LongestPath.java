@@ -40,7 +40,44 @@ public class LongestPath {
         System.out.println(longestPath(new int[]{-1, 0 ,1}, "aab"));
     }
 
+    public int longestPath2(int[] parent, String s) {
+        // 等于1直接返回
+        if (parent.length == 1) return 1;
+        char[] chars = s.toCharArray();
+        List<Integer>[] children = new ArrayList[parent.length];
+        for (int i = 1; i < parent.length; i++) {
+            if (children[parent[i]] == null) {
+                children[parent[i]] = new ArrayList<>();
+            }
+            children[parent[i]].add(i);
+        }
+        // 这个的含义是该节点的孩子中，最长的，满足题意的长度
+        dfs2(0, children, chars);
+        // 必须要这么写
+        return ans + 1;
+    }
+
+    private int dfs2(int i, List<Integer>[] children, char[] chars) {
+        // 初始值为0，代表孩子的最大长度
+        int maxLen = 0;
+        // 没有孩子直接返回
+        if (children[i] == null) return maxLen;
+
+        for (int k: children[i]) {
+            int len = dfs2(k, children, chars) + 1;
+            if (chars[k] != chars[i]) {
+                // 这里不是任何情况都进得来！如果整个树的节点都是重复的，就进不来，也就更新不了这个答案。所以 dfs 的含义不能包含该节点
+                ans = Math.max(ans, maxLen + len);
+                maxLen = Math.max(maxLen, len);
+            }
+        }
+        return maxLen;
+    }
+
+
     public int longestPath(int[] parent, String s) {
+        // 等于1直接返回
+        if (parent.length == 1) return 1;
         char[] chars = s.toCharArray();
         List<Integer>[] children = new ArrayList[parent.length];
         for (int i = 1; i < parent.length; i++) {
@@ -55,14 +92,16 @@ public class LongestPath {
 
     private int[] dfs(int i, List<Integer>[] children, char[] chars) {
         int[] result = new int[]{1, chars[i]};
+        // 没有孩子直接返回
         if (children[i] == null) return result;
 
         int singleMax = 0;
         int[] maxTow = new int[2];
         for (int k: children[i]) {
             int[] tmp = dfs(k, children, chars);
+            // 单链路最长的分支
             singleMax = Math.max(singleMax, tmp[0]);
-            // 和根节点不相等
+            // 和根节点不相等, 最长的两条分支
             if (tmp[1] != chars[i]) {
                 if (maxTow[0] < tmp[0]) {
                     maxTow[1] = maxTow[0];
@@ -71,7 +110,7 @@ public class LongestPath {
                     maxTow[1] = tmp[0];
                 }
             }
-            // 单链路且和父节点不重复最长
+            // 单链路且和父节点不重复最长，往上传递的结果
             if (tmp[1] != chars[i] && tmp[0] + 1 > result[0]) {
                 result[0] = tmp[0] + 1;
             }
