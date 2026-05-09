@@ -2,6 +2,9 @@ package com.lj.problem.leetcode._3;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 2246. 相邻字符不同的最长路径
  * 给你一棵 树（即一个连通、无向、无环图），根节点是节点 0 ，这棵树由编号从 0 到 n - 1 的 n 个节点组成。用下标从 0 开始、长度为 n 的数组 parent 来表示这棵树，其中 parent[i] 是节点 i 的父节点，由于节点 0 是根节点，所以 parent[0] == -1 。
@@ -39,10 +42,52 @@ public class LongestPath {
 
     public int longestPath(int[] parent, String s) {
         char[] chars = s.toCharArray();
-        dfs(0, parent, chars);
+        List<Integer>[] children = new ArrayList[parent.length];
+        for (int i = 1; i < parent.length; i++) {
+            if (children[parent[i]] == null) {
+                children[parent[i]] = new ArrayList<>();
+            }
+            children[parent[i]].add(i);
+        }
+        dfs(0, children, chars);
         return ans;
     }
 
+    private int[] dfs(int i, List<Integer>[] children, char[] chars) {
+        int[] result = new int[]{1, chars[i]};
+        if (children[i] == null) return result;
+
+        int singleMax = 0;
+        int[] maxTow = new int[2];
+        for (int k: children[i]) {
+            int[] tmp = dfs(k, children, chars);
+            singleMax = Math.max(singleMax, tmp[0]);
+            // 和根节点不相等
+            if (tmp[1] != chars[i]) {
+                if (maxTow[0] < tmp[0]) {
+                    maxTow[1] = maxTow[0];
+                    maxTow[0] = tmp[0];
+                }else if (maxTow[1] < tmp[0]) {
+                    maxTow[1] = tmp[0];
+                }
+            }
+            // 单链路且和父节点不重复最长
+            if (tmp[1] != chars[i] && tmp[0] + 1 > result[0]) {
+                result[0] = tmp[0] + 1;
+            }
+        }
+
+        ans = Math.max(ans, Math.max(singleMax, maxTow[0] + maxTow[1] + 1));
+        return result;
+    }
+
+    /**
+     * parent 不讲武徳，几乎顺序都没有
+     * @param i
+     * @param parent
+     * @param chars
+     * @return
+     */
     private int[] dfs(int i, int[] parent, char[] chars) {
         int idx = lowerBound(i, parent, i);
         int[] result = new int[]{1, chars[i]};
