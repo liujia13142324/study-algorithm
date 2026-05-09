@@ -63,6 +63,28 @@ public class LongestUnivaluePath {
         return result;
     }
 
+    /**
+     * 这种写法更加简洁
+     * @param root
+     * @return
+     */
+    public int longestUnivaluePath2(TreeNode root) {
+        dfs2(root);
+        return ans;
+    }
+
+    private int dfs2(TreeNode node) {
+        if (node == null) {
+            return -1; // 下面 +1 后，对于叶子节点就刚好是 0
+        }
+        int lLen = dfs2(node.left) + 1; // 左子树最大链长+1
+        int rLen = dfs2(node.right) + 1; // 右子树最大链长+1
+        if (node.left != null && node.left.val != node.val) lLen = 0; // 链长视作 0
+        if (node.right != null && node.right.val != node.val) rLen = 0; // 链长视作 0
+        ans = Math.max(ans, lLen + rLen); // 两条链拼成路径
+        return Math.max(lLen, rLen); // 当前子树最大链和
+    }
+
 
     public class TreeNode {
         int val;
