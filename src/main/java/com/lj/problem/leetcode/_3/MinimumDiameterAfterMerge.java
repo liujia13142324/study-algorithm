@@ -40,7 +40,7 @@ public class MinimumDiameterAfterMerge {
 
     @Test
     public void test() {
-        /*System.out.println(minimumDiameterAfterMerge(
+        System.out.println(minimumDiameterAfterMerge(
                         new int[][]{{0, 1}, {0, 2}, {0, 3}, {2, 4}, {2, 5}, {3, 6}, {2, 7}}
                         , new int[][]{{0, 1}, {0, 2}, {0, 3}, {2, 4}, {2, 5}, {3, 6}, {2, 7}}
                 )
@@ -50,7 +50,7 @@ public class MinimumDiameterAfterMerge {
                         new int[][]{}
                         , new int[][]{{0, 1}, {1, 2}}
                 )
-        );*/
+        );
 
         System.out.println(minimumDiameterAfterMerge(
                         new int[][]{{0,1},{2,0},{3,2},{3,6},{8,7},{4,8},{5,4},{3,5},{3,9}}
@@ -77,6 +77,7 @@ public class MinimumDiameterAfterMerge {
         }
 
         int min = Integer.MAX_VALUE;
+        int diameter = Integer.MIN_VALUE;
         for (int i = 0; i < totalEdges.length; i++) {
             int[] two = new int[2];
             int max = Integer.MIN_VALUE;
@@ -91,9 +92,10 @@ public class MinimumDiameterAfterMerge {
                 }
             }
             min = Math.min(min, max);
+            diameter = Math.max(diameter, two[0] + two[1]);
         }
 
-        return new int[]{};
+        return new int[]{diameter, min};
     }
 
     private int dfs(int current, int parent, List<Integer>[] totalEdges) {
