@@ -64,8 +64,11 @@ public class MinimumDiameterAfterMerge {
         len = new int[]{0, 0};
         dfs2(edges1, 0);
         dfs2(edges2, 1);
+
         return Math.max(
+                // 合成树的最短直径
                 (int)(1 + Math.ceil(len[0] / 2.0) + Math.ceil(len[1] / 2.0))
+                // 树0，树1的直径
                 , Math.max(len[0], len[1])
         );
     }
