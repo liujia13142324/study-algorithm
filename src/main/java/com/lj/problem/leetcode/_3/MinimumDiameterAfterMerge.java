@@ -1,5 +1,11 @@
 package com.lj.problem.leetcode._3;
 
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * 3203. 合并两棵树后的最小直径
  * 给你两棵 无向 树，分别有 n 和 m 个节点，节点编号分别为 0 到 n - 1 和 0 到 m - 1 。给你两个二维整数数组 edges1 和 edges2 ，长度分别为 n - 1 和 m - 1 ，其中 edges1[i] = [ai, bi] 表示在第一棵树中节点 ai 和 bi 之间有一条边，edges2[i] = [ui, vi] 表示在第二棵树中节点 ui 和 vi 之间有一条边。
@@ -31,7 +37,74 @@ package com.lj.problem.leetcode._3;
  * 输入保证 edges1 和 edges2 分别表示一棵合法的树。
  */
 public class MinimumDiameterAfterMerge {
-    public int minimumDiameterAfterMerge(int[][] edges1, int[][] edges2) {
 
+    @Test
+    public void test() {
+        /*System.out.println(minimumDiameterAfterMerge(
+                        new int[][]{{0, 1}, {0, 2}, {0, 3}, {2, 4}, {2, 5}, {3, 6}, {2, 7}}
+                        , new int[][]{{0, 1}, {0, 2}, {0, 3}, {2, 4}, {2, 5}, {3, 6}, {2, 7}}
+                )
+        );
+
+        System.out.println(minimumDiameterAfterMerge(
+                        new int[][]{}
+                        , new int[][]{{0, 1}, {1, 2}}
+                )
+        );*/
+
+        System.out.println(minimumDiameterAfterMerge(
+                        new int[][]{{0,1},{2,0},{3,2},{3,6},{8,7},{4,8},{5,4},{3,5},{3,9}}
+                        , new int[][]{{0, 1}, {0, 2}, {0, 3}}
+                )
+        );
     }
+
+    int maxLen[] = {Integer.MAX_VALUE, Integer.MAX_VALUE};
+
+    public int minimumDiameterAfterMerge(int[][] edges1, int[][] edges2) {
+        int[] m1 = dfs(edges1);
+        int[] m2 = dfs(edges2);
+        return Math.max(m1[1] + m2[1] + 1, Math.max(m1[0], m2[0]));
+    }
+
+    private int[] dfs(int[][] edges) {
+        if (edges.length == 0) return new int[]{0, 0};
+        List<Integer>[] totalEdges = new ArrayList[edges.length + 1];
+        Arrays.setAll(totalEdges, e->new ArrayList<>());
+        for (int[] edge : edges) {
+            totalEdges[edge[0]].add(edge[1]);
+            totalEdges[edge[1]].add(edge[0]);
+        }
+
+        int min = Integer.MAX_VALUE;
+        for (int i = 0; i < totalEdges.length; i++) {
+            int[] two = new int[2];
+            int max = Integer.MIN_VALUE;
+            for (int child: totalEdges[i]) {
+                int len = dfs(child, i, totalEdges) + 1;
+                max = Math.max(max, len);
+                if (len > two[0]) {
+                    two[1] = two[0];
+                    two[0] = len;
+                }else if (len > two[1]) {
+                    two[1] = len;
+                }
+            }
+            min = Math.min(min, max);
+        }
+
+        return new int[]{};
+    }
+
+    private int dfs(int current, int parent, List<Integer>[] totalEdges) {
+        int maxLen = 0;
+        for (int child: totalEdges[current]) {
+            if (child == parent) {
+                continue;
+            }
+            maxLen = Math.max(maxLen, dfs(child, current, totalEdges) + 1);
+        }
+        return maxLen;
+    }
+
 }
