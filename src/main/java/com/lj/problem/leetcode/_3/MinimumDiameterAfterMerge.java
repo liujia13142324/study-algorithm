@@ -40,26 +40,68 @@ public class MinimumDiameterAfterMerge {
 
     @Test
     public void test() {
-        System.out.println(minimumDiameterAfterMerge(
+       /* System.out.println(minimumDiameterAfterMerge2(
                         new int[][]{{0, 1}, {0, 2}, {0, 3}, {2, 4}, {2, 5}, {3, 6}, {2, 7}}
                         , new int[][]{{0, 1}, {0, 2}, {0, 3}, {2, 4}, {2, 5}, {3, 6}, {2, 7}}
                 )
         );
 
-        System.out.println(minimumDiameterAfterMerge(
+        System.out.println(minimumDiameterAfterMerge2(
                         new int[][]{}
                         , new int[][]{{0, 1}, {1, 2}}
                 )
-        );
+        );*/
 
-        System.out.println(minimumDiameterAfterMerge(
+        System.out.println(minimumDiameterAfterMerge2(
                         new int[][]{{0,1},{2,0},{3,2},{3,6},{8,7},{4,8},{5,4},{3,5},{3,9}}
                         , new int[][]{{0, 1}, {0, 2}, {0, 3}}
                 )
         );
     }
 
-    int maxLen[] = {Integer.MAX_VALUE, Integer.MAX_VALUE};
+    int[] len = new int[]{0, 0};
+    public int minimumDiameterAfterMerge2(int[][] edges1, int[][] edges2) {
+        len = new int[]{0, 0};
+        dfs2(edges1, 0);
+        dfs2(edges2, 1);
+        return Math.max(
+                (int)(1 + Math.ceil(len[0] / 2.0) + Math.ceil(len[1] / 2.0))
+                , Math.max(len[0], len[1])
+        );
+    }
+
+    private void dfs2(int[][] edges, int lenIdx) {
+        if (edges.length == 0) return;
+        List<Integer>[] totalEdges = new ArrayList[edges.length + 1];
+        Arrays.setAll(totalEdges, e->new ArrayList<>());
+        for (int[] edge : edges) {
+            totalEdges[edge[0]].add(edge[1]);
+            totalEdges[edge[1]].add(edge[0]);
+        }
+
+        dfs(-1, 0, totalEdges, lenIdx);
+    }
+
+    private int dfs(int parent, int i, List<Integer>[] totalEdges, int lenIdx) {
+        if (totalEdges[i] == null) return 0;
+        int[] two = new int[]{0, 0};
+        int max = 0;
+        for (int child: totalEdges[i]) {
+            if (child == parent) continue;
+            int len = dfs(i, child, totalEdges, lenIdx) + 1;
+            max = Math.max(max, len);
+            if (len > two[0]) {
+                two[1] = two[0];
+                two[0] = len;
+            }else if (len > two[1]) {
+                two[1] = len;
+            }
+        }
+
+        len[lenIdx] = Math.max(len[lenIdx], two[0] + two[1]);
+        return max;
+    }
+
 
     public int minimumDiameterAfterMerge(int[][] edges1, int[][] edges2) {
         int[] m1 = dfs(edges1);
