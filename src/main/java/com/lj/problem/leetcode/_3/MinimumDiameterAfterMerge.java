@@ -59,6 +59,44 @@ public class MinimumDiameterAfterMerge {
         );
     }
 
+    public int minimumDiameterAfterMerge3(int[][] edges1, int[][] edges2) {
+        int diameter0 = getDiameter(edges1);
+        int diameter1 = getDiameter(edges2);
+        return Math.max(
+                // 合成树的最短直径
+                (int)(1 + Math.ceil(diameter0 / 2.0) + Math.ceil(diameter1 / 2.0))
+                // 树0，树1的直径
+                , Math.max(diameter0, diameter1)
+        );
+    }
+
+    int diameter;
+    private int getDiameter(int[][] edges) {
+        if (edges.length == 0) return 0;
+        List<Integer>[] totalEdges = new ArrayList[edges.length + 1];
+        Arrays.setAll(totalEdges, e->new ArrayList<>());
+        for (int[] edge : edges) {
+            totalEdges[edge[0]].add(edge[1]);
+            totalEdges[edge[1]].add(edge[0]);
+        }
+        diameter = 0;
+        dfs2(-1, 0, totalEdges);
+        return diameter;
+    }
+
+    private int dfs2(int parent, int i, List<Integer>[] totalEdges) {
+        if (totalEdges[i] == null) return 0;
+        int max = 0;
+        for (int child: totalEdges[i]) {
+            if (child == parent) continue;
+            int len = dfs2(i, child, totalEdges) + 1;
+            diameter = Math.max(diameter, max + len);
+            max = Math.max(max, len);
+        }
+        return max;
+    }
+
+
     int[] len = new int[]{0, 0};
     public int minimumDiameterAfterMerge2(int[][] edges1, int[][] edges2) {
         len = new int[]{0, 0};
