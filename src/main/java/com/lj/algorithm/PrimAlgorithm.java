@@ -36,7 +36,7 @@ public class PrimAlgorithm {
         int[][] edge = originGraph.getEdge();
         
         //从第一个点开始遍历
-        visited[1] = true;
+        visited[0] = true;
         
         for(int i=0 ; i<edgesCount ; i++){
             int min = originGraph.getDisConnectNumber();
@@ -44,8 +44,11 @@ public class PrimAlgorithm {
             int minCol = -1;
             
             for(int row=0 ; row<vertextCount; row++){
+                if (!visited[row]) {
+                    continue;
+                }
                 for( int col=0 ; col<vertextCount; col++){
-                    if(visited[row] && !visited[col] && min>edge[row][col]){
+                    if(!visited[col] && min>edge[row][col]){
                         min = edge[row][col];
                         minRow = row;
                         minCol = col;
