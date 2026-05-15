@@ -31,6 +31,21 @@ package com.lj.problem.leetcode._1;
  */
 public class IsIsomorphic {
     public boolean isIsomorphic(String s, String t) {
+        char[] c1 = s.toCharArray();
+        char[] c2 = t.toCharArray();
+        byte[] mapping1 = new byte[128];
+        byte[] mapping2 = new byte[128];
 
+        for (int i = 0; i < c1.length; i++) {
+            if (mapping1[c1[i]] == 0 && mapping2[c2[i]] == 0) {
+                mapping1[c1[i]] = (byte) c2[i];
+                mapping2[c2[i]] = (byte) c1[i];
+                continue;
+            }else if (mapping1[c1[i]] == c2[i]) {
+                continue;
+            }
+            return false;
+        }
+        return true;
     }
 }
