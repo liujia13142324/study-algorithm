@@ -30,6 +30,14 @@ import java.util.Set;
  */
 public class ContainsDuplicate {
 
+    public boolean containsDuplicate2(int[] nums) {
+        Set<Integer> set = new HashSet<>();
+        for (int num: nums) {
+            if (!set.add(num)) return true;
+        }
+        return false;
+    }
+
     public boolean containsDuplicate(int[] nums) {
         Set<Integer> set = new HashSet<>();
         for (int num: nums) {
