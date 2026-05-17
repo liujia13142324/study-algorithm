@@ -1,5 +1,9 @@
 package com.lj.problem.leetcode._3;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * 1617. 统计子树中城市之间最大距离
  * 给你 n 个城市，编号为从 1 到 n 。同时给你一个大小为 n-1 的数组 edges ，其中 edges[i] = [ui, vi] 表示城市 ui 和 vi 之间有一条双向边。题目保证任意城市之间只有唯一的一条路径。换句话说，所有城市形成了一棵 树 。
@@ -33,7 +37,64 @@ package com.lj.problem.leetcode._3;
  */
 public class CountSubgraphsForEachDiameter {
 
-    public int[] countSubgraphsForEachDiameter(int n, int[][] edges) {
+    int diameter;
+    boolean[] set;
+    boolean[] v;
+    List<Integer>[] children;
+    int n;
+    int[] ans;
 
+    public int[] countSubgraphsForEachDiameter(int n, int[][] edges) {
+        this.n = n;
+        children = new ArrayList[n];
+        Arrays.setAll(children, i -> new ArrayList<>());
+        for (int[] edge: edges) {
+            int x = edge[0] - 1;
+            int y = edge[1] - 1;
+            children[x].add(y);
+            children[y].add(x);
+        }
+
+        set = new boolean[n];
+        ans = new int[n - 1];
+        traverseSet(0);
+        return ans;
+    }
+
+    private void traverseSet(int i) {
+        if (i == n) {
+            for (int k = 0; k < n; k++) {
+                if (set[k]) {
+                    v = new boolean[n];
+                    diameter = 0;
+                    dfs(k);
+                    break;
+                }
+            }
+            if (diameter > 0 && Arrays.equals(v, set)) {
+                ans[diameter - 1] ++;
+            }
+            return;
+        }
+
+        // 不选择
+        traverseSet(i + 1);
+        // 选择
+        set[i] = true;
+        traverseSet(i + 1);
+        set[i] = false;
+    }
+
+    private int dfs(int k) {
+        int maxLen = 0;
+        v[k] = true;
+        for (int child: children[k]) {
+            if (set[child] && !v[child]) {
+                int len = dfs(child) + 1;
+                diameter = Math.max(diameter, maxLen + len);
+                maxLen = Math.max(maxLen, len);
+            }
+        }
+        return maxLen;
     }
 }
