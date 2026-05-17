@@ -57,6 +57,7 @@ public class CountSubgraphsForEachDiameter {
 
         set = new boolean[n];
         ans = new int[n - 1];
+        // 从第一个节点开始枚举
         traverseSet(0);
         return ans;
     }
@@ -64,6 +65,7 @@ public class CountSubgraphsForEachDiameter {
     private void traverseSet(int i) {
         if (i == n) {
             for (int k = 0; k < n; k++) {
+                // 从任一点进入，都可遍历整张图
                 if (set[k]) {
                     v = new boolean[n];
                     diameter = 0;
@@ -71,6 +73,10 @@ public class CountSubgraphsForEachDiameter {
                     break;
                 }
             }
+
+            // 该子集可能不是一颗联通的树，所以需要匹配“枚举的子集”和“dfs遍历路径”是否相等
+            // 比如 [[1,3],[1,4],[2,3]]，枚举 1,4 的时候，是可以成功匹配 dfs 路径，但是枚举 1,4,2 的时候，是不能成功匹配 dfs 路径的
+            // 1,4,2不是一颗联通的树，所以从任意节点进入遍历的时候，无法遍历全部节点
             if (diameter > 0 && Arrays.equals(v, set)) {
                 ans[diameter - 1] ++;
             }
