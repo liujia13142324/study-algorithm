@@ -30,6 +30,32 @@ package com.lj.problem.leetcode._1;
  */
 public class CountNodes {
 
+    public int countNodes3(TreeNode root) {
+        if (root == null){
+            return 0;
+        }
+        int leftHeight = height(root.left);
+        int rightHeight = height(root.right);
+
+        int cnt = 1;
+        if (leftHeight == rightHeight) {
+            while (leftHeight-- > 0) {
+                cnt <<= 1;
+            }
+            return cnt + countNodes3(root.right);
+        }else {
+            while (rightHeight-- > 0) {
+                cnt <<= 1;
+            }
+            return cnt + countNodes3(root.left);
+        }
+    }
+
+    private int height(TreeNode node) {
+        if (node == null) return 0;
+        return 1 + Math.max(height(node.left), height(node.right));
+    }
+
     public int countNodes2(TreeNode root) {
         if (root == null){
             return 0;
