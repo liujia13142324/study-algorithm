@@ -34,20 +34,14 @@ public class CountNodes {
         if (root == null){
             return 0;
         }
-        int leftHeight = height(root.left);
-        int rightHeight = height(root.right);
+        int left = height(root.left);
+        int right = height(root.right);
 
         int cnt = 1;
-        if (leftHeight == rightHeight) {
-            while (leftHeight-- > 0) {
-                cnt <<= 1;
-            }
-            return cnt + countNodes3(root.right);
-        }else {
-            while (rightHeight-- > 0) {
-                cnt <<= 1;
-            }
-            return cnt + countNodes3(root.left);
+        if(left == right){
+            return countNodes3(root.right) + (1<<left);
+        }else{
+            return countNodes3(root.left) + (1<<right);
         }
     }
 
