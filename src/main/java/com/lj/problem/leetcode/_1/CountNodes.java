@@ -34,15 +34,23 @@ public class CountNodes {
         if (root == null){
             return 0;
         }
-        int left = height(root.left);
-        int right = height(root.right);
+        int left = height2(root.left);
+        int right = height2(root.right);
 
-        int cnt = 1;
         if(left == right){
             return countNodes3(root.right) + (1<<left);
         }else{
             return countNodes3(root.left) + (1<<right);
         }
+    }
+
+    private int height2(TreeNode node) {
+        int height = 0;
+        while (node != null) {
+            height++;
+            node = node.left;
+        }
+        return height;
     }
 
     private int height(TreeNode node) {
