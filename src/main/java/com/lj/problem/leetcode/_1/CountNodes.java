@@ -30,11 +30,19 @@ package com.lj.problem.leetcode._1;
  */
 public class CountNodes {
 
+    int len;
 
     public int countNodes(TreeNode root) {
+        dfs(root);
+        return len;
     }
 
-
+    private void dfs(TreeNode root) {
+        if (root == null) return;
+        len++;
+        dfs(root.left);
+        dfs(root.right);
+    }
 
 
     public class TreeNode {
