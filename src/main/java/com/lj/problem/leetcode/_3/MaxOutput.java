@@ -1,8 +1,6 @@
 package com.lj.problem.leetcode._3;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * 2538. 最大价值和与最小价值和的差值
@@ -43,26 +41,33 @@ public class MaxOutput {
 
     public long maxOutput(int n, int[][] edges, int[] price) {
         List<Integer>[] nodeEdges = new ArrayList[n];
-        Arrays.setAll(nodeEdges, e -> new ArrayList<>());
+        Arrays.setAll(nodeEdges, e->new ArrayList<>());
         for (int[] edge: edges) {
             nodeEdges[edge[0]].add(edge[1]);
             nodeEdges[edge[1]].add(edge[0]);
         }
 
+        Map<Integer, Integer>[] cache = new HashMap[price.length];
+        Arrays.setAll(cache, e->new HashMap<>());
+
         int ans = 0;
         for (int i = 0; i < n; i++) {
-            ans = Math.max(ans, dfs(-1, i, nodeEdges, price) - price[i]);
+            ans = Math.max(ans, dfs(-1, i, nodeEdges, price, cache) - price[i]);
         }
 
         return ans;
     }
 
-    private int dfs(int pre, int curr, List<Integer>[] edges, int[] price) {
+    private int dfs(int pre, int curr, List<Integer>[] edges, int[] price, Map<Integer, Integer>[] cache) {
+        if (cache[curr].get(pre) != null) {
+            return cache[curr].get(pre);
+        }
         int maxVal = 0;
         for (int next: edges[curr]) {
             if (next == pre) continue;
-            maxVal = Math.max(maxVal, dfs(curr, next, edges, price));
+            maxVal = Math.max(maxVal, dfs(curr, next, edges, price, cache));
         }
+        cache[curr].put(pre, maxVal + price[curr]);
         return maxVal + price[curr];
     }
 
