@@ -1,5 +1,9 @@
 package com.lj.problem.leetcode._3;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * 2538. 最大价值和与最小价值和的差值
  * 给你一个 n 个节点的无向无根图，节点编号为 0 到 n - 1 。给你一个整数 n 和一个长度为 n - 1 的二维整数数组 edges ，其中 edges[i] = [ai, bi] 表示树中节点 ai 和 bi 之间有一条边。
@@ -36,8 +40,30 @@ package com.lj.problem.leetcode._3;
  */
 public class MaxOutput {
 
-    public long maxOutput(int n, int[][] edges, int[] price) {
 
+    public long maxOutput(int n, int[][] edges, int[] price) {
+        List<Integer>[] nodeEdges = new ArrayList[n];
+        Arrays.setAll(nodeEdges, e -> new ArrayList<>());
+        for (int[] edge: edges) {
+            nodeEdges[edge[0]].add(edge[1]);
+            nodeEdges[edge[1]].add(edge[0]);
+        }
+
+        int ans = 0;
+        for (int i = 0; i < n; i++) {
+            ans = Math.max(ans, dfs(-1, i, nodeEdges, price) - price[i]);
+        }
+
+        return ans;
+    }
+
+    private int dfs(int pre, int curr, List<Integer>[] edges, int[] price) {
+        int maxVal = 0;
+        for (int next: edges[curr]) {
+            if (next == pre) continue;
+            maxVal = Math.max(maxVal, dfs(curr, next, edges, price));
+        }
+        return maxVal + price[curr];
     }
 
 }
