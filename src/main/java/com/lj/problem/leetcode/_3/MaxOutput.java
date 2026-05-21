@@ -70,13 +70,19 @@ public class MaxOutput {
 
     private int[] dfs(int parent, int i, List<Integer>[] nodeEdges, int[] price) {
         // 0: i 到叶子端最大值
-        // 1: i 到非叶子端最大值
+        // 1: i 到非叶子最大值
         int[] curr = new int[]{price[i], 0};
         for (int child: nodeEdges[i]) {
             if (parent == child) continue;
+            // 下个孩子
             int[] next = dfs(i, child, nodeEdges, price);
+            // 更新答案， curr: 根据child 从根、左、右的顺序，0:当前 i 到叶子端最大值，1:当前 i 到非叶子最大值。答案为以下两种情况
+            // 取右端点为根（剔除右端点）-> curr[0] + next[1]
+            // 取左端点为根（剔除左端点）-> curr[1] + next[0]
             ans = Math.max(ans, Math.max(curr[0] + next[1], curr[1] + next[0]));
+            // 计算 curr[0], i 到叶子端最大值
             curr[0] = Math.max(curr[0], price[i] + next[0]);
+            // 计算 curr[1], i 到非叶子最大值
             curr[1] = Math.max(curr[1], price[i] + next[1]);
         }
         return curr;
