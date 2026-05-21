@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._3;
 
+import org.junit.Test;
+
 import java.util.*;
 
 /**
@@ -38,6 +40,48 @@ import java.util.*;
  */
 public class MaxOutput {
 
+    @Test
+    public void test() {
+        System.out.println(maxOutput2(6, new int[][]{{0, 1}, {1, 2}, {1, 3}, {3, 4}, {3, 5}}, new int[]{9, 8, 7,6,10,5}));
+    }
+
+    /**
+     *  1. 路径肯定是两个叶子端点的连线
+     *  2. 求某路径，去掉一端的最大路径和
+     *
+     * 求树直径任务的变种, 遍历树的时候，dfs(i) 返回从 i 到其叶子节点的最大值，i 到非叶子节点的最大值
+     *
+     * @param n
+     * @param edges
+     * @param price
+     * @return
+     */
+    long ans = 0;
+    public long maxOutput2(int n, int[][] edges, int[] price) {
+        List<Integer>[] nodeEdges = new ArrayList[n];
+        Arrays.setAll(nodeEdges, e->new ArrayList<>());
+        for (int[] edge: edges) {
+            nodeEdges[edge[0]].add(edge[1]);
+            nodeEdges[edge[1]].add(edge[0]);
+        }
+        dfs(-1, 0, nodeEdges, price);
+        return ans;
+    }
+
+    private int[] dfs(int parent, int i, List<Integer>[] nodeEdges, int[] price) {
+        // 0: i 到叶子端最大值
+        // 1: i 到非叶子端最大值
+        int[] curr = new int[]{price[i], 0};
+        for (int child: nodeEdges[i]) {
+            if (parent == child) continue;
+            int[] next = dfs(i, child, nodeEdges, price);
+            ans = Math.max(ans, Math.max(curr[0] + next[1], curr[1] + next[0]));
+            curr[0] = Math.max(curr[0], price[i] + next[0]);
+            curr[1] = Math.max(curr[1], price[i] + next[1]);
+        }
+        return curr;
+    }
+
 
     public long maxOutput(int n, int[][] edges, int[] price) {
         List<Integer>[] nodeEdges = new ArrayList[n];
@@ -52,6 +96,7 @@ public class MaxOutput {
 
         int ans = 0;
         for (int i = 0; i < n; i++) {
+            if (nodeEdges[i].size() != 1) continue;
             ans = Math.max(ans, dfs(-1, i, nodeEdges, price, cache) - price[i]);
         }
 
