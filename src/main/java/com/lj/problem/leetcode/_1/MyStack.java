@@ -1,5 +1,10 @@
 package com.lj.problem.leetcode._1;
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Queue;
+
 /**
  * 225. 用队列实现栈
  * 简单
@@ -43,6 +48,8 @@ package com.lj.problem.leetcode._1;
  */
 public class MyStack {
 
+    Queue<Integer> queue1;
+    Queue<Integer> queue2;
 
     /**
      * Your MyStack object will be instantiated and called as such:
@@ -54,25 +61,28 @@ public class MyStack {
      */
 
     public MyStack() {
-
+        queue1 = new ArrayDeque<>();
+        queue2 = new ArrayDeque<>();
     }
 
     public void push(int x) {
-
+        queue2.add(x);
+        while (!queue1.isEmpty()) queue2.add(queue1.poll());
+        Queue<Integer> tmp = queue1;
+        queue1 = queue2;
+        queue2 = tmp;
     }
 
     public int pop() {
-
+        return queue1.poll();
     }
 
     public int top() {
-
+        return queue1.peek();
     }
 
     public boolean empty() {
-
+        return queue1.isEmpty();
     }
-
-
 
 }
