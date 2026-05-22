@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._1;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -39,7 +41,29 @@ import java.util.List;
 public class SummaryRanges {
 
     public List<String> summaryRanges(int[] nums) {
+        if (nums.length == 0) return Collections.emptyList();
+        List<String> ans = new ArrayList<>();
+        int pre = nums[0] - 1;
+        int len = 0;
+        for (int num: nums) {
+            if (pre != num - 1) {
+                add(ans, pre, len);
+                len = 0;
+            }
+            pre = num;
+            len++;
+        }
 
+        add(ans, pre, len);
+        return ans;
+    }
+
+    private void add(List<String> ans, int pre, int len) {
+        if (len > 1) {
+            ans.add((pre - len + 1) + "->" + pre);
+        }else {
+            ans.add(String.valueOf(pre));
+        }
     }
 
 }
