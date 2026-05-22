@@ -9,13 +9,33 @@ package com.lj.problem.leetcode._2;
  */
 public class Rob2 {
 
-
-
-
+    /**
+     * @param root
+     * @return
+     */
     public int rob(TreeNode root) {
-
+        int[] sum = dfs(root);
+        return Math.max(sum[0], sum[1]);
     }
 
+    /**
+     * 0: 含根节点
+     * 1: 不含根节点
+     * @param node
+     * @return
+     */
+    private int[] dfs(TreeNode node) {
+        if (node == null) {
+            return new int[]{0, 0};
+        }
+        int[] left = dfs(node.left);
+        int[] right = dfs(node.right);
+
+        return new int[]{
+                left[1] + right[1] + node.val
+                , Math.max(left[0], left[1]) + Math.max(right[0], right[1])
+        };
+    }
 
 
     public class TreeNode {
