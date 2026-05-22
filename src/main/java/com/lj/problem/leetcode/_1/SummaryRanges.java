@@ -60,9 +60,11 @@ public class SummaryRanges {
 
     private void add(List<String> ans, int pre, int len) {
         if (len > 1) {
-            ans.add((pre - len + 1) + "->" + pre);
+            StringBuilder sb = new StringBuilder(Integer.toString(pre - len + 1));
+            sb.append("->").append(pre);
+            ans.add(sb.toString());
         }else {
-            ans.add(String.valueOf(pre));
+            ans.add(Integer.toString(pre));
         }
     }
 
