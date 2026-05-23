@@ -1,8 +1,9 @@
 package com.lj.problem;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 /**
  * # P1352 没有上司的舞会
@@ -65,19 +66,54 @@ import java.util.stream.Collectors;
  * 对于 $100\%$ 的数据，保证 $1\leq n \leq 6 \times 10^3$，$-128 \leq r_i\leq 127$，$1 \leq l, k \leq n$，且给出的关系一定是一棵树。
  */
 public class PartyWithoutABoss {
+
+
+
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         int n = sc.nextInt();
         int[] happyPoint = new int[n];
-        int[][] bossInfo = new int[n-1][2];
+        List<Integer>[] children = new ArrayList[n];
+        int[][] cache = new int[n][];
         for (int i = 0; i < n; i++) {
             happyPoint[i] = sc.nextInt();
         }
-        for (int i = 0; i < bossInfo.length; i++) {
-            bossInfo[i] = new int[]{sc.nextInt(), sc.nextInt()};
+        for (int i = 0; i < n - 1; i++) {
+            int child = sc.nextInt() - 1;
+            int parent = sc.nextInt() - 1;
+            if (children[parent] == null) {
+                children[parent] = new ArrayList<>();
+            }
+            children[parent].add(child);
         }
 
-        System.out.println(Arrays.toString(happyPoint));
-        System.out.println(Arrays.stream(bossInfo).map(e->Arrays.toString(e)).collect(Collectors.toList()));
+        int ans = 0;
+        for (int i = 0; i < n; i++) {
+            int[] calc = dfs(i, happyPoint, children, cache);
+            ans = Math.max(Math.max(ans, calc[0]), calc[1]);
+        }
+        System.out.println(ans);
+    }
+
+    private static int[] dfs(int i, int[] happyPoint, List<Integer>[] children, int[][] cache) {
+        if (cache[i] != null) {
+            return cache[i];
+        }
+        if (children[i] == null) {
+            return cache[i] = new int[]{happyPoint[i], 0};
+        }
+        int contain = Math.max(happyPoint[i], 0);
+        int notContain = 0;
+        for (int child: children[i]) {
+            int[] childCalculation = dfs(child, happyPoint, children, cache);
+            if (childCalculation[1] > 0) {
+                contain += childCalculation[1];
+            }
+            if (childCalculation[0] > 0 || childCalculation[1] > 0) {
+                notContain += Math.max(childCalculation[0], childCalculation[1]);
+            }
+        }
+
+        return cache[i] = new int[]{contain, notContain};
     }
 }
