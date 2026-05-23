@@ -56,28 +56,31 @@ public class MyQueue {
     }
 
     public void push(int x) {
-        while (!read.isEmpty()) {
-            write.push(read.pop());
-        }
         write.push(x);
     }
 
     public int pop() {
-        while (!write.isEmpty()) {
-            read.push(write.pop());
+        while (read.isEmpty()) {
+            purgeWrite();
         }
         return read.pop();
     }
 
     public int peek() {
-        while (!write.isEmpty()) {
-            read.push(write.pop());
+        while (read.isEmpty()) {
+            purgeWrite();
         }
         return read.peek();
     }
 
     public boolean empty() {
         return write.isEmpty() && read.isEmpty();
+    }
+
+    private void purgeWrite() {
+        while (!write.isEmpty()) {
+            read.push(write.pop());
+        }
     }
 
     /**
