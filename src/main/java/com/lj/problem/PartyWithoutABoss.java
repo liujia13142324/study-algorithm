@@ -67,14 +67,12 @@ import java.util.Scanner;
  */
 public class PartyWithoutABoss {
 
-
-
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         int n = sc.nextInt();
         int[] happyPoint = new int[n];
         List<Integer>[] children = new ArrayList[n];
-        int[][] cache = new int[n][];
+        boolean[] hasParent = new boolean[n];
         for (int i = 0; i < n; i++) {
             happyPoint[i] = sc.nextInt();
         }
@@ -85,27 +83,30 @@ public class PartyWithoutABoss {
                 children[parent] = new ArrayList<>();
             }
             children[parent].add(child);
+            hasParent[child] = true;
         }
 
-        int ans = 0;
+        int root = 0;
         for (int i = 0; i < n; i++) {
-            int[] calc = dfs(i, happyPoint, children, cache);
-            ans = Math.max(Math.max(ans, calc[0]), calc[1]);
+            if (!hasParent[i]) {
+                root = i;
+                break;
+            }
         }
-        System.out.println(ans);
+
+        int[] calc = dfs(root, happyPoint, children);
+        System.out.println(Math.max(calc[0], calc[1]));
     }
 
-    private static int[] dfs(int i, int[] happyPoint, List<Integer>[] children, int[][] cache) {
-        if (cache[i] != null) {
-            return cache[i];
-        }
+    private static int[] dfs(int i, int[] happyPoint, List<Integer>[] children) {
         if (children[i] == null) {
-            return cache[i] = new int[]{happyPoint[i], 0};
+            // 还是应该需要判断是否为正数
+            return new int[]{happyPoint[i], 0};
         }
         int contain = Math.max(happyPoint[i], 0);
         int notContain = 0;
         for (int child: children[i]) {
-            int[] childCalculation = dfs(child, happyPoint, children, cache);
+            int[] childCalculation = dfs(child, happyPoint, children);
             if (childCalculation[1] > 0) {
                 contain += childCalculation[1];
             }
@@ -114,6 +115,6 @@ public class PartyWithoutABoss {
             }
         }
 
-        return cache[i] = new int[]{contain, notContain};
+        return  new int[]{contain, notContain};
     }
 }
