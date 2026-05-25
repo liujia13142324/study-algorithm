@@ -59,6 +59,9 @@ public class FrogPosition {
         if (t == 0 || notVisitedCnt == 0) {
             return i == target ? 1 : 0;
         }
+        if (i == target) {
+            return 0;
+        }
         double ans = 0;
         for (int child: children[i]) {
             if (parent == child) continue;
