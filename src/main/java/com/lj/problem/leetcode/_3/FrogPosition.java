@@ -2,9 +2,7 @@ package com.lj.problem.leetcode._3;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * 1377. T 秒后青蛙的位置
@@ -42,7 +40,7 @@ public class FrogPosition {
 
     @Test
     public void test() {
-        System.out.println(frogPosition(7, new int[][]{{1,2}, {1,3}, {1,7}, {2,4}, {2,6}, {3,5}}, 2, 4));
+        System.out.println(frogPosition2(7, new int[][]{{2, 1}, {3,1}, {4,2}, {5,4}, {6,5}, {7,2}}, 3, 2));
     }
 
     public double frogPosition(int n, int[][] edges, int t, int target) {
@@ -60,6 +58,36 @@ public class FrogPosition {
         int notVisitedCnt = parent == 0 ? children[i].size() : children[i].size() - 1;
         if (t == 0 || notVisitedCnt == 0) {
             return i == target ? 1 : 0;
+        }
+        double ans = 0;
+        for (int child: children[i]) {
+            if (parent == child) continue;
+            ans = 1.0 / notVisitedCnt * dfs(i, child, t - 1, target, children);
+            if (ans > 0) {
+                break;
+            }
+        }
+        return ans;
+    }
+
+    public double frogPosition2(int n, int[][] edges, int t, int target) {
+        Set<Integer>[] children = new HashSet[n + 1];
+        Arrays.setAll(children, e->new HashSet<>());
+        for (int[] edge: edges) {
+            children[edge[0]].add(edge[1]);
+            children[edge[1]].add(edge[0]);
+        }
+
+        return dfs(0, 1, t, target, children);
+    }
+
+    private double dfs(int parent, int i, int t, int target, Set<Integer>[] children) {
+        int notVisitedCnt = parent == 0 ? children[i].size() : children[i].size() - 1;
+        if (notVisitedCnt == 0) {
+            return i == target ? 1 : 0;
+        }
+        if (t == 1) {
+            return children[i].contains(target) && parent != target ? 1.0 / notVisitedCnt : 0;
         }
         double ans = 0;
         for (int child: children[i]) {
