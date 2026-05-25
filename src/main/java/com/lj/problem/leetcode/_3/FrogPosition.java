@@ -1,5 +1,11 @@
 package com.lj.problem.leetcode._3;
 
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * 1377. T 秒后青蛙的位置
  * 提示
@@ -34,7 +40,36 @@ package com.lj.problem.leetcode._3;
  */
 public class FrogPosition {
 
-    public double frogPosition(int n, int[][] edges, int t, int target) {
-
+    @Test
+    public void test() {
+        System.out.println(frogPosition(7, new int[][]{{1,2}, {1,3}, {1,7}, {2,4}, {2,6}, {3,5}}, 2, 4));
     }
+
+    public double frogPosition(int n, int[][] edges, int t, int target) {
+        List<Integer>[] children = new ArrayList[n + 1];
+        Arrays.setAll(children, e->new ArrayList<>());
+        for (int[] edge: edges) {
+            children[edge[0]].add(edge[1]);
+            children[edge[1]].add(edge[0]);
+        }
+
+        return dfs(0, 1, t, target, children);
+    }
+
+    private double dfs(int parent, int i, int t, int target, List<Integer>[] children) {
+        int notVisitedCnt = parent == 0 ? children[i].size() : children[i].size() - 1;
+        if (t == 0 || notVisitedCnt == 0) {
+            return i == target ? 1 : 0;
+        }
+        double ans = 0;
+        for (int child: children[i]) {
+            if (parent == child) continue;
+            ans = 1.0 / notVisitedCnt * dfs(i, child, t - 1, target, children);
+            if (ans > 0) {
+                break;
+            }
+        }
+        return ans;
+    }
+
 }
