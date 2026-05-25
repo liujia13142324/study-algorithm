@@ -51,11 +51,12 @@ public class FrogPosition {
             children[edge[1]].add(edge[0]);
         }
 
+        children[1].add(0);
         return dfs(0, 1, t, target, children);
     }
 
     private double dfs(int parent, int i, int t, int target, List<Integer>[] children) {
-        int notVisitedCnt = parent == 0 ? children[i].size() : children[i].size() - 1;
+        int notVisitedCnt = children[i].size() - 1;
         if (t == 0 || notVisitedCnt == 0) {
             return i == target ? 1 : 0;
         }
