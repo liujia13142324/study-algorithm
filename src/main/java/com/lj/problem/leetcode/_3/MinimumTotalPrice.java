@@ -1,5 +1,11 @@
 package com.lj.problem.leetcode._3;
 
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * 2646. 最小化旅行的价格总和
  * 困难
@@ -53,8 +59,76 @@ package com.lj.problem.leetcode._3;
  */
 public class MinimumTotalPrice {
 
-    public int minimumTotalPrice(int n, int[][] edges, int[] price, int[][] trips) {
+    @Test
+    public void test() {
+        System.out.println(minimumTotalPrice(4, new int[][]{{0,1}, {1,2}, {1,3}}, new int[]{2,2,10,6}, new int[][]{{0,3}, {2,1}, {2,3}}));
+    }
 
+
+    public int minimumTotalPrice(int n, int[][] edges, int[] price, int[][] trips) {
+        List<Integer>[] children = new ArrayList[n];
+        Arrays.setAll(children, e -> new ArrayList<>());
+        for (int[] edge : edges) {
+            children[edge[0]].add(edge[1]);
+            children[edge[1]].add(edge[0]);
+        }
+
+        Object[] tmp = dfs(-1, 0, children, price);
+        List<Integer> nodes2Half = null;
+        if (((Integer) tmp[0]) > ((Integer) tmp[1])) {
+            nodes2Half = (List<Integer>) tmp[2];
+        } else {
+            nodes2Half = (List<Integer>) tmp[3];
+        }
+
+        for (int i: nodes2Half) {
+            price[i] /= 2;
+        }
+
+        int ans = 0;
+        for (int[] trip: trips) {
+            ans += dfs(-1, trip[0], trip[1], price, children);
+        }
+
+        return ans;
+    }
+
+    private int dfs(int parent, int i, int target, int[] price, List<Integer>[] children) {
+        if (i == target) {
+            return price[i];
+        }
+        for (int child: children[i]) {
+            if (parent == child) continue;
+            int childSum = dfs(i, child, target, price, children);
+            if ( childSum > 0) {
+                return price[i] + childSum;
+            }
+        }
+        return 0;
+    }
+
+    private Object[] dfs(int parent, int i, List<Integer>[] children, int[] price) {
+        int contained = price[i];
+        int notContained = 0;
+        List<Integer> containedList = new ArrayList<>();
+        List<Integer> notContainList = new ArrayList<>();
+        containedList.add(i);
+
+        for (int child: children[i]) {
+            if (parent == child) continue;
+            Object[] tmp = dfs(i, child, children, price);
+            contained += (Integer) tmp[1];
+            containedList.addAll((List)tmp[3]);
+            if (((Integer) tmp[0]) > ((Integer) tmp[1])) {
+                notContained += (Integer) tmp[0];
+                notContainList.addAll((List)tmp[2]);
+            }else {
+                notContained += (Integer) tmp[1];
+                notContainList.addAll((List)tmp[3]);
+            }
+        }
+
+        return new Object[]{contained, notContained, containedList, notContainList};
     }
 
 }
