@@ -2,9 +2,7 @@ package com.lj.problem.leetcode._3;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * 2646. 最小化旅行的价格总和
@@ -73,58 +71,66 @@ public class MinimumTotalPrice {
             children[edge[1]].add(edge[0]);
         }
 
+        List<Integer>[] paths = new ArrayList[trips.length];
+        for (int i = 0; i < trips.length; i++) {
+            int[] trip = trips[i];
+            paths[i] = dfsForPath(-1, trip[0], trip[1], children);
+        }
+
         Object[] tmp = dfs(-1, 0, children, price);
-        List<Integer> nodes2Half = null;
-        if (((Integer) tmp[0]) > ((Integer) tmp[1])) {
-            nodes2Half = (List<Integer>) tmp[2];
-        } else {
-            nodes2Half = (List<Integer>) tmp[3];
-        }
 
-        for (int i: nodes2Half) {
-            price[i] /= 2;
-        }
+        return Math.min(calc((Set<Integer>) tmp[2], paths, price), calc((Set<Integer>) tmp[3], paths, price));
+    }
 
+    private int calc(Set<Integer> plan, List<Integer>[] paths, int[] price) {
         int ans = 0;
-        for (int[] trip: trips) {
-            ans += dfs(-1, trip[0], trip[1], price, children);
+        for (List<Integer> path: paths) {
+            for (int n: path) {
+                if (plan.contains(n)) {
+                    ans += (price[n] / 2);
+                }else {
+                    ans += price[n];
+                }
+            }
         }
-
         return ans;
     }
 
-    private int dfs(int parent, int i, int target, int[] price, List<Integer>[] children) {
+    private List<Integer> dfsForPath(int parent, int i, int target, List<Integer>[] children) {
         if (i == target) {
-            return price[i];
+            ArrayList<Integer> result = new ArrayList<>();
+            result.add(i);
+            return result;
         }
         for (int child: children[i]) {
             if (parent == child) continue;
-            int childSum = dfs(i, child, target, price, children);
-            if ( childSum > 0) {
-                return price[i] + childSum;
+            List<Integer> childPath = dfsForPath(i, child, target, children);
+            if ( childPath != null ) {
+                childPath.add(i);
+                return childPath;
             }
         }
-        return 0;
+        return null;
     }
 
     private Object[] dfs(int parent, int i, List<Integer>[] children, int[] price) {
         int contained = price[i];
         int notContained = 0;
-        List<Integer> containedList = new ArrayList<>();
-        List<Integer> notContainList = new ArrayList<>();
+        Set<Integer> containedList = new HashSet<>();
+        Set<Integer> notContainList = new HashSet<>();
         containedList.add(i);
 
         for (int child: children[i]) {
             if (parent == child) continue;
             Object[] tmp = dfs(i, child, children, price);
             contained += (Integer) tmp[1];
-            containedList.addAll((List)tmp[3]);
+            containedList.addAll((Set)tmp[3]);
             if (((Integer) tmp[0]) > ((Integer) tmp[1])) {
                 notContained += (Integer) tmp[0];
-                notContainList.addAll((List)tmp[2]);
+                notContainList.addAll((Set)tmp[2]);
             }else {
                 notContained += (Integer) tmp[1];
-                notContainList.addAll((List)tmp[3]);
+                notContainList.addAll((Set)tmp[3]);
             }
         }
 
