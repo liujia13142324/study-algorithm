@@ -62,6 +62,7 @@ public class MinimumTotalPrice {
         System.out.println(minimumTotalPrice(4, new int[][]{{0,1}, {1,2}, {1,3}}, new int[]{2,2,10,6}, new int[][]{{0,3}, {2,1}, {2,3}}));
     }
 
+    int[] newPrice;
 
     public int minimumTotalPrice(int n, int[][] edges, int[] price, int[][] trips) {
         List<Integer>[] children = new ArrayList[n];
@@ -70,71 +71,43 @@ public class MinimumTotalPrice {
             children[edge[0]].add(edge[1]);
             children[edge[1]].add(edge[0]);
         }
-
-        List<Integer>[] paths = new ArrayList[trips.length];
-        for (int i = 0; i < trips.length; i++) {
-            int[] trip = trips[i];
-            paths[i] = dfsForPath(-1, trip[0], trip[1], children);
+        // 递归，根据旅游路径，算出新的价值，没有路过的节点，价值归0
+        newPrice = new int[n];
+        for (int[] trip: trips) {
+            dfsForNewPrice(-1, trip[0], trip[1], price, children);
         }
 
-        Object[] tmp = dfs(-1, 0, children, price);
+        int[] ans = dfs(-1, 0, children);
 
-        return Math.min(calc((Set<Integer>) tmp[2], paths, price), calc((Set<Integer>) tmp[3], paths, price));
+        return Math.min(ans[0], ans[1]);
     }
 
-    private int calc(Set<Integer> plan, List<Integer>[] paths, int[] price) {
-        int ans = 0;
-        for (List<Integer> path: paths) {
-            for (int n: path) {
-                if (plan.contains(n)) {
-                    ans += (price[n] / 2);
-                }else {
-                    ans += price[n];
-                }
-            }
+    private int[] dfs(int parent, int i, List<Integer>[] children) {
+        int[] ans = new int[]{newPrice[i] / 2, newPrice[i]};
+        for (int child: children[i]) {
+            if (child == parent) continue;
+            int[] tmp = dfs(i, child, children);
+            ans[0] += tmp[1];
+            ans[1] += Math.min(tmp[0], tmp[1]);
         }
         return ans;
     }
 
-    private List<Integer> dfsForPath(int parent, int i, int target, List<Integer>[] children) {
+    private int dfsForNewPrice(int parent, int i, int target, int[] price, List<Integer>[] children) {
         if (i == target) {
-            ArrayList<Integer> result = new ArrayList<>();
-            result.add(i);
-            return result;
+            newPrice[i] += price[i];
+            return i;
         }
         for (int child: children[i]) {
             if (parent == child) continue;
-            List<Integer> childPath = dfsForPath(i, child, target, children);
-            if ( childPath != null ) {
-                childPath.add(i);
-                return childPath;
+            int val = dfsForNewPrice(i, child, target, price, children);
+            if (val >= 0) {
+                newPrice[i] += price[i];
+                return i;
             }
         }
-        return null;
+        return -1;
     }
 
-    private Object[] dfs(int parent, int i, List<Integer>[] children, int[] price) {
-        int contained = price[i];
-        int notContained = 0;
-        Set<Integer> containedList = new HashSet<>();
-        Set<Integer> notContainList = new HashSet<>();
-        containedList.add(i);
-
-        for (int child: children[i]) {
-            if (parent == child) continue;
-            Object[] tmp = dfs(i, child, children, price);
-            contained += (Integer) tmp[1];
-            containedList.addAll((Set)tmp[3]);
-            if (((Integer) tmp[0]) > ((Integer) tmp[1])) {
-                notContained += (Integer) tmp[0];
-                notContainList.addAll((Set)tmp[2]);
-            }else {
-                notContained += (Integer) tmp[1];
-                notContainList.addAll((Set)tmp[3]);
-            }
-        }
-
-        return new Object[]{contained, notContained, containedList, notContainList};
-    }
 
 }
