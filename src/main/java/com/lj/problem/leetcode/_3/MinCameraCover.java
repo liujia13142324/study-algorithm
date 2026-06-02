@@ -27,18 +27,10 @@ package com.lj.problem.leetcode._3;
 public class MinCameraCover {
 
     public int minCameraCover(TreeNode root) {
-        int[] ans = dfs(root);
-        return Math.min(ans[0], ans[1]);
     }
 
     private int[] dfs(TreeNode node) {
-        if (node == null) {
-            return new int[]{0, 0};
-        }
-        int[] left = dfs(node.left);
-        int[] right = dfs(node.right);
 
-        return new int[]{1 + left[1] + right[1], left[0] + right[0]};
     }
 
 
