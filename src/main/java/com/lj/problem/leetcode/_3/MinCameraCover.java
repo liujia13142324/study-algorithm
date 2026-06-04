@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._3;
 
+import org.junit.Test;
+
 /**
  * 968. 监控二叉树
  * 困难
@@ -26,11 +28,45 @@ package com.lj.problem.leetcode._3;
  */
 public class MinCameraCover {
 
+    @Test
+    public void test() {
+        TreeNode root = new TreeNode(1);
+        root.left = new TreeNode(2);
+        root.left.left = new TreeNode(3);
+        root.left.left.left = new TreeNode(4);
+        root.left.left.left.right = new TreeNode(5);
+        System.out.println(minCameraCover(root));
+    }
+
     public int minCameraCover(TreeNode root) {
+        int[] ans = dfs(root);
+        return Math.min(ans[0], ans[1]);
     }
 
     private int[] dfs(TreeNode node) {
+        int[] ans = new int[] {1, 1, 0};
+        int l0 = 100000000, r0 = 100000000, l1 = 0, r1 = 0;
+        if (node.left != null) {
+            int[] l = dfs(node.left);
+            int tmp = Math.min(l[0], l[1]);
+            ans[0] += Math.min(tmp, l[2]);
+            ans[2] += tmp;
+            l0 = l[0];
+            l1 = l[1];
+        }
 
+        if (node.right != null) {
+            int[] r = dfs(node.right);
+            int tmp = Math.min(r[0], r[1]);
+            ans[0] += Math.min(tmp, r[2]);
+            ans[2] += tmp;
+            r0 = r[0];
+            r1 = r[1];
+        }
+
+        ans[1] = Math.min(l0 + r0, Math.min(l0 + r1, l1 + r0));
+        if (ans[1] >= 100000000) ans[1] = 1;
+        return ans;
     }
 
 
