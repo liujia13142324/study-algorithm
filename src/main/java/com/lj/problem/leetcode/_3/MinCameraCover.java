@@ -38,6 +38,26 @@ public class MinCameraCover {
         System.out.println(minCameraCover(root));
     }
 
+    public int minCameraCover2(TreeNode root) {
+        int[] ans = dfs2(root);
+        return Math.min(ans[0], ans[1]);
+    }
+
+    private int[] dfs2(TreeNode node) {
+        if (node == null) {
+            return new int[]{Integer.MAX_VALUE / 2, 0, 0};
+        }
+        int[] l = dfs2(node.left);
+        int[] r = dfs2(node.right);
+
+        return new int[]{
+                Math.min(l[0], l[2]) + Math.min(r[0], r[2]) + 1,
+                Math.min(l[0] + r[0], Math.min(l[0] + r[1], l[1] + r[0])),
+                Math.min(l[0], l[1]) + Math.min(r[0], r[1])
+        };
+    }
+
+
     public int minCameraCover(TreeNode root) {
         int[] ans = dfs(root);
         return Math.min(ans[0], ans[1]);
