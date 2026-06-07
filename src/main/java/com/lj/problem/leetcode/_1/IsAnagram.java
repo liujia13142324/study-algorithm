@@ -23,7 +23,20 @@ package com.lj.problem.leetcode._1;
 public class IsAnagram {
 
     public boolean isAnagram(String s, String t) {
-
+        if (s.length() != t.length()) return false;
+        char[] chars1 = s.toCharArray();
+        char[] chars2 = t.toCharArray();
+        short[] cnt = new short[26];
+        for (int i = 0; i < chars1.length; i++) {
+            cnt[chars1[i] - 'a']++;
+        }
+        for (int i = 0; i < chars2.length; i++) {
+            if (cnt[chars2[i] - 'a'] < 1) {
+                return false;
+            }
+            cnt[chars2[i] - 'a']--;
+        }
+        return true;
     }
 
 }
