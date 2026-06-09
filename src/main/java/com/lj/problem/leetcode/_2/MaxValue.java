@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._2;
 
+import org.junit.Test;
+
 /**
  * LCP 34. 二叉树染色
  * 中等
@@ -23,18 +25,76 @@ package com.lj.problem.leetcode._2;
  */
 public class MaxValue {
 
-    public int maxValue(TreeNode root, int k) {
+    @Test
+    public void test() {
+        TreeNode root = new TreeNode(8);
+        root.left = new TreeNode(1);
+        root.right = new TreeNode(3);
+        root.left.left = new TreeNode(9);
+        root.left.right = new TreeNode(9);
+        root.right.left = new TreeNode(9);
+        root.left.left.left = new TreeNode(9);
+        root.left.left.right = new TreeNode(5);
+        root.left.right.left = new TreeNode(6);
+        root.left.right.right = new TreeNode(8);
+        System.out.println(maxValue(root, 2));
 
+        root = new TreeNode(1);
+        root.left = new TreeNode(6);
+        root.left.left = new TreeNode(8);
+        root.left.right = new TreeNode(8);
+        root.left.left.right = new TreeNode(5);
+        root.left.right.left = new TreeNode(3);
+        root.left.left.right.left = new TreeNode(7);
+        root.left.left.right.right = new TreeNode(10);
+        root.left.right.left.left = new TreeNode(5);
+        root.left.right.left.right = new TreeNode(8);
+        System.out.println(maxValue(root, 10));
     }
 
+    class Pair<K,V> {
+        K k;
+        V v;
+        Pair(K k, V v) {
+            this.k = k;
+            this.v = v;
+        }
+    }
 
+    public int maxValue(TreeNode root, int k) {
+        Pair<int[], Integer> ans = dfs(root, k);
+        return ans.v;
+    }
 
+    private Pair<int[], Integer> dfs(TreeNode node, int k) {
+        if (node == null) {
+            return new Pair<>(new int[k + 1], 0);
+        }
+        Pair<int[], Integer> l = dfs(node.left, k);
+        Pair<int[], Integer> r = dfs(node.right, k);
 
+        int[] ans = new int[k + 1];
+        ans[0] =  l.v + r.v;
+        int max = ans[0];
+        for (int i = 0; i < k; i++) {
+            int val = 0;
+            for (int j = 0; j <= i; j++) {
+                val = Math.max(val, l.k[j] + r.k[i - j]);
+            }
+            ans[i + 1] = val + node.val;
+            max = Math.max(max, ans[i + 1]);
+        }
+
+        return new Pair<>(ans, max);
+    }
+
+    int nextId;
     public class TreeNode {
+        int id;
         int val;
         TreeNode left;
         TreeNode right;
-        TreeNode(int x) { val = x; }
+        TreeNode(int x) { val = x; id = ++ nextId;}
     }
 
 }
