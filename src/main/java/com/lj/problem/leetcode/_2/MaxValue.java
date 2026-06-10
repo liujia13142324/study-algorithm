@@ -37,7 +37,7 @@ public class MaxValue {
         root.left.left.right = new TreeNode(5);
         root.left.right.left = new TreeNode(6);
         root.left.right.right = new TreeNode(8);
-        System.out.println(maxValue(root, 2));
+        System.out.println(maxValue2(root, 2));
 
         root = new TreeNode(1);
         root.left = new TreeNode(6);
@@ -49,7 +49,7 @@ public class MaxValue {
         root.left.left.right.right = new TreeNode(10);
         root.left.right.left.left = new TreeNode(5);
         root.left.right.left.right = new TreeNode(8);
-        System.out.println(maxValue(root, 10));
+        System.out.println(maxValue2(root, 10));
     }
 
     class Pair<K,V> {
@@ -60,6 +60,38 @@ public class MaxValue {
             this.v = v;
         }
     }
+
+    public int maxValue2(TreeNode root, int k) {
+        int[] ans = dfs3(root, k);
+        return ans[ans.length - 1];
+    }
+
+    private int[] dfs3(TreeNode node, int k) {
+        if (node == null) {
+            return new int[2];
+        }
+        int[] l = dfs3(node.left, k);
+        int[] r = dfs3(node.right, k);
+
+        int[] ans = new int[Math.min(l.length + r.length - 1, k + 2)];
+
+        for (int i = 0; i < l.length - 1; i++) {
+            for (int j = 0; j < r.length - 1 && j < ans.length - i - 2; j++) {
+                ans[i + j + 1] = Math.max(ans[i + j + 1], l[i] + r[j]);
+            }
+        }
+
+        ans[0] =  l[l.length - 1] + r[r.length - 1];
+        int max = ans[0];
+        for (int i = 1; i < ans.length - 1; i++) {
+            ans[i] += node.val;
+            max = Math.max(max, ans[i]);
+        }
+        ans[ans.length - 1] = max;
+
+        return ans;
+    }
+
 
     public int maxValue(TreeNode root, int k) {
         Pair<int[], Integer> ans = dfs2(root, k);
