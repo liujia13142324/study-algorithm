@@ -62,9 +62,35 @@ public class MaxValue {
     }
 
     public int maxValue(TreeNode root, int k) {
-        Pair<int[], Integer> ans = dfs(root, k);
+        Pair<int[], Integer> ans = dfs2(root, k);
         return ans.v;
     }
+
+    private Pair<int[], Integer> dfs2(TreeNode node, int k) {
+        if (node == null) {
+            return new Pair<>(new int[1], 0);
+        }
+        Pair<int[], Integer> l = dfs2(node.left, k);
+        Pair<int[], Integer> r = dfs2(node.right, k);
+
+        int[] ans = new int[Math.min(l.k.length + r.k.length, k + 1)];
+
+        for (int i = 0; i < l.k.length; i++) {
+            for (int j = 0; j < r.k.length && j < ans.length - i - 1; j++) {
+                ans[i + j + 1] = Math.max(ans[i + j + 1], l.k[i] + r.k[j]);
+            }
+        }
+
+        ans[0] =  l.v + r.v;
+        int max = ans[0];
+        for (int i = 1; i < ans.length; i++) {
+            ans[i] += node.val;
+            max = Math.max(max, ans[i]);
+        }
+
+        return new Pair<>(ans, max);
+    }
+
 
     private Pair<int[], Integer> dfs(TreeNode node, int k) {
         if (node == null) {
