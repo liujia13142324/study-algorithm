@@ -44,17 +44,9 @@ import java.util.Map;
 public class CloseLampInTree {
 
     public int closeLampInTree2(TreeNode root) {
-
         return dfs2(root, 0, 0, new HashMap<>());
     }
 
-    /**
-     *
-     * @param node
-     * @param s2  s2 是否切换，偶数次会抵消 --> s2 的奇偶性即代表的 s2 的开关
-     * @param s3  s3 是否切换，
-     * @return
-     */
     private int dfs2(TreeNode node, int s2, int s3, Map<TreeNode, int[][]> cache) {
         if (node == null) return 0;
         if (cache.get(node) != null && cache.get(node)[s2][s3] != -1) {
@@ -88,6 +80,45 @@ public class CloseLampInTree {
         }
 
         return cache.get(node)[s2][s3];
+    }
+
+    private int dfs(TreeNode node, boolean s2, boolean s3, Map<TreeNode, int[][]> cache) {
+        if (node == null) return 0;
+        int i = s2 ? 1 : 0;
+        int j = s3 ? 1 : 0;
+        if (cache.get(node) != null && cache.get(node)[i][j] != -1) {
+            return cache.get(node)[i][j];
+        }
+        // 当前灯是开的情况
+        // 当前开，s2 s3 同时切换抵消了/同时关闭，故还是开
+        // 当前关，s2 s3 一正一负，故还是开
+        if ((node.val == 1) == (s2 == s3)) {
+            // s1 s2 s3 操作奇数次, 灯泡开 -> 关
+            // s1 切换
+            int s1_ = dfs(node.left, s2, false, cache) + dfs(node.right, s2, false, cache) + 1;
+            // s2 切换
+            int s2_ = dfs(node.left, !s2, false, cache) + dfs(node.right, !s2, false, cache) + 1;
+            // s3 切换
+            int s3_ = dfs(node.left, s2, true, cache) + dfs(node.right, s2, true, cache) + 1;
+            // s1 s2 s3 同时切换 (奇数次，当前灯会熄灭)
+            int s123_ = dfs(node.left, !s2, true, cache) + dfs(node.right, !s2, true, cache) + 3;
+
+            cache.computeIfAbsent(node, k -> new int[][]{{-1, -1}, {-1, -1}})[i][j] = Math.min(s123_, Math.min(s3_, Math.min(s1_, s2_)));
+        } else {
+            // s1 s2 s3 操作偶数次，灯泡保持关闭
+            // s0 啥也不操作
+            int s0_ = dfs(node.left, s2, false, cache) + dfs(node.right, s2, false, cache);
+            // s12 切换
+            int s12_ = dfs(node.left, !s2, false, cache) + dfs(node.right, !s2, false, cache) + 2;
+            // s13 切换
+            int s13_ = dfs(node.left, s2, true, cache) + dfs(node.right, s2, true, cache) + 2;
+            // s23 切换
+            int s23_ = dfs(node.left, !s2, true, cache) + dfs(node.right, !s2, true, cache) + 2;
+
+            cache.computeIfAbsent(node, k -> new int[][]{{-1, -1}, {-1, -1}})[i][j] = Math.min(s0_, Math.min(s12_, Math.min(s13_, s23_)));
+        }
+
+        return cache.get(node)[i][j];
     }
 
 
