@@ -60,7 +60,7 @@ public class MaxValue {
             this.v = v;
         }
     }
-
+    // TODO 写一篇题解
     public int maxValue2(TreeNode root, int k) {
         int[] ans = dfs3(root, k);
         return ans[ans.length - 1];
