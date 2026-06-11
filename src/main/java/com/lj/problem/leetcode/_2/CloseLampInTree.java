@@ -41,9 +41,45 @@ package com.lj.problem.leetcode._2;
 public class CloseLampInTree {
 
     public int closeLampInTree(TreeNode root) {
-
+        return dfs(root, false, false);
     }
 
+    /**
+     *
+     * @param node
+     * @param s2  s2 是否切换，偶数次会抵消
+     * @param s3  s3 是否切换，
+     * @return
+     */
+    private int dfs(TreeNode node, boolean s2, boolean s3) {
+        if (node == null) return 0;
+        // 当前灯是开的情况
+        // 当前开，s2 s3 同时切换抵消了/同时关闭，故还是开
+        // 当前关，s2 s3 一正一负，故还是开
+        if ((node.val == 1) == (s2 == s3)) {
+            // s1 s2 s3 操作奇数次, 灯泡开 -> 关
+            // s1 切换
+            int s1_ = dfs(node.left, s2, false) + dfs(node.right, s2, false) + 1;
+            // s2 切换
+            int s2_ = dfs(node.left, !s2, false) + dfs(node.right, !s2, false) + 1;
+            // s3 切换
+            int s3_ = dfs(node.left, s2, true) + dfs(node.right, s2, true) + 1;
+            // s1 s2 s3 同时切换 (奇数次，当前灯会熄灭)
+            int s123_ = dfs(node.left, !s2, true) + dfs(node.right, !s2, true) + 3;
+            return Math.min(s123_, Math.min(s3_, Math.min(s1_, s2_)));
+        } else {
+            // s1 s2 s3 操作偶数次，灯泡保持关闭
+            // s0 啥也不操作
+            int s0_ = dfs(node.left, s2, false) + dfs(node.right, s2, false);
+            // s12 切换
+            int s12_ = dfs(node.left, !s2, false) + dfs(node.right, !s2, false) + 2;
+            // s13 切换
+            int s13_ = dfs(node.left, s2, true) + dfs(node.right, s2, true) + 2;
+            // s23 切换
+            int s23_ = dfs(node.left, !s2, true) + dfs(node.right, !s2, true) + 2;
+            return Math.min(s0_, Math.min(s12_, Math.min(s13_, s23_)));
+        }
+    }
 
 
     public class TreeNode {
