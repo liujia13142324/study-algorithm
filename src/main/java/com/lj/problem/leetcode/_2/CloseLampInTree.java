@@ -73,10 +73,7 @@ public class CloseLampInTree {
             int s3_ = dfs2(node.left, s2, 1, cache) + dfs2(node.right, s2, 1, cache) + 1;
             // s1 s2 s3 同时切换 (奇数次，当前灯会熄灭)
             int s123_ = dfs2(node.left, s2 ^ 1, 1, cache) + dfs2(node.right, s2 ^ 1, 1, cache) + 3;
-            if (cache.get(node) == null) {
-                cache.put(node, new int[][]{{-1, -1}, {-1, -1}});
-            }
-            cache.get(node)[s2][s3] = Math.min(s123_, Math.min(s3_, Math.min(s1_, s2_)));
+            cache.computeIfAbsent(node, k -> new int[][]{{-1, -1}, {-1, -1}})[s2][s3] = Math.min(s123_, Math.min(s3_, Math.min(s1_, s2_)));
         } else {
             // s1 s2 s3 操作偶数次，灯泡保持关闭
             // s0 啥也不操作
@@ -87,10 +84,7 @@ public class CloseLampInTree {
             int s13_ = dfs2(node.left, s2, 1, cache) + dfs2(node.right, s2, 1, cache) + 2;
             // s23 切换
             int s23_ = dfs2(node.left, s2 ^ 1, 1, cache) + dfs2(node.right, s2 ^ 1, 1, cache) + 2;
-            if (cache.get(node) == null) {
-                cache.put(node, new int[][]{{-1, -1}, {-1, -1}});
-            }
-            cache.get(node)[s2][s3] = Math.min(s0_, Math.min(s12_, Math.min(s13_, s23_)));
+            cache.computeIfAbsent(node, k -> new int[][]{{-1, -1}, {-1, -1}})[s2][s3] = Math.min(s0_, Math.min(s12_, Math.min(s13_, s23_)));
         }
 
         return cache.get(node)[s2][s3];
