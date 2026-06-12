@@ -27,41 +27,25 @@ package com.lj.problem.leetcode._2;
  */
 public class DailyTemperatures {
 
-    int idx = 0;
 
     public int[] dailyTemperatures(int[] temperatures) {
         int[][] stack = new int[temperatures.length][2];
         int[] ans = new int[temperatures.length];
+        int idx = 0;
         for (int i = 0; i < temperatures.length; i++) {
-            while (!isEmpty() && peek(stack)[0] < temperatures[i]) {
-                int[] pop = pop(stack);
+            while (idx != 0 && stack[idx - 1][0] < temperatures[i]) {
+                int[] pop = stack[--idx];
                 ans[pop[1]] = i - pop[1];
             }
-            push(stack, new int[]{temperatures[i], i});
+            stack[idx ++] = new int[]{temperatures[i], i};
         }
 
-        while (!isEmpty()) {
-            int[] pop = pop(stack);
+        while (idx != 0) {
+            int[] pop = stack[--idx];
             ans[pop[1]] = 0;
         }
 
         return ans;
-    }
-
-    private void push(int[][] stack, int[] element) {
-        stack[idx ++] = element;
-    }
-
-    private int[] pop(int[][] stack) {
-        return stack[--idx];
-    }
-
-    private int[] peek(int[][] stack) {
-        return stack[idx - 1];
-    }
-
-    private boolean isEmpty() {
-        return idx == 0;
     }
 
 }
