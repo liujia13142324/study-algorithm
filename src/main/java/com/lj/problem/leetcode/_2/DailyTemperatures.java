@@ -44,21 +44,20 @@ public class DailyTemperatures {
     }
 
 
-        public int[] dailyTemperatures(int[] temperatures) {
-        int[][] stack = new int[temperatures.length][2];
+    public int[] dailyTemperatures(int[] temperatures) {
+        int[] stack = new int[temperatures.length];
         int[] ans = new int[temperatures.length];
         int idx = 0;
         for (int i = 0; i < temperatures.length; i++) {
-            while (idx != 0 && stack[idx - 1][0] < temperatures[i]) {
-                int[] pop = stack[--idx];
-                ans[pop[1]] = i - pop[1];
+            while (idx != 0 && temperatures[stack[idx - 1]] < temperatures[i]) {
+                ans[stack[idx - 1]] = i - stack[idx - 1];
+                idx--;
             }
-            stack[idx ++] = new int[]{temperatures[i], i};
+            stack[idx ++] = i;
         }
 
         while (idx != 0) {
-            int[] pop = stack[--idx];
-            ans[pop[1]] = 0;
+            ans[stack[--idx]] = 0;
         }
 
         return ans;
