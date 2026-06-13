@@ -55,11 +55,6 @@ public class DailyTemperatures {
             }
             stack[idx ++] = i;
         }
-
-        while (idx != 0) {
-            ans[stack[--idx]] = 0;
-        }
-
         return ans;
     }
 
