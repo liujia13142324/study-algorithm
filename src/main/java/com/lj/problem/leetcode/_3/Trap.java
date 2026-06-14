@@ -27,9 +27,37 @@ public class Trap {
         System.out.println(trap2(new int[]{4,2,0,3,2,5}));
         System.out.println(trap2(new int[]{5,5,1,7,1,1,5,2,7,6}));
 
-        System.out.println(trap3(new int[]{0,1,0,2,1,0,1,3,2,1,2,1}));
-        System.out.println(trap3(new int[]{4,2,0,3,2,5}));
-        System.out.println(trap3(new int[]{5,5,1,7,1,1,5,2,7,6}));
+        System.out.println(trap5(new int[]{0,1,0,2,1,0,1,3,2,1,2,1}));
+        System.out.println(trap5(new int[]{4,2,0,3,2,5}));
+        System.out.println(trap5(new int[]{5,5,1,7,1,1,5,2,7,6}));
+    }
+
+    /**
+     * 单调栈
+     * @param height
+     * @return
+     */
+    public int trap5(int[] height) {
+        int[] stack = new int[height.length];
+        int idx = 0;
+        int ans = 0;
+        for (int h: height) {
+            if (idx != 0 && stack[idx - 1] < h) {
+                if (stack[0] > h) {
+                    for (int j = idx - 1; stack[j] < h; j--) {
+                        ans += h - stack[j];
+                        stack[j] = h;
+                    }
+                }else {
+                    for (int j = 1; j < idx; j++) {
+                        ans += stack[0] - stack[j];
+                    }
+                    idx = 0;
+                }
+            }
+            stack[idx++] = h;
+        }
+        return ans;
     }
 
     public int trap3(int[] height) {
