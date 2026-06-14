@@ -48,6 +48,23 @@ public class Trap {
         return ans;
     }
 
+    public int trap4(int[] height) {
+        int lmax = height[0];
+        int rmax = height[height.length - 1];
+        int l = 0, r = height.length - 1;
+        int ans = 0;
+        while (l < r) {
+            if (height[l] < height[r]) {
+                lmax = Math.max(lmax, height[++l]);
+                ans += Math.max(0, Math.min(lmax, rmax) - height[l]);
+            }else {
+                rmax = Math.max(rmax, height[--r]);
+                ans += Math.max(0, Math.min(lmax, rmax) - height[r]);
+            }
+        }
+        return ans;
+    }
+
     public int trap2(int[] height) {
         int[] maxL = new int[height.length];
         int[] maxR = new int[height.length];
