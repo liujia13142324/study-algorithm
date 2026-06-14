@@ -19,17 +19,61 @@ public class Trap {
 
     @Test
     public void test() {
-        System.out.println(trap(new int[]{0,1,0,2,1,0,1,3,2,1,2,1}));
-        System.out.println(trap(new int[]{4,2,0,3,2,5}));
-        System.out.println(trap(new int[]{5,5,1,7,1,1,5,2,7,6}));
+//        System.out.println(trap(new int[]{0,1,0,2,1,0,1,3,2,1,2,1}));
+//        System.out.println(trap(new int[]{4,2,0,3,2,5}));
+//        System.out.println(trap(new int[]{5,5,1,7,1,1,5,2,7,6}));
 
-        System.out.println(trap2(new int[]{0,1,0,2,1,0,1,3,2,1,2,1}));
-        System.out.println(trap2(new int[]{4,2,0,3,2,5}));
-        System.out.println(trap2(new int[]{5,5,1,7,1,1,5,2,7,6}));
+//        System.out.println(trap2(new int[]{0,1,0,2,1,0,1,3,2,1,2,1}));
+//        System.out.println(trap2(new int[]{4,2,0,3,2,5}));
+//        System.out.println(trap2(new int[]{5,5,1,7,1,1,5,2,7,6}));
 
-        System.out.println(trap5(new int[]{0,1,0,2,1,0,1,3,2,1,2,1}));
-        System.out.println(trap5(new int[]{4,2,0,3,2,5}));
-        System.out.println(trap5(new int[]{5,5,1,7,1,1,5,2,7,6}));
+        System.out.println(trap6(new int[]{0,1,0,2,1,0,1,3,2,1,2,1}));
+        System.out.println(trap6(new int[]{4,2,0,3,2,5}));
+        System.out.println(trap6(new int[]{5,5,1,7,1,1,5,2,7,6}));
+    }
+
+    /**
+     * 双指针
+     * @param height
+     * @return
+     */
+    public int trap3(int[] height) {
+        int l = 0, r = height.length - 1, ans = 0 , maxL = 0, maxR = 0;
+        while (l < r) {
+            if (height[l] <= height[r]) {
+                maxL = Math.max(maxL, height[l]);
+                ans += maxL - height[l];
+                l++;
+            }else {
+                maxR = Math.max(maxR, height[r]);
+                ans += maxR - height[r];
+                r--;
+            }
+        }
+        return ans;
+    }
+
+    /**
+     * 单调栈
+     * @param height
+     * @return
+     */
+    public int trap6(int[] height) {
+        int[] stack = new int[height.length];
+        int idx = -1;
+        int ans = 0;
+        for (int i = 0; i < height.length; i++) {
+            while (idx != -1 && height[stack[idx]] <= height[i]) {
+                idx--;
+                if (idx == -1) {
+                    break;
+                }
+                int h = Math.min(height[stack[idx]], height[i]) - height[stack[idx + 1]];
+                ans += h * (i - stack[idx] - 1);
+            }
+            stack[++idx] = i;
+        }
+        return ans;
     }
 
     /**
@@ -60,22 +104,13 @@ public class Trap {
         return ans;
     }
 
-    public int trap3(int[] height) {
-        int l = 0, r = height.length - 1, ans = 0 , maxL = 0, maxR = 0;
-        while (l < r) {
-            if (height[l] <= height[r]) {
-                maxL = Math.max(maxL, height[l]);
-                ans += maxL - height[l];
-                l++;
-            }else {
-                maxR = Math.max(maxR, height[r]);
-                ans += maxR - height[r];
-                r--;
-            }
-        }
-        return ans;
-    }
 
+
+    /**
+     * 双指针
+     * @param height
+     * @return
+     */
     public int trap4(int[] height) {
         int lmax = height[0];
         int rmax = height[height.length - 1];
