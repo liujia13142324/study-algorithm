@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._2;
 
+import java.util.Arrays;
+
 /**
  * 503. 下一个更大元素 II
  * 中等
@@ -30,7 +32,24 @@ package com.lj.problem.leetcode._2;
 public class NextGreaterElements {
 
     public int[] nextGreaterElements(int[] nums) {
+        int[] stack = new int[nums.length];
+        int[] ans = new int[nums.length];
+        Arrays.fill(ans, -1);
+        int index = -1;
+        for (int i = 0; i < nums.length; i++) {
+            while (index != -1 && nums[i] > nums[stack[index]]) {
+                ans[stack[index--]] = nums[i];
+            }
+            stack[++index] = i;
+        }
 
+        for (int num: nums) {
+            while (num > nums[stack[index]]) {
+                ans[stack[index--]] = num;
+            }
+        }
+
+        return ans;
     }
 
 }
