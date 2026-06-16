@@ -41,6 +41,12 @@ import java.util.Arrays;
  */
 public class NextGreaterElement {
 
+    /**
+     * 单调栈，从左往右
+     * @param nums1
+     * @param nums2
+     * @return
+     */
     public int[] nextGreaterElement(int[] nums1, int[] nums2) {
         int[] mapping = new int[10001];
         int[] ans = new int[nums1.length];
@@ -57,6 +63,32 @@ public class NextGreaterElement {
                 idx--;
             }
             stack[++idx] = num;
+        }
+        return ans;
+    }
+
+    /**
+     * 单调栈，从右往左
+     * @param nums1
+     * @param nums2
+     * @return
+     */
+    public int[] nextGreaterElement2(int[] nums1, int[] nums2) {
+        int[] mapping = new int[10001];
+        int[] ans = new int[nums1.length];
+        Arrays.fill(mapping, -1);
+        Arrays.fill(ans, - 1);
+        for (int i = 0; i < nums1.length; i++) mapping[nums1[i]] = i;
+        int[] stack = new int[nums2.length];
+        int idx = -1;
+        for (int i = nums2.length - 1; i >= 0; i--) {
+            while (idx != -1 && nums2[i] >= stack[idx]) {
+                idx--;
+            }
+            if (idx != -1 && mapping[nums2[i]] != -1) {
+                ans[mapping[nums2[i]]] = stack[idx];
+            }
+            stack[++idx] = nums2[i];
         }
         return ans;
     }
