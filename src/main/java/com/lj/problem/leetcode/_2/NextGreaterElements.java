@@ -28,4 +28,9 @@ package com.lj.problem.leetcode._2;
  * -109 <= nums[i] <= 109
  */
 public class NextGreaterElements {
+
+    public int[] nextGreaterElements(int[] nums) {
+
+    }
+
 }
