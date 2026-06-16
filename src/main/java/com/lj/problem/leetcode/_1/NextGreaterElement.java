@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._1;
 
+import java.util.Arrays;
+
 /**
  * 496. 下一个更大元素 I
  * nums1 中数字 x 的 下一个更大元素 是指 x 在 nums2 中对应位置 右侧 的 第一个 比 x 大的元素。
@@ -40,7 +42,23 @@ package com.lj.problem.leetcode._1;
 public class NextGreaterElement {
 
     public int[] nextGreaterElement(int[] nums1, int[] nums2) {
-
+        int[] mapping = new int[10001];
+        int[] ans = new int[nums1.length];
+        Arrays.fill(mapping, -1);
+        Arrays.fill(ans, - 1);
+        for (int i = 0; i < nums1.length; i++) mapping[nums1[i]] = i;
+        int[] stack = new int[nums2.length];
+        int idx = -1;
+        for (int num: nums2) {
+            while (idx != -1 && num > stack[idx]) {
+                if (mapping[stack[idx]] != -1) {
+                    ans[stack[idx]] = num;
+                }
+                idx--;
+            }
+            stack[++idx] = num;
+        }
+        return ans;
     }
 
 }
