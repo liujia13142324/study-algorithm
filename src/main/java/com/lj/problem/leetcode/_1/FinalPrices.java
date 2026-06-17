@@ -1,5 +1,9 @@
 package com.lj.problem.leetcode._1;
 
+import org.junit.Test;
+
+import java.util.Arrays;
+
 /**
  * 1475. 商品折扣后的最终价格
  * 给你一个数组 prices ，其中 prices[i] 是商店里第 i 件商品的价格。
@@ -37,6 +41,16 @@ package com.lj.problem.leetcode._1;
  */
 public class FinalPrices {
 
+    @Test
+    public void test() {
+        System.out.println(Arrays.toString(finalPrices2(new int[]{})));
+    }
+
+    /**
+     * 从左往右
+     * @param prices
+     * @return
+     */
     public int[] finalPrices(int[] prices) {
         int[] ans = new int[prices.length];
         System.arraycopy(prices, 0, ans, 0, prices.length);
@@ -46,6 +60,30 @@ public class FinalPrices {
             while (idx != -1 && prices[stack[idx]] >= prices[i]) {
                 ans[stack[idx]] = prices[stack[idx]] - prices[i];
                 idx--;
+            }
+            stack[++idx] = i;
+        }
+
+        return ans;
+    }
+
+
+    /**
+     * 从右往左
+     * @param prices
+     * @return
+     */
+    public int[] finalPrices2(int[] prices) {
+        int[] ans = new int[prices.length];
+        System.arraycopy(prices, 0, ans, 0, prices.length);
+        int[] stack = new int[prices.length];
+        int idx = -1;
+        for (int i = prices.length - 1; i >= 0; i--) {
+            while (idx != -1 && prices[stack[idx]] > prices[i]) {
+                idx--;
+            }
+            if (idx != -1) {
+                ans[i] = prices[i] - prices[stack[idx]];
             }
             stack[++idx] = i;
         }
