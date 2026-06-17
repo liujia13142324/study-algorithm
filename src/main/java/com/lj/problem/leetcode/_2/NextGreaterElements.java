@@ -32,7 +32,7 @@ import java.util.Arrays;
 public class NextGreaterElements {
 
     /**
-     * 从左到右，分开遍历
+     * 从左到右，分开遍历 --> 从右往左可以不用存下标，直接存值，详情见最后种写法
      * @param nums
      * @return
      */
@@ -112,13 +112,13 @@ public class NextGreaterElements {
         int index = -1;
         for (int i = 2 * nums.length - 1; i >= 0; i--) {
             int x = nums[i % nums.length];
-            while (index != -1 && x >= nums[stack[index]]) {
+            while (index != -1 && x >= stack[index]) {
                 index--;
             }
             if (index != -1 && i < nums.length) {
-                ans[i] = nums[stack[index]];
+                ans[i] = stack[index];
             }
-            stack[++index] = i % nums.length;
+            stack[++index] = x;
         }
         return ans;
     }
