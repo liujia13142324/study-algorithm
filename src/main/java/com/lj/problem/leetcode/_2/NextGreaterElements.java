@@ -91,12 +91,34 @@ public class NextGreaterElements {
         Arrays.fill(ans, -1);
         int index = -1;
         for (int i = 0; i < 2 * nums.length; i++) {
-            int i_ = i % nums.length;
-            int x = nums[i_];
+            int x = nums[i % nums.length];
             while (index != -1 && x > nums[stack[index]]) {
                 ans[stack[index--]] = x;
             }
-            stack[++index] = i_;
+            stack[++index] = i % nums.length;
+        }
+        return ans;
+    }
+
+    /**
+     * 从右往左
+     * @param nums
+     * @return
+     */
+    public int[] nextGreaterElements3(int[] nums) {
+        int[] stack = new int[nums.length];
+        int[] ans = new int[nums.length];
+        Arrays.fill(ans, -1);
+        int index = -1;
+        for (int i = 2 * nums.length - 1; i >= 0; i--) {
+            int x = nums[i % nums.length];
+            while (index != -1 && x >= nums[stack[index]]) {
+                index--;
+            }
+            if (index != -1 && i < nums.length) {
+                ans[i] = nums[stack[index]];
+            }
+            stack[++index] = i % nums.length;
         }
         return ans;
     }
