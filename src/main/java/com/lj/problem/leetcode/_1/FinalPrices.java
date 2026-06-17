@@ -38,7 +38,19 @@ package com.lj.problem.leetcode._1;
 public class FinalPrices {
 
     public int[] finalPrices(int[] prices) {
+        int[] ans = new int[prices.length];
+        System.arraycopy(prices, 0, ans, 0, prices.length);
+        int[] stack = new int[prices.length];
+        int idx = -1;
+        for (int i = 0; i < prices.length; i++) {
+            while (idx != -1 && prices[stack[idx]] >= prices[i]) {
+                ans[stack[idx]] = prices[stack[idx]] - prices[i];
+                idx--;
+            }
+            stack[++idx] = i;
+        }
 
+        return ans;
     }
 
 }
