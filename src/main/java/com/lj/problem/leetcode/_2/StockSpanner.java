@@ -39,22 +39,28 @@ package com.lj.problem.leetcode._2;
  */
 public class StockSpanner {
 
-    int idx;
-    int[] nums;
+    int idx0;
+    int idx1;
+    static int[] prices = new int[10001];
+    static int[] stack = new int[10001];
+
+    static {
+        prices[0] = Integer.MAX_VALUE;
+        stack[0] = 0;
+    }
 
     public StockSpanner() {
-        idx = -1;
-        nums = new int[10000];
+        idx0 = 0;
+        idx1 = 0;
     }
 
     public int next(int price) {
-        int i = idx;
-        int ans = 1;
-        while (i != -1 && nums[i--] <= price) {
-            ans++;
+        prices[++idx0] = price;
+        while (prices[stack[idx1]] <= price) {
+            idx1--;
         }
-        nums[++idx] = price;
-        return ans;
+        stack[++idx1] = idx0;
+        return idx0 - stack[idx1 - 1];
     }
 
 }
