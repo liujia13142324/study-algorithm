@@ -31,6 +31,11 @@ import java.util.Arrays;
  */
 public class NextGreaterElements {
 
+    /**
+     * 从左到右，分开遍历
+     * @param nums
+     * @return
+     */
     public int[] nextGreaterElements(int[] nums) {
         int[] stack = new int[nums.length];
         int[] ans = new int[nums.length];
@@ -49,6 +54,50 @@ public class NextGreaterElements {
             }
         }
 
+        return ans;
+    }
+
+    /**
+     * 从左到右1次遍历1
+     * @param nums
+     * @return
+     */
+    public int[] nextGreaterElements2(int[] nums) {
+        int[] stack = new int[nums.length];
+        int[] ans = new int[nums.length];
+        Arrays.fill(ans, -1);
+        int index = -1;
+        for (int i = 0; i < 2 * nums.length; i++) {
+            int x = nums[i % nums.length];
+            while (index != -1 && x > nums[stack[index]]) {
+                ans[stack[index--]] = x;
+            }
+             if (i < nums.length) {
+                stack[++index] = i;
+             }
+        }
+
+        return ans;
+    }
+
+    /**
+     * 从左到右1次遍历2
+     * @param nums
+     * @return
+     */
+    public int[] nextGreaterElements2_(int[] nums) {
+        int[] stack = new int[nums.length * 2];
+        int[] ans = new int[nums.length];
+        Arrays.fill(ans, -1);
+        int index = -1;
+        for (int i = 0; i < 2 * nums.length; i++) {
+            int i_ = i % nums.length;
+            int x = nums[i_];
+            while (index != -1 && x > nums[stack[index]]) {
+                ans[stack[index--]] = x;
+            }
+            stack[++index] = i_;
+        }
         return ans;
     }
 
