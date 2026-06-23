@@ -45,7 +45,8 @@ public class CanSeePersonsCount {
 
     @Test
     public void test() {
-        System.out.println(Arrays.toString(canSeePersonsCount(new int[]{4,3,2,1})));
+//        System.out.println(Arrays.toString(canSeePersonsCount(new int[]{4,3,2,1})));
+        System.out.println(Arrays.toString(canSeePersonsCount2(new int[]{10,6,8,5,10,12})));
     }
 
     public int[] canSeePersonsCount(int[] heights) {
@@ -62,6 +63,24 @@ public class CanSeePersonsCount {
                 c++;
             }
             ans[i] = c;
+            stack[++idx] = i;
+        }
+        return ans;
+    }
+
+    public int[] canSeePersonsCount2(int[] heights) {
+        int[] stack = new int[heights.length];
+        int[] ans = new int[heights.length];
+        int idx = -1;
+        for (int i = 0; i < heights.length; i++) {
+            // 正常需要 >=, 但题目中 height 互不相同，故 >, >= 都可
+            while (idx != -1 && heights[i] >= heights[stack[idx]]) {
+                int j = stack[idx--];
+                ans[j]++;
+            }
+            if (idx != -1) {
+                ans[stack[idx]] ++;
+            }
             stack[++idx] = i;
         }
         return ans;
