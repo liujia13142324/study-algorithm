@@ -55,17 +55,14 @@ public class CanSeePersonsCount {
         for (int i = heights.length - 1; i >= 0; i--) {
             int c = 0;
             while (idx != -1 && heights[i] >= heights[stack[idx]]) {
-                int top = stack[idx--];
-                if (idx != -1) {
-                    ans[top] ++;
-                }
+                idx--;
+                c++;
+            }
+            if (idx != - 1) {
                 c++;
             }
             ans[i] = c;
             stack[++idx] = i;
-        }
-        while (idx > 0) {
-            ans[stack[idx--]] ++;
         }
         return ans;
     }
