@@ -1,5 +1,9 @@
 package com.lj.problem.leetcode._3;
 
+import org.junit.Test;
+
+import java.util.Arrays;
+
 /**
  * 1944. 队列中可以看到的人数
  * 困难
@@ -39,8 +43,30 @@ package com.lj.problem.leetcode._3;
  */
 public class CanSeePersonsCount {
 
-    public int[] canSeePersonsCount(int[] heights) {
-
+    @Test
+    public void test() {
+        System.out.println(Arrays.toString(canSeePersonsCount(new int[]{4,3,2,1})));
     }
 
+    public int[] canSeePersonsCount(int[] heights) {
+        int[] stack = new int[heights.length];
+        int[] ans = new int[heights.length];
+        int idx = -1;
+        for (int i = heights.length - 1; i >= 0; i--) {
+            int c = 0;
+            while (idx != -1 && heights[i] >= heights[stack[idx]]) {
+                int top = stack[idx--];
+                if (idx != -1) {
+                    ans[top] ++;
+                }
+                c++;
+            }
+            ans[i] = c;
+            stack[++idx] = i;
+        }
+        while (idx > 0) {
+            ans[stack[idx--]] ++;
+        }
+        return ans;
+    }
 }
