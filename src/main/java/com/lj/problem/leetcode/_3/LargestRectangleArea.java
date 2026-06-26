@@ -27,8 +27,8 @@ public class LargestRectangleArea {
 
     @Test
     public void test() {
-        System.out.println(largestRectangleArea(new int[]{999,999,999,999}));
-        System.out.println(largestRectangleArea(new int[]{5, 4, 1, 2}));
+        System.out.println(largestRectangleArea2(new int[]{999,999,999,999}));
+        System.out.println(largestRectangleArea2(new int[]{5, 4, 1, 2}));
     }
 
     public int largestRectangleArea(int[] heights) {
@@ -47,6 +47,31 @@ public class LargestRectangleArea {
             }
         }
 
+        return ans;
+    }
+
+
+    public int largestRectangleArea2(int[] heights) {
+        int ans = 0;
+        int[] stack = new int[heights.length + 1];
+        int idx = -1;
+        stack[++idx] = -1;
+
+        for (int i = 0; i < heights.length; i++) {
+            if (idx != 0 && heights[stack[idx]] >= heights[i]) {
+                for (int j = 0; j < idx; j++) {
+                    ans = Math.max(ans, (stack[idx] - stack[j]) * heights[stack[j + 1]]);
+                }
+                while (idx != 0 && heights[stack[idx]] >= heights[i]) {
+                    idx--;
+                }
+            }
+            stack[++idx] = i;
+        }
+
+        for (int j = 0; j < idx; j++) {
+            ans = Math.max(ans, (stack[idx] - stack[j]) * heights[stack[j + 1]]);
+        }
         return ans;
     }
 }
