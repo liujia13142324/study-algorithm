@@ -2,6 +2,8 @@ package com.lj.problem.leetcode._3;
 
 import org.junit.Test;
 
+import java.util.Arrays;
+
 /**
  * 84. 柱状图中最大的矩形
  * 给定 n 个非负整数，用来表示柱状图中各个柱子的高度。每个柱子彼此相邻，且宽度为 1 。
@@ -27,13 +29,13 @@ public class LargestRectangleArea {
 
     @Test
     public void test() {
-//        System.out.println(largestRectangleArea3(new int[]{999,999,999,999}));
-//        System.out.println(largestRectangleArea3(new int[]{5, 4, 1, 2}));
-        System.out.println(largestRectangleArea3(new int[]{1}));
+        System.out.println(largestRectangleArea3_2(new int[]{999,999,999,999}));
+        System.out.println(largestRectangleArea3_2(new int[]{5, 4, 1, 2}));
+        System.out.println(largestRectangleArea3_2(new int[]{1}));
     }
 
     /**
-     * 三次遍历
+     * 我的三次遍历，比一般两次遍历强
      * @param heights
      * @return
      */
@@ -62,7 +64,34 @@ public class LargestRectangleArea {
         return ans;
     }
 
-    public int largestRectangleArea(int[] heights) {
+    /**
+     * 正统两次遍历
+     * @param heights
+     * @return
+     */
+    public int largestRectangleArea3_2(int[] heights) {
+        int[] left = new int[heights.length];
+        int[] right = new int[heights.length];
+        Arrays.fill(right, heights.length);
+        int[] stack =  new int[heights.length + 1];
+        int idx = -1;
+        stack[++idx] = -1;
+        for (int i = 0; i < heights.length; i++) {
+            while (idx != 0 && heights[stack[idx]] > heights[i]) {
+                right[stack[idx--]] = i;
+            }
+            left[i] = stack[idx];
+            stack[++idx] = i;
+        }
+
+        int ans = 0;
+        for (int i = 0; i < heights.length; i++) {
+            ans = Math.max(ans, heights[i] * (right[i] - left[i] - 1));
+        }
+        return ans;
+    }
+
+        public int largestRectangleArea(int[] heights) {
         int ans = 0;
         int[] stack = new int[heights.length + 1];
         int idx = -1;
