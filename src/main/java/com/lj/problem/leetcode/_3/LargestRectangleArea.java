@@ -35,7 +35,34 @@ public class LargestRectangleArea {
     }
 
     /**
-     * 我的三次遍历，比一般一次遍历强，快1s （看起来是正统的一次遍历）,
+     * 去掉 minWidth 数组
+     * @param heights
+     * @return
+     */
+    public int largestRectangleArea3_1(int[] heights) {
+        int[] stack = new int[heights.length + 1];
+        int idx = -1;
+        stack[++idx] = -1;
+        int ans = 0;
+
+        for (int i = 0; i < heights.length; i++) {
+            // 这个 >= 都行？ 举例：1,3,4,3,2
+            // 一样的，没有等号，左边的3正常，但是右边的3偏小。有等号，左边的3偏小，但是右边的3正常
+            while (idx > 0 && heights[stack[idx]] > heights[i]) {
+                ans = Math.max(ans, (i - stack[idx - 1] - 1) * heights[stack[idx--]]);
+            }
+            stack[++idx] = i;
+        }
+
+        for (int i = 1; i <= idx; i++) {
+            ans = Math.max(ans, (heights.length - stack[i - 1] - 1) * heights[stack[i]]);
+        }
+
+        return ans;
+    }
+
+    /**
+     * 我的二次遍历，比一般一次遍历强，快1s,
      * @param heights
      * @return
      */
