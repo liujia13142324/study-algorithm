@@ -27,7 +27,37 @@ package com.lj.problem.leetcode._3;
  */
 public class MaximalRectangle {
 
-    public int maximalRectangle(char[][] matrix) {
 
+    /**
+     * 做 m 次 84 题
+     * @param matrix
+     * @return
+     */
+    public int maximalRectangle(char[][] matrix) {
+        char[] arr = new char[matrix[0].length];
+        int[] stack = new int[matrix[0].length + 1];
+        int ans = 0;
+
+        for (char[] chars : matrix) {
+            for (int j = 0; j < chars.length; j++) {
+                if (chars[j] == '1') {
+                    arr[j]++;
+                } else {
+                    arr[j] = 0;
+                }
+            }
+            int idx = -1;
+            stack[++idx] = -1;
+            for (int j = 0; j <= arr.length; j++) {
+                int h = j == chars.length ? -1 : arr[j];
+                while (idx > 0 && arr[stack[idx]] > h) {
+                    ans = Math.max(ans, (j - stack[idx - 1] - 1) * arr[stack[idx]]);
+                    idx--;
+                }
+                stack[++idx] = j;
+            }
+        }
+
+        return ans;
     }
 }
