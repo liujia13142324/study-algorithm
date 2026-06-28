@@ -37,6 +37,12 @@ public class MaximumScore2 {
         System.out.println(maximumScore(arr, 232));
     }
 
+    /**
+     * 单调栈  TODO 双指针
+     * @param nums
+     * @param k
+     * @return
+     */
     public int maximumScore(int[] nums, int k) {
         int[] stack = new int[nums.length + 1];
         int idx = -1;
