@@ -29,13 +29,13 @@ public class LargestRectangleArea {
 
     @Test
     public void test() {
-        System.out.println(largestRectangleArea3_2(new int[]{999,999,999,999}));
-        System.out.println(largestRectangleArea3_2(new int[]{5, 4, 1, 2}));
-        System.out.println(largestRectangleArea3_2(new int[]{1}));
+        System.out.println(largestRectangleArea4(new int[]{999,999,999,999}));
+        System.out.println(largestRectangleArea4(new int[]{5, 4, 1, 2}));
+        System.out.println(largestRectangleArea4(new int[]{1}));
     }
 
     /**
-     * 我的三次遍历，比一般两次遍历强
+     * 我的三次遍历，比一般一次遍历强，快1s （看起来是正统的一次遍历）,
      * @param heights
      * @return
      */
@@ -46,6 +46,8 @@ public class LargestRectangleArea {
         stack[++idx] = -1;
 
         for (int i = 0; i < heights.length; i++) {
+            // 这个 >= 都行？ 举例：1,3,4,3,2
+            // 一样的，没有等号，左边的3正常，但是右边的3偏小。有等号，左边的3偏小，但是右边的3正常
             while (idx > 0 && heights[stack[idx]] > heights[i]) {
                 maxWidth[stack[idx]] = i - stack[--idx] - 1;
             }
@@ -61,6 +63,26 @@ public class LargestRectangleArea {
             ans = Math.max(ans, heights[i] * maxWidth[i]);
         }
 
+        return ans;
+    }
+
+    /**
+     * 一次遍历，加哨兵 （height 遍历完后的那个-1）
+     * @param heights
+     * @return
+     */
+    public int largestRectangleArea4(int[] heights) {
+        int[] stack = new int[heights.length + 1];
+        int idx = -1;
+        stack[++idx] = -1;
+        int ans = 0;
+        for (int i = 0; i <= heights.length; i++) {
+            int h = i < heights.length ? heights[i] : -1;
+            while (idx > 0 && heights[stack[idx]] > h) {
+                ans = Math.max(ans, (i - stack[idx - 1] - 1) * heights[stack[idx--]]);
+            }
+            stack[++idx] = i;
+        }
         return ans;
     }
 
@@ -91,7 +113,11 @@ public class LargestRectangleArea {
         return ans;
     }
 
-        public int largestRectangleArea(int[] heights) {
+
+
+    // 下面的都算是暴力
+
+    public int largestRectangleArea(int[] heights) {
         int ans = 0;
         int[] stack = new int[heights.length + 1];
         int idx = -1;
