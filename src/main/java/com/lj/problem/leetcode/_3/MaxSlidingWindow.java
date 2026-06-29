@@ -1,5 +1,9 @@
 package com.lj.problem.leetcode._3;
 
+import org.junit.Test;
+
+import java.util.Arrays;
+
 /**
  * 239. 滑动窗口最大值
  * 困难
@@ -40,8 +44,35 @@ package com.lj.problem.leetcode._3;
  */
 public class MaxSlidingWindow {
 
-    public int[] maxSlidingWindow(int[] nums, int k) {
+    @Test
+    public void test() {
+        System.out.println(Arrays.toString(maxSlidingWindow(new int[]{5,3,4}, 1)));
+        System.out.println(Arrays.toString(maxSlidingWindow(new int[]{7, 2, 4}, 2)));
+    }
 
+
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        int[] queue = new int[nums.length];
+        int tail = -1;
+        int head = 0;
+        int[] ans = new int[nums.length - k + 1];
+        int idx = -1;
+        for (int i = 0; i < nums.length; i++) {
+            while (tail >= head && nums[queue[tail]] < nums[i]) {
+                tail--;
+            }
+
+            queue[++tail] = i;
+
+            if (i - k == queue[head]) {
+                head ++;
+            }
+
+            if (i >= k - 1) {
+                ans[++idx] = nums[queue[head]];
+            }
+        }
+        return ans;
     }
 
 }
