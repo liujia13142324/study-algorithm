@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._2;
 
+import org.junit.Test;
+
 /**
  * 1438. 绝对差不超过限制的最长连续子数组
  * 中等
@@ -46,8 +48,42 @@ package com.lj.problem.leetcode._2;
  */
 public class LongestSubarray2 {
 
-    public int longestSubarray(int[] nums, int limit) {
+    @Test
+    public void test() {
+        System.out.println(longestSubarray(new int[]{24,12,71,33,5,87,10,11,3,58,2,97,97,36,32,35,15,80,24,45,38,9,22,21,33,68,22,85,35,83,92,38,59,90,42,64,61,15,4,40,50,44,54,25,34,14,33,94,66,27,78,56,3,29,3,51,19,5,93,21,58,91,65,87,55,70,29,81,89,67,58,29,68,84,4,51,87,74,42,85,81,55,8,95,39}
+                , 87));
+    }
 
+    public int longestSubarray(int[] nums, int limit) {
+        int l = 0;
+        // 递增
+        int[] queue1 = new int[nums.length];
+        // 递减
+        int[] queue2 = new int[nums.length];
+        int head1 = 0, tail1 = -1;
+        int head2 = 0, tail2 = -1;
+        int ans = 0;
+
+        for (int i = 0; i < nums.length; i++) {
+            while (head1 <= tail1 && nums[queue1[tail1]] >= nums[i]) {
+                tail1--;
+            }
+            while (head2 <= tail2 && nums[queue2[tail2]] <= nums[i]) {
+                tail2--;
+            }
+            queue1[++tail1] = i;
+            queue2[++tail2] = i;
+            while (nums[queue2[head2]] - nums[queue1[head1]] > limit) {
+                if (head1 == tail1) {
+                    l = queue2[head2++] + 1;
+                } else {
+                    l = queue1[head1++] + 1;
+                }
+            }
+            ans = Math.max(ans, i - l + 1);
+        }
+
+        return ans;
     }
 
 }
