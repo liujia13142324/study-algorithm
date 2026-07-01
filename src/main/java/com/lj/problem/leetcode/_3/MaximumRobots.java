@@ -48,6 +48,36 @@ public class MaximumRobots {
                 , new int[]{91,92,39,89,62,81,33,99,28,99,86,19,5,6,19,94,65,86,17,10,8,42}, 85));
     }
 
+    /**
+     * 空间优化，不需要 sum 数组
+     * @param chargeTimes
+     * @param runningCosts
+     * @param budget
+     * @return
+     */
+    public int maximumRobots2(int[] chargeTimes, int[] runningCosts, long budget) {
+        long sum = 0L;
+        int[] queue = new int[chargeTimes.length];
+        int head = 0, tail = -1;
+        int l = 0;
+        int ans = 0;
+        for (int i = 0; i < chargeTimes.length; i++) {
+            while (head <= tail && chargeTimes[queue[tail]] <= chargeTimes[i]) {
+                tail--;
+            }
+            queue[++tail] = i;
+            sum += runningCosts[i];
+            while (l <= i && chargeTimes[queue[head]] + (long) (i - l + 1) * sum > budget) {
+                if (l == queue[head]) {
+                    head++;
+                }
+                sum -= runningCosts[l++];
+            }
+            ans = Math.max(ans, i - l + 1);
+        }
+        return ans;
+    }
+
     public int maximumRobots(int[] chargeTimes, int[] runningCosts, long budget) {
         long[] sum = new long[runningCosts.length + 1];
         for (int i = 1; i <= runningCosts.length; i++) {
