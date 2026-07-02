@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._3;
 
+import org.junit.Test;
+
 /**
  * 862. 和至少为 K 的最短子数组
  * 困难
@@ -34,7 +36,61 @@ package com.lj.problem.leetcode._3;
  */
 public class ShortestSubarray {
 
-    public int shortestSubarray(int[] nums, int k) {
+    @Test
+    public void test() {
+        /*System.out.println(shortestSubarray(new int[]{2,-1,2}, 3));
+        System.out.println(shortestSubarray(new int[]{-28,81,-20,28,-29}, 89));
+        System.out.println(shortestSubarray(new int[]{84,-37,32,40,95}, 167));
+        System.out.println(shortestSubarray(new int[]{75,-32,50,32,97}, 129));
+        System.out.println(shortestSubarray(new int[]{-34,37,51,3,-12,-50,51,100,-47,99,34,14,-13,89,31,-14,-44,23,-38,6}
+                , 151));*/
+//        System.out.println(shortestSubarray(new int[]{75,-32,50,32,97}, 129));
+//        System.out.println(shortestSubarray(new int[]{-47,45,92,86,17,-22,77,62,-1,42}, 180));
+//        System.out.println(shortestSubarray(new int[]{56,-21,56,35,-9}, 61));
+//        System.out.println(shortestSubarray(new int[]{84,-37,32,40,95}, 167));
+        System.out.println(shortestSubarray(new int[]{11,47,97,35,-46,59,46,51,59,80,14,-6,2,20,96,1,18,74,-17,71}
+                , 282));
 
+
+    }
+
+    public int shortestSubarray(int[] nums, int k) {
+        int[] sums = new int[nums.length + 1];
+        for (int i = 1; i <= nums.length; i++) {
+            sums[i] = sums[i - 1] + nums[i - 1];
+        }
+
+        int l = 0, sum = 0;
+        int ans = Integer.MAX_VALUE;
+        int[] queue = new int[nums.length];
+        int head = 0, tail = -1;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[l] < 0) {
+                l++;
+                continue;
+            }
+            sum += nums[i];
+            while (head <= tail && sums[queue[tail] + 1] - sums[l] >= sum) {
+                tail--;
+            }
+            queue[++tail] = i;
+            while (sum >= k) {
+                ans = Math.min(ans, i - l + 1);
+                if (ans == 1) return ans;
+                head++;
+                while (l < queue[head]) {
+                    sum -= nums[l++];
+                }
+            }
+        }
+
+        while (l < nums.length) {
+            sum -= nums[l ++];
+            if (sum >= k) {
+                ans = Math.min(ans, nums.length - l);
+            }
+        }
+
+        return ans == Integer.MAX_VALUE ? -1 : ans;
     }
 }
