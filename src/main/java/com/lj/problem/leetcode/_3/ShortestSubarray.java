@@ -54,6 +54,27 @@ public class ShortestSubarray {
 
     }
 
+    public int shortestSubarray2(int[] nums, int k) {
+        int[] sums = new int[nums.length + 1];
+        for (int i = 1; i <= nums.length; i++) {
+            sums[i] = sums[i - 1] + nums[i - 1];
+        }
+        int[] queue = new int[nums.length + 1];
+        int head = 0, tail = -1;
+        int ans = Integer.MAX_VALUE;
+        for (int i = 0; i <= nums.length; i++) {
+            while (tail >= head && sums[i] - sums[queue[head]] >= k) {
+                ans = Math.min(ans, i - queue[head]);
+                head++;
+            }
+            while (tail >= head && sums[queue[tail]] >= sums[i]) {
+                tail--;
+            }
+            queue[++tail] = i;
+        }
+        return ans == Integer.MAX_VALUE ? -1 : ans;
+    }
+
     public int shortestSubarray(int[] nums, int k) {
         int[] sums = new int[nums.length + 1];
         for (int i = 1; i <= nums.length; i++) {
