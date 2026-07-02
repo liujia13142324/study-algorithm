@@ -63,6 +63,7 @@ public class ShortestSubarray {
         int head = 0, tail = -1;
         int ans = Integer.MAX_VALUE;
         for (int i = 0; i <= nums.length; i++) {
+            // 这两个 while 交换顺序都是可以的
             while (tail >= head && sums[i] - sums[queue[head]] >= k) {
                 ans = Math.min(ans, i - queue[head]);
                 head++;
