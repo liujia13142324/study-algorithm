@@ -50,6 +50,43 @@ public class FindMaxValueOfEquation {
                 , 13));
     }
 
+    /**
+     * 单调 yi - xi 的最大值
+     * @param points
+     * @param k
+     * @return
+     */
+    public int findMaxValueOfEquation2(int[][] points, int k) {
+        int[] minus = new int[points.length];
+        for (int i = 0; i < points.length; i++) {
+            minus[i] = points[i][1] - points[i][0];
+        }
+
+        int[] queue = new int[points.length];
+        int head = 0, tail = -1;
+        int ans = Integer.MIN_VALUE;
+        for (int i = 0; i < points.length; i++) {
+            while (tail >= head && points[i][0] - points[queue[head]][0] > k) {
+                head++;
+            }
+            if (tail >= head) {
+                ans = Math.max(ans, points[i][0] - points[queue[head]][0] + points[i][1] + points[queue[head]][1]);
+            }
+            while (tail >= head && minus[i] >= minus[queue[tail]]) {
+                tail--;
+            }
+            queue[++tail] = i;
+        }
+
+        return ans;
+    }
+
+    /**
+     * 单调 sum((yi - y<i-1>) - (xi - x<i-1>)) 的最大值
+     * @param points
+     * @param k
+     * @return
+     */
     public int findMaxValueOfEquation(int[][] points, int k) {
         int[] sums = new int[points.length];
         for (int i = 1; i < points.length; i++) {
