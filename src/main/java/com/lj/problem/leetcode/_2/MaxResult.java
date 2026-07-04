@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._2;
 
+import org.junit.Test;
+
 /**
  * 1696. 跳跃游戏 VI
  * 中等
@@ -40,7 +42,26 @@ package com.lj.problem.leetcode._2;
  */
 public class MaxResult {
 
-    public int maxResult(int[] nums, int k) {
+    @Test
+    public void test() {
+        System.out.println(maxResult(new int[]{1,-1,-2,4,-7,3}, 2));
+    }
 
+    public int maxResult(int[] nums, int k) {
+        int[] dp = new int[nums.length];
+        int[] queue = new int[nums.length];
+        int head = 0, tail = -1;
+        for (int i = nums.length - 1; i >= 0; i--) {
+            while (tail >= head && nums[i] + dp[queue[head]] >= dp[queue[tail]]) {
+                tail--;
+            }
+            dp[i] = nums[i] + dp[queue[head]];
+            queue[++tail] = i;
+            while (queue[head] - i >= k) {
+                head++;
+            }
+        }
+
+        return dp[0];
     }
 }
