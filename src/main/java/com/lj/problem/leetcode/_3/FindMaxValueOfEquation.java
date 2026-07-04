@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._3;
 
+import org.junit.Test;
+
 /**
  * 1499. 满足不等式的最大值
  * 困难
@@ -39,7 +41,39 @@ package com.lj.problem.leetcode._3;
  */
 public class FindMaxValueOfEquation {
 
-    public int findMaxValueOfEquation(int[][] points, int k) {
+    @Test
+    public void test() {
+        System.out.println(findMaxValueOfEquation(new int[][]{{1,3},{2,0},{5,10},{6,-10}}
+                , 1));
 
+        System.out.println(findMaxValueOfEquation(new int[][]{{-17,-6},{-4,0},{-2,-16},{-1,2},{0,11},{6,18}}
+                , 13));
     }
+
+    public int findMaxValueOfEquation(int[][] points, int k) {
+        int[] sums = new int[points.length];
+        for (int i = 1; i < points.length; i++) {
+            sums[i] = sums[i - 1] + ((points[i][1] - points[i - 1][1]) - (points[i][0] - points[i - 1][0]));
+        }
+
+        int[] queue = new int[points.length];
+        int head = 0, tail = -1;
+        int ans = Integer.MIN_VALUE;
+        for (int i = 0; i < points.length; i++) {
+            while (tail >= head && points[i][0] - points[queue[head]][0] > k) {
+                head++;
+            }
+            if (tail >= head) {
+                ans = Math.max(ans, points[i][0] - points[queue[head]][0] + points[i][1] + points[queue[head]][1]);
+            }
+            while (tail >= head && sums[i] >= sums[queue[tail]]) {
+                tail--;
+            }
+            queue[++tail] = i;
+        }
+
+        return ans;
+    }
+
+
 }
