@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._2;
 
+import org.junit.Test;
+
 /**
  * 2944. 购买水果需要的最少金币数
  * 中等
@@ -69,7 +71,35 @@ package com.lj.problem.leetcode._2;
  * 1 <= prices[i] <= 105
  */
 public class MinimumCoins {
-    public int minimumCoins(int[] prices) {
 
+    @Test
+    public void test() {
+//        System.out.println(minimumCoins(new int[]{3,1,2}));
+//        System.out.println(minimumCoins(new int[]{26,18,6,12,49,7,45,45}));
+        System.out.println(minimumCoins(new int[]{1,37,19,38,11,42,18,33,6,37,15,48,23,12,41,18,27,32}));
+    }
+
+    public int minimumCoins(int[] prices) {
+        int[] queue = new int[prices.length];
+        int head = 0, tail = -1;
+        int ans = Integer.MAX_VALUE;
+
+        for (int i = 0; i < prices.length; i++) {
+            while (queue[head] < (i - 1)/2) {
+                head++;
+            }
+            if (tail >= head) {
+                prices[i] += prices[queue[head]];
+            }
+            if (i >= (prices.length - 1)/ 2) {
+                ans = Math.min(ans, prices[i]);
+            }
+            while (tail >= head && prices[queue[tail]] >= prices[i]) {
+                tail--;
+            }
+            queue[++tail] = i;
+        }
+
+        return ans == Integer.MAX_VALUE ? prices[0] : ans;
     }
 }
