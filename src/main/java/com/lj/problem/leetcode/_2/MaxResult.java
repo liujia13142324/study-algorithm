@@ -45,6 +45,29 @@ public class MaxResult {
     @Test
     public void test() {
         System.out.println(maxResult(new int[]{1,-1,-2,4,-7,3}, 2));
+        System.out.println(maxResult2(new int[]{10,-5,-2,4,0,3}, 3));
+    }
+
+    /**
+     * 正序
+     * @param nums
+     * @param k
+     * @return
+     */
+    public int maxResult2(int[] nums, int k) {
+        int[] queue = new int[nums.length];
+        int head = 0, tail = 0;
+        for (int i = 1; i < nums.length; i++) {
+            while (i - queue[head] > k) {
+                head++;
+            }
+            nums[i] += nums[queue[head]];
+            while (tail >= head && nums[i] >= nums[queue[tail]]) {
+                tail--;
+            }
+            queue[++tail] = i;
+        }
+        return nums[nums.length - 1];
     }
 
     public int maxResult(int[] nums, int k) {
@@ -64,4 +87,5 @@ public class MaxResult {
 
         return dp[0];
     }
+
 }
