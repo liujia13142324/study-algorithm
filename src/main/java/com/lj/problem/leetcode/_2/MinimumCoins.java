@@ -75,9 +75,29 @@ public class MinimumCoins {
     @Test
     public void test() {
 //        System.out.println(minimumCoins(new int[]{3,1,2}));
-//        System.out.println(minimumCoins(new int[]{26,18,6,12,49,7,45,45}));
-        System.out.println(minimumCoins(new int[]{1,37,19,38,11,42,18,33,6,37,15,48,23,12,41,18,27,32}));
+        System.out.println(minimumCoins2(new int[]{26,18,6,12,49,7,45,45}));
+//        System.out.println(minimumCoins(new int[]{1,37,19,38,11,42,18,33,6,37,15,48,23,12,41,18,27,32}));
     }
+
+    public int minimumCoins2(int[] prices) {
+        int[] queue = new int[prices.length];
+        int[] dp = new int[prices.length + 1];
+        int head = 0, tail = 0;
+        queue[head] = prices.length;
+        for (int i = prices.length - 1; i >= 0; i--) {
+            while ((queue[head] - 1) / 2 > i) {
+                head++;
+            }
+            dp[i] = dp[queue[head]] + prices[i];
+            while (tail >= head && dp[queue[tail]] >= dp[i]) {
+                tail--;
+            }
+            queue[++tail] = i;
+        }
+        return dp[0];
+    }
+
+
 
     public int minimumCoins(int[] prices) {
         int[] queue = new int[prices.length];
