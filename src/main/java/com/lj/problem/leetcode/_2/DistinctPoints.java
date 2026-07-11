@@ -1,5 +1,12 @@
 package com.lj.problem.leetcode._2;
 
+import org.junit.Test;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 /**
  * 3694. 删除子字符串后不同的终点
  * 中等
@@ -61,8 +68,74 @@ package com.lj.problem.leetcode._2;
  */
 public class DistinctPoints {
 
-    public int distinctPoints(String s, int k) {
+    @Test
+    public void test() {
+        System.out.println(distinctPoints("LUL", 1));
+    }
 
+    public int distinctPoints(String s, int k) {
+        int n = s.length();
+        if (n == k) return 1;
+        Map<Integer, Set<Integer>> cache = new HashMap<>();
+        char[] chars = s.toCharArray();
+        int[] tmp = {0, 0};
+        for (int c: chars) {
+            cacl1(tmp, c);
+        }
+
+        int l = 0;
+        int ans = 0;
+        for (int r = 0; r < n; r++) {
+            cacl2(tmp, chars[r]);
+            if (r < k - 1) {
+                continue;
+            }
+            while (r - l + 1 > k) {
+                cacl1(tmp, chars[l++]);
+            }
+            if (!cache.containsKey(tmp[0]) || !cache.get(tmp[0]).contains(tmp[1])) {
+                Set<Integer> val = cache.getOrDefault(tmp[0], new HashSet<>());
+                val.add(tmp[1]);
+                cache.put(tmp[0], val);
+                ans++;
+            }
+        }
+
+        return ans;
+    }
+
+    private void cacl2(int[] tmp, char c) {
+        switch (c) {
+            case 'U':
+                tmp[1]--;
+                break;
+            case 'D':
+                tmp[1]++;
+                break;
+            case 'L':
+                tmp[0]++;
+                break;
+            default:
+                tmp[0]--;
+                break;
+        }
+    }
+
+    private void cacl1(int[] tmp, int c) {
+        switch (c) {
+            case 'U':
+                tmp[1]++;
+                break;
+            case 'D':
+                tmp[1]--;
+                break;
+            case 'L':
+                tmp[0]--;
+                break;
+            default:
+                tmp[0]++;
+                break;
+        }
     }
 
 }
