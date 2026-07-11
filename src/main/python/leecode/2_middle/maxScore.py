@@ -39,6 +39,7 @@
 #
 # 输入：cardPoints = [1,79,80,1,1,1,200,1], k = 3
 # 输出：202
+from math import inf
 from typing import List
 
 
@@ -74,6 +75,16 @@ class Solution:
             sums += cardPoints[i] - cardPoints[i - m]
             min_val = min(min_val, sums)
         return sum(cardPoints) - min_val
+
+
+    def maxScore(self, cardPoints: List[int], k: int) -> int:
+        n = len(cardPoints)
+        sums = sum(cardPoints[:k])
+        ans = sums
+        for i in range(1, k+1):
+            sums += cardPoints[n - i] - cardPoints[k - i]
+            ans = max(ans, sums)
+        return ans
 
 
 if __name__ == '__main__':
