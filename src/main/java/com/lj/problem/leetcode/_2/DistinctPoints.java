@@ -82,6 +82,29 @@ public class DistinctPoints {
         DIRS['R'] = new int[]{1, 0};
     }
 
+    /**
+     * 算第一个窗口的增减量
+     * @param s
+     * @param k
+     * @return
+     */
+    public int distinctPoints3(String s, int k) {
+        int n = s.length();
+        char[] chars = s.toCharArray();
+        Set<Long> cache = new HashSet<>();
+        long x = 0, y = 0;
+        cache.add(((x + n) << 20) | (y + n));
+
+        for (int i = k; i < n; i++) {
+            x += DIRS[chars[i]][0] - DIRS[chars[i - k]][0];
+            y += DIRS[chars[i]][1] - DIRS[chars[i - k]][1];
+            cache.add(((x + n) << 20) | (y + n));
+        }
+        return cache.size();
+    }
+
+
+
     public int distinctPoints2(String s, int k) {
         int n = s.length();
         long x = 0, y = 0;
@@ -103,9 +126,6 @@ public class DistinctPoints {
 
         return cache.size();
     }
-
-
-
 
 
     public int distinctPoints(String s, int k) {
