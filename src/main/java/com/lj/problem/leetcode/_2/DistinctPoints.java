@@ -73,6 +73,41 @@ public class DistinctPoints {
         System.out.println(distinctPoints("LUL", 1));
     }
 
+    private static final int[][] DIRS = new int[128][];
+
+    static {
+        DIRS['U'] = new int[]{0, 1};
+        DIRS['D'] = new int[]{0, -1};
+        DIRS['L'] = new int[]{-1, 0};
+        DIRS['R'] = new int[]{1, 0};
+    }
+
+    public int distinctPoints2(String s, int k) {
+        int n = s.length();
+        long x = 0, y = 0;
+        int ans = 0;
+        Set<Long> cache = new HashSet<>();
+        char[] chars = s.toCharArray();
+        for (int i = 0; i < n; i++) {
+            x += DIRS[chars[i]][0];
+            y += DIRS[chars[i]][1];
+            if (i < k - 1) {
+                continue;
+            }
+            cache.add(((x + n) << 20) | (y + n));
+
+            // 左边递减，为下次循环左准备
+            x -= DIRS[chars[i - k + 1]][0];
+            y -= DIRS[chars[i - k + 1]][1];
+        }
+
+        return cache.size();
+    }
+
+
+
+
+
     public int distinctPoints(String s, int k) {
         int n = s.length();
         if (n == k) return 1;
