@@ -64,3 +64,18 @@ class Solution:
             r = (r + 1) % _len
 
         return ans
+
+    def maxScore(self, cardPoints: List[int], k: int) -> int:
+        n = len(cardPoints)
+        m = n - k
+        sums = sum(cardPoints[:m])
+        min_val = sums
+        for i in range(m, n):
+            sums += cardPoints[i] - cardPoints[i - m]
+            min_val = min(min_val, sums)
+        return sum(cardPoints) - min_val
+
+
+if __name__ == '__main__':
+    arr = [1,2,3,4,5]
+    print(Solution().maxScore([1,2,3,4,5,6,1], 3))
