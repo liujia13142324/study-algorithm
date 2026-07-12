@@ -38,7 +38,7 @@ from typing import List
 class Solution:
     def searchRange(self, nums: List[int], target: int) -> List[int]:
         i = self.lowerBound(nums, target)
-        return [self.lowerBound(nums, target), self.lowerBound(nums, target + 1) - 1] if i < len(nums) and nums[i] == target else [-1, -1]
+        return [i, self.lowerBound(nums, target + 1) - 1] if i < len(nums) and nums[i] == target else [-1, -1]
 
     def lowerBound(self, nums: List[int], target: int) -> int:
         l = -1
