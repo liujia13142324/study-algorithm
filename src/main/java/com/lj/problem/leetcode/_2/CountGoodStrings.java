@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._2;
 
+import java.util.Arrays;
+
 /**
  * 2466. 统计构造好字符串的方案数
  * 中等
@@ -42,6 +44,19 @@ package com.lj.problem.leetcode._2;
 public class CountGoodStrings {
 
     public int countGoodStrings(int low, int high, int zero, int one) {
+        int[] cache = new int[high + 1];
+        Arrays.fill(cache, -1);
+        return dfs(0, low, high, zero, one, cache);
+    }
 
+    private int dfs(int i, int low, int high, int zero, int one, int[] cache) {
+        if (i > high) return 0;
+        if (cache[i] != -1) return cache[i];
+        long ans = 0;
+        if (i >= low) {
+            ans = 1;
+        }
+        cache[i] = (int) ((ans + dfs(i + zero, low, high, zero, one, cache) + dfs(i + one, low, high, zero, one, cache)) % 1000000007);
+        return cache[i];
     }
 }
