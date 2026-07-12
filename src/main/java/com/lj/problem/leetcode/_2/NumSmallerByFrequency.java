@@ -1,5 +1,9 @@
 package com.lj.problem.leetcode._2;
 
+import org.junit.Test;
+
+import java.util.Arrays;
+
 /**
  * 1170. 比较字符串最小字母出现频次
  * 中等
@@ -38,8 +42,48 @@ package com.lj.problem.leetcode._2;
  */
 public class NumSmallerByFrequency {
 
-    public int[] numSmallerByFrequency(String[] queries, String[] words) {
+    @Test
+    public void test() {
+        System.out.println(Arrays.toString(numSmallerByFrequency(new String[]{"cbd"}, new String[]{"zaaaz"})));
+    }
 
+    public int[] numSmallerByFrequency(String[] queries, String[] words) {
+        int[] cnts = new int[words.length];
+        for (int i = 0; i < words.length; i++) {
+            cnts[i] = countMinCharCnt(words[i]);
+        }
+        Arrays.sort(cnts);
+        int[] ans = new int[queries.length];
+        for (int i = 0; i < queries.length; i++) {
+            ans[i] = cnts.length - lowerBound(cnts, countMinCharCnt(queries[i]));
+        }
+
+        return ans;
+    }
+
+    private int lowerBound(int[] arr, int target) {
+        int l = -1, r = arr.length;
+        while (l + 1 < r) {
+            int mid = (l + r) >>> 1;
+            if (arr[mid] > target) {
+                r = mid;
+            }else {
+                l = mid;
+            }
+        }
+        return r;
+    }
+
+    private int countMinCharCnt(String word) {
+        int[] cnt = new int[26];
+        char min = 'z';
+        for (char c: word.toCharArray()) {
+            cnt[c - 'a'] ++;
+            if (c < min) {
+                min = c;
+            }
+        }
+        return cnt[min - 'a'];
     }
 
 }
