@@ -94,5 +94,22 @@ class Solution:
 
         return len(cache)
 
+    def distinctPoints(self, s: str, k: int) -> int:
+        cache = set()
+        x = 0
+        n = len(s)
+        UDLR2 = {
+            'U': n + 1,
+            'D': -(n + 1),
+            'L': -1,
+            'R': 1
+        }
+        cache.add(0)
+        for i in range(k, n):
+            x += UDLR2[s[i]] - UDLR2[s[i - k]]
+            cache.add(x)
+
+        return len(cache)
+
 if __name__ == '__main__':
     print(Solution().distinctPoints("LUL", 1))
