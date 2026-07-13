@@ -43,6 +43,15 @@ import java.util.Arrays;
  */
 public class CountGoodStrings {
 
+    public int countGoodStrings2(int low, int high, int zero, int one) {
+        int[] dp = new int[high + Math.max(zero, one) + 1];
+        for (int i = high; i >= 0; i--) {
+            dp[i] = (int) (((i >= low ? 1L : 0L) + dp[i + zero] + dp[i + one]) % 1000000007);
+        }
+        return dp[0];
+    }
+
+
     public int countGoodStrings(int low, int high, int zero, int one) {
         int[] cache = new int[high + 1];
         Arrays.fill(cache, -1);
@@ -59,4 +68,6 @@ public class CountGoodStrings {
         cache[i] = (int) ((ans + dfs(i + zero, low, high, zero, one, cache) + dfs(i + one, low, high, zero, one, cache)) % 1000000007);
         return cache[i];
     }
+
+
 }
