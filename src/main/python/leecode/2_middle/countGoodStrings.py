@@ -52,3 +52,15 @@ class Solution:
 
         return dfs(0, low, high, zero, one)
 
+
+    def countGoodStrings(self, low: int, high: int, zero: int, one: int) -> int:
+        n = (high + max(zero, one) + 1)
+        dp = [0] * n
+        for i in range(high, -1, -1):
+            dp[i] = ((1 if i >= low else 0) + dp[i + one] + dp[i + zero]) % 1000000007
+        return dp[0]
+
+
+if __name__ == '__main__':
+    for i in range(10, -1, -1):
+        print(i)
