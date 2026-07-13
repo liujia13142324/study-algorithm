@@ -36,6 +36,19 @@
 #
 # 1 <= low <= high <= 105
 # 1 <= zero, one <= low
+from functools import cache
+
 
 class Solution:
     def countGoodStrings(self, low: int, high: int, zero: int, one: int) -> int:
+        @cache
+        def dfs(i: int, low: int, high: int, zero: int, one: int):
+            if i > high:
+                return 0
+            ans = 0
+            if i >= low:
+                ans = 1
+            return (ans + dfs(i + zero, low, high, zero, one) + dfs(i + one, low, high, zero, one)) % 1000000007
+
+        return dfs(0, low, high, zero, one)
+
