@@ -43,6 +43,46 @@ import java.util.Arrays;
  */
 public class CountGoodStrings {
 
+    public int countGoodStrings4(int low, int high, int zero, int one) {
+        int[] dp = new int[high + 1];
+        dp[0] = 1;
+        int ans = 0;
+        for (int i = 1; i <= high; i++) {
+            if (i - zero >= 0) {
+                dp[i] = (dp[i] + dp[i - zero]) % 1000000007;
+            }
+            if (i - one >= 0) {
+                dp[i] = (dp[i] + dp[i - one]) % 1000000007;
+            }
+            if (i >= low) {
+                ans = (ans + dp[i]) % 1000000007;
+            }
+        }
+        return ans;
+    }
+
+    public int countGoodStrings3(int low, int high, int zero, int one) {
+        int ans = 0;
+        int[] cache = new int[high + 1];
+        Arrays.fill(cache, -1);
+        for (int i = low; i <= high; i++) {
+            ans = (ans + dfs(i, zero, one, cache)) % 1000000007;
+        }
+        return ans;
+    }
+
+    private int dfs(int i, int zero, int one, int[] cache) {
+        if (i < 0) {
+            return 0;
+        }
+        if (i == 0) {
+            return 1;
+        }
+        if (cache[i] != -1) return cache[i];
+
+        return cache[i] = (dfs(i - zero, zero, one, cache) + dfs(i - one, zero, one, cache)) % 1000000007;
+    }
+
     public int countGoodStrings2(int low, int high, int zero, int one) {
         int[] dp = new int[high + Math.max(zero, one) + 1];
         for (int i = high; i >= 0; i--) {
