@@ -43,6 +43,31 @@ import java.util.Arrays;
  */
 public class CountGoodStrings {
 
+    public int countGoodStrings2(int low, int high, int zero, int one) {
+        int[] dp = new int[high + Math.max(zero, one) + 1];
+        for (int i = high; i >= 0; i--) {
+            dp[i] = (int) (((i >= low ? 1L : 0L) + dp[i + zero] + dp[i + one]) % 1000000007);
+        }
+        return dp[0];
+    }
+
+    public int countGoodStrings(int low, int high, int zero, int one) {
+        int[] cache = new int[high + 1];
+        Arrays.fill(cache, -1);
+        return dfs(0, low, high, zero, one, cache);
+    }
+
+    private int dfs(int i, int low, int high, int zero, int one, int[] cache) {
+        if (i > high) return 0;
+        if (cache[i] != -1) return cache[i];
+        long ans = 0;
+        if (i >= low) {
+            ans = 1;
+        }
+        cache[i] = (int) ((ans + dfs(i + zero, low, high, zero, one, cache) + dfs(i + one, low, high, zero, one, cache)) % 1000000007);
+        return cache[i];
+    }
+
     public int countGoodStrings4(int low, int high, int zero, int one) {
         int[] dp = new int[high + 1];
         dp[0] = 1;
@@ -82,32 +107,4 @@ public class CountGoodStrings {
 
         return cache[i] = (dfs(i - zero, zero, one, cache) + dfs(i - one, zero, one, cache)) % 1000000007;
     }
-
-    public int countGoodStrings2(int low, int high, int zero, int one) {
-        int[] dp = new int[high + Math.max(zero, one) + 1];
-        for (int i = high; i >= 0; i--) {
-            dp[i] = (int) (((i >= low ? 1L : 0L) + dp[i + zero] + dp[i + one]) % 1000000007);
-        }
-        return dp[0];
-    }
-
-
-    public int countGoodStrings(int low, int high, int zero, int one) {
-        int[] cache = new int[high + 1];
-        Arrays.fill(cache, -1);
-        return dfs(0, low, high, zero, one, cache);
-    }
-
-    private int dfs(int i, int low, int high, int zero, int one, int[] cache) {
-        if (i > high) return 0;
-        if (cache[i] != -1) return cache[i];
-        long ans = 0;
-        if (i >= low) {
-            ans = 1;
-        }
-        cache[i] = (int) ((ans + dfs(i + zero, low, high, zero, one, cache) + dfs(i + one, low, high, zero, one, cache)) % 1000000007);
-        return cache[i];
-    }
-
-
 }
