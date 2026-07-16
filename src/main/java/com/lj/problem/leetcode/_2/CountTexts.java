@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._2;
 
+import org.junit.Test;
+
 /**
  * 2266. 统计打字方案数
  * 中等
@@ -42,8 +44,46 @@ package com.lj.problem.leetcode._2;
  */
 public class CountTexts {
 
-    public int countTexts(String pressedKeys) {
+    @Test
+    public void test() {
+        System.out.println(countTexts("22233"));
+    }
 
+    public int countTexts(String pressedKeys) {
+        char[] chars = pressedKeys.toCharArray();
+        int[] dp = new int[chars.length + 1];
+        int[] mapping = new int[]{0, 0, 3, 3, 3, 3, 3, 4, 3, 4};
+        int i = 1;
+        char pre = '0';
+        long ans = 1;
+        dp[0] = 1;
+        for (char c: chars) {
+            if (pre != c) {
+                ans = ((ans % 1000000007) * (dp[i - 1] % 1000000007)) % 1000000007;
+                i = 1;
+            }
+            dp[i] = 0;
+            for (int j = i - 1, k = Math.max(i - mapping[c - '0'], 0); j >= k; j--) {
+                dp[i] = ((dp[i] % 1000000007) + (dp[j] % 1000000007)) % 1000000007;
+            }
+            i++;
+            pre = c;
+        }
+
+        ans = ((ans % 1000000007) * (dp[i - 1] % 1000000007)) % 1000000007;
+        return (int) ans;
+    }
+
+    public static void main(String[] args) {
+        long[] dp = new long[37];
+        dp[0] = 1;
+        dp[1] = 1;
+        dp[2] = 2;
+        dp[3] = 4;
+        for (int i = 4; i < 37; i++) {
+            dp[i] = dp[i - 1] + dp[i - 2] + dp[i - 3];
+        }
+        System.out.println(dp[36]);
     }
 
 }
