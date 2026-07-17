@@ -46,7 +46,43 @@ public class CountTexts {
 
     @Test
     public void test() {
-        System.out.println(countTexts("22233"));
+        System.out.println(countTexts2("22233"));
+    }
+
+    static long[] f;
+    static long[] g;
+    static boolean init = false;
+
+    private void init() {
+        if (init) {
+            return;
+        }
+        f = new long[100000 + 1];
+        g = new long[100000 + 1];
+        init = true;
+        f[0] = g[0] = 1;
+        f[1] = g[1] = 1;
+        f[2] = g[2] = 2;
+        f[3] = g[3] = 4;
+        for (int i = 4; i <= 100000; i++) {
+            f[i] = (f[i - 1] + f[i - 2] + f[i - 3]) % 1000000007;
+            g[i] = (g[i - 1] + g[i - 2] + g[i - 3] + g[i - 4]) % 1000000007;
+        }
+    }
+
+    public int countTexts2(String pressedKeys) {
+        init();
+        long ans = 1;
+        char[] chars = pressedKeys.toCharArray();
+        int cnt = 0;
+        for (int i = 0; i < chars.length; i++) {
+            cnt++;
+            if (i == chars.length - 1 || chars[i] != chars[i + 1]) {
+                ans = ans * (chars[i] == '7' || chars[i] == '9' ? g[cnt] : f[cnt])  % 1000000007;
+                cnt = 0;
+            }
+        }
+        return (int) ans;
     }
 
     public int countTexts(String pressedKeys) {
@@ -75,15 +111,7 @@ public class CountTexts {
     }
 
     public static void main(String[] args) {
-        long[] dp = new long[37];
-        dp[0] = 1;
-        dp[1] = 1;
-        dp[2] = 2;
-        dp[3] = 4;
-        for (int i = 4; i < 37; i++) {
-            dp[i] = dp[i - 1] + dp[i - 2] + dp[i - 3];
-        }
-        System.out.println(dp[36]);
+        System.out.println(1000000007L * 1000000007);
     }
 
 }
