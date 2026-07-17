@@ -43,6 +43,7 @@
 #
 # 1 <= pressedKeys.length <= 105
 # pressedKeys 只包含数字 '2' 到 '9' 。
+from itertools import groupby
 
 f = [1, 1, 2, 4]
 g = [1, 1, 2, 4]
@@ -84,9 +85,16 @@ class Solution:
                 cnt = 0
         return ans
 
+    def countTexts(self, pressedKeys: str) -> int:
+        ans = 1
+        for ch, s in groupby(pressedKeys):
+            n = len(list(s))
+            ans = ans * (g[n] if ch in "79" else f[n]) % 1000000007
+        return ans
 
 if __name__ == '__main__':
-    # print(Solution().countTexts("22233"))
-    # print(Solution().countTexts("222222222222222222222222222222222222"))
+    print(Solution().countTexts("22233"))
+    print(Solution().countTexts("222222222222222222222222222222222222"))
     print(Solution().countTexts("444479999555588866"))
-
+    # for ch, s in groupby("444479999555588866"):
+    #     print(ch, "-->", list(s))
