@@ -44,6 +44,13 @@
 # 1 <= pressedKeys.length <= 105
 # pressedKeys 只包含数字 '2' 到 '9' 。
 
+f = [1, 1, 2, 4]
+g = [1, 1, 2, 4]
+
+for _ in range(10 ** 5 - 3):
+    f.append(f[-1] + f[-2] + f[-3])
+    g.append(g[-1] + g[-2] + g[-3] + g[-4])
+
 
 class Solution:
     def countTexts(self, pressedKeys: str) -> int:
@@ -66,6 +73,20 @@ class Solution:
         ans = (ans * dp[idx - 1]) % 1000000007
         return ans
 
+    def countTexts(self, pressedKeys: str) -> int:
+        ans = 1
+        n = len(pressedKeys)
+        cnt = 0
+        for i in range(0, n):
+            cnt += 1
+            if i == n - 1 or pressedKeys[i] != pressedKeys[i + 1]:
+                ans = ans * (g[cnt] if pressedKeys[i] == '7' or pressedKeys[i] == '9' else f[cnt]) % 1000000007
+                cnt = 0
+        return ans
+
 
 if __name__ == '__main__':
-    print(Solution().countTexts("222222222222222222222222222222222222"))
+    # print(Solution().countTexts("22233"))
+    # print(Solution().countTexts("222222222222222222222222222222222222"))
+    print(Solution().countTexts("444479999555588866"))
+
