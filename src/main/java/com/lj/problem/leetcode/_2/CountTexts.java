@@ -59,18 +59,18 @@ public class CountTexts {
         dp[0] = 1;
         for (char c: chars) {
             if (pre != c) {
-                ans = ((ans % 1000000007) * (dp[i - 1] % 1000000007)) % 1000000007;
+                ans = (ans * (dp[i - 1] % 1000000007)) % 1000000007;
                 i = 1;
             }
             dp[i] = 0;
             for (int j = i - 1, k = Math.max(i - mapping[c - '0'], 0); j >= k; j--) {
-                dp[i] = ((dp[i] % 1000000007) + (dp[j] % 1000000007)) % 1000000007;
+                dp[i] = (dp[i] + dp[j]) % 1000000007;
             }
             i++;
             pre = c;
         }
 
-        ans = ((ans % 1000000007) * (dp[i - 1] % 1000000007)) % 1000000007;
+        ans = (ans * (dp[i - 1] % 1000000007)) % 1000000007;
         return (int) ans;
     }
 
