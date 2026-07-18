@@ -37,6 +37,26 @@ package com.lj.problem.leetcode._2;
  */
 public class Rob3 {
     public int rob(int[] nums) {
+        if (nums.length == 1) {
+            return nums[0];
+        }
 
+        int pre = 0;
+        int ans = nums[0];
+        for (int i = 2; i <= nums.length - 1; i++) {
+            int tmp = ans;
+            ans = Math.max(ans, pre + nums[i - 1]);
+            pre = tmp;
+        }
+
+        pre = 0;
+        int ans2 = nums[1];
+        for (int i = 3; i <= nums.length; i++) {
+            int tmp = ans2;
+            ans2 = Math.max(ans2, pre + nums[i - 1]);
+            pre = tmp;
+        }
+
+        return Math.max(ans, ans2);
     }
 }
