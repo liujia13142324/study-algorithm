@@ -44,6 +44,16 @@ class Solution:
             stack[top] = i
         return ans
 
+    def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
+        stack = []
+        ans = [0] * len(temperatures)
+        for i, val in enumerate(temperatures):
+            while stack and temperatures[stack[-1]] < val:
+                tmp = stack.pop()
+                ans[tmp] = i - tmp
+            stack.append(i)
+        return ans
+
 
 if __name__ == '__main__':
     print(Solution().dailyTemperatures([73,74,75,71,69,72,76,73]))
