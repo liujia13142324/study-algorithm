@@ -1,5 +1,11 @@
 package com.lj.problem.leetcode._2;
 
+import com.lj.study.common.utils.MyArrayUtil;
+import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.Comparator;
+
 /**
  * 853. 车队
  * 中等
@@ -63,7 +69,33 @@ package com.lj.problem.leetcode._2;
  */
 public class CarFleet {
 
-    public int carFleet(int target, int[] position, int[] speed) {
+    @Test
+    public void test() {
+//        System.out.println(carFleet(12, new int[]{10,8,0,5,3}, new int[]{2,4,1,1,3}));
+//        System.out.println(carFleet(10, new int[]{0,4,2}, new int[]{2, 1, 3}));
+        System.out.println(carFleet(10, new int[]{8,3,7,4,6,5}, new int[]{4,4,4,4,4,4}));
+    }
 
+    public int carFleet(int target, int[] position, int[] speed) {
+        double[][] helper = new double[position.length][2];
+        for (int i = 0; i < position.length; i++) {
+            helper[i][0] = position[i];
+            helper[i][1] =  (target - position[i] + 0f) / speed[i];
+        }
+        Arrays.sort(helper, Comparator.comparingDouble(e->-e[0]));
+
+        int[] stack = new int[position.length];
+        int top = -1;
+        int ans = 0;
+        for (int i = 0; i < position.length; i++) {
+            if (top != -1 && helper[stack[top]][1] < helper[i][1]) {
+                ans++;
+                stack[++top] = i;
+            }else if (top == -1) {
+                stack[++top] = i;
+            }
+        }
+
+        return ans + 1;
     }
 }
