@@ -46,7 +46,7 @@ public class CountHousePlacements {
         dp[1] = 1;
         sums[1] = 1;
         for (int i = 2; i <= n; i++) {
-            dp[i] = (1 + sums[i - 2]) % 1000000007;
+            dp[i] = 1 + sums[i - 2];
             sums[i] = (sums[i - 1] + dp[i]) % 1000000007;
         }
         long tmp = sums[n] + 1;
