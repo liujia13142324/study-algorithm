@@ -76,6 +76,37 @@ public class CarFleet {
         System.out.println(carFleet(10, new int[]{8,3,7,4,6,5}, new int[]{4,4,4,4,4,4}));
     }
 
+    /**
+     * 用 int 做前置计算，比 double 更快
+     * @param target
+     * @param position
+     * @param speed
+     * @return
+     */
+    public int carFleet2(int target, int[] position, int[] speed) {
+        int[][] helper = new int[position.length][2];
+        for (int i = 0; i < position.length; i++) {
+            helper[i][0] = position[i];
+            helper[i][1] = speed[i];
+        }
+        Arrays.sort(helper, Comparator.comparingInt(e->-e[0]));
+
+        double[] stack = new double[position.length];
+        int top = -1;
+        int ans = 0;
+        for (int i = 0; i < position.length; i++) {
+            double t = (double)(target - helper[i][0]) / helper[i][1];
+            if (top != -1 && stack[top] < t) {
+                ans++;
+                stack[++top] = t;
+            }else if (top == -1) {
+                stack[++top] = t;
+            }
+        }
+
+        return ans + 1;
+    }
+
     public int carFleet(int target, int[] position, int[] speed) {
         double[][] helper = new double[position.length][2];
         for (int i = 0; i < position.length; i++) {
