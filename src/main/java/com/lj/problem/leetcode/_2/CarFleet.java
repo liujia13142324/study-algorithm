@@ -77,6 +77,33 @@ public class CarFleet {
     }
 
     /**
+     * 最快版本，细节优化
+     * @param target
+     * @param position
+     * @param speed
+     * @return
+     */
+    public int carFleet3(int target, int[] position, int[] speed) {
+        int[][] helper = new int[position.length][2];
+        for (int i = 0; i < position.length; i++) {
+            helper[i][0] = position[i];
+            helper[i][1] = speed[i];
+        }
+        Arrays.sort(helper, (a, b) -> -Integer.compare(a[0], b[0]));
+
+        double[] stack = new double[position.length];
+        int top = -1;
+        for (int i = 0; i < position.length; i++) {
+            double t = (double)(target - helper[i][0]) / helper[i][1];
+            if (top == -1 || stack[top] < t) {
+                stack[++top] = t;
+            }
+        }
+
+        return top + 1;
+    }
+
+    /**
      * 用 int 做前置计算，比 double 更快
      * @param target
      * @param position
