@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._2;
 
+import org.junit.Test;
+
 /**
  * 2320. 统计放置房子的方式数
  * 相关企业
@@ -29,8 +31,25 @@ package com.lj.problem.leetcode._2;
  */
 public class CountHousePlacements {
 
-    public int countHousePlacements(int n) {
-
+    @Test
+    public void test() {
+        System.out.println(countHousePlacements(5));
+        System.out.println(countHousePlacements(1));
+        System.out.println(countHousePlacements(2));
+        System.out.println(countHousePlacements(3));
+        System.out.println(countHousePlacements(4));
     }
 
+    public int countHousePlacements(int n) {
+        int[] dp = new int[n + 1];
+        int[] sums = new int[n + 1];
+        dp[1] = 1;
+        sums[1] = 1;
+        for (int i = 2; i <= n; i++) {
+            dp[i] = (1 + sums[i - 2]) % 1000000007;
+            sums[i] = (sums[i - 1] + dp[i]) % 1000000007;
+        }
+        long tmp = sums[n] + 1;
+        return (int) ((tmp * tmp) % 1000000007);
+    }
 }
