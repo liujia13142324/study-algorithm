@@ -48,6 +48,31 @@ import java.util.*;
  */
 public class NumIslands {
 
+    public int numIslands3(char[][] grid) {
+        int ans = 0;
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if ('1' == grid[i][j]) {
+                    ans ++;
+                    dfs2(i, j, grid);
+                }
+            }
+        }
+        return ans;
+    }
+
+    private void dfs2(int i, int j, char[][] grid) {
+        if (i == grid.length || i < 0 || j == grid[0].length || j < 0 || grid[i][j] != '1') {
+            return;
+        }
+        grid[i][j] = '2';
+        dfs2(i + 1, j, grid);
+        dfs2(i - 1, j, grid);
+        dfs2(i, j + 1, grid);
+        dfs2(i, j - 1, grid);
+    }
+
+
     public int numIslands2(char[][] grid) {
         boolean[][] visited = new boolean[grid.length][grid[0].length];
         int ans = 0;
@@ -72,9 +97,6 @@ public class NumIslands {
         dfs2(i, j + 1, visited, grid);
         dfs2(i, j - 1, visited, grid);
     }
-
-
-
 
 
     public int numIslands(char[][] grid) {
