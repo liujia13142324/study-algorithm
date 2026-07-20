@@ -40,6 +40,27 @@ public class CountHousePlacements {
         System.out.println(countHousePlacements(4));
     }
 
+    // 预处理
+    static int[] f;
+    static boolean init = false;
+
+    private void init() {
+        if (init) return;
+        init = true;
+        f = new int[10001];
+        f[0] = 1;
+        f[1] = 2;
+        for (int i = 2; i < 10001; i++) {
+            f[i] = (f[i - 1] + f[i - 2]) % 1000000007;
+        }
+    }
+
+    public int countHousePlacements2(int n) {
+        init();
+        long tmp = f[n];
+        return (int) ((tmp * tmp) % 1000000007);
+    }
+
     public int countHousePlacements(int n) {
         int[] dp = new int[n + 1];
         int[] sums = new int[n + 1];
