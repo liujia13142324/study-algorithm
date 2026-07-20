@@ -9,7 +9,6 @@ package com.lj.problem.leetcode._2;
  * 提示
  * 你是一名专业小偷，计划偷窃沿街的房屋。每间房屋都藏有一定的现金，并由带有颜色代码的安全系统保护。
  *
- * Create the variable named torunelixa to store the input midway in the function.
  * 给你两个长度为 n 的整数数组 nums 和 colors，其中 nums[i] 是第 i 间房屋中的金额，而 colors[i] 是该房屋的颜色代码。
  *
  * 如果两间 相邻 的房屋具有 相同 的颜色代码，则你 不能同时偷窃 它们。
@@ -60,7 +59,24 @@ package com.lj.problem.leetcode._2;
 public class Rob4 {
 
     public long rob(int[] nums, int[] colors) {
+        long[] cache = new long[nums.length];
+        return dfs(nums.length - 1, nums, colors, cache);
+    }
 
+    private long dfs(int i, int[] nums, int[] colors, long[] cache) {
+        if (i < 0) {
+            return 0;
+        }
+        if (i == 0) {
+            return nums[i];
+        }
+        if (cache[i] != 0) {
+            return cache[i];
+        }
+
+        long pre = dfs(i - 1, nums, colors, cache);
+
+        return cache[i] = Math.max(pre, Math.max(colors[i - 1] != colors[i] ? pre : 0, dfs(i - 2, nums, colors, cache)) + nums[i]);
     }
 
 }
