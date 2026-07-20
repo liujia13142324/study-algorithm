@@ -36,8 +36,36 @@ import java.util.*;
  * grid[i][j] 的值为 '0' 或 '1'
  */
 public class NumIslands {
-    
-    
+
+    public int numIslands2(char[][] grid) {
+        boolean[][] visited = new boolean[grid.length][grid[0].length];
+        int ans = 0;
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if ('1' == grid[i][j] && !visited[i][j]) {
+                    ans ++;
+                    dfs2(i, j, visited, grid);
+                }
+            }
+        }
+        return ans;
+    }
+
+    private void dfs2(int i, int j, boolean[][] visited, char[][] grid) {
+        if (i == visited.length || i < 0 || j == visited[0].length || j < 0 || visited[i][j] || grid[i][j] == '0') {
+            return;
+        }
+        visited[i][j] = true;
+        dfs2(i + 1, j, visited, grid);
+        dfs2(i - 1, j, visited, grid);
+        dfs2(i, j + 1, visited, grid);
+        dfs2(i, j - 1, visited, grid);
+    }
+
+
+
+
+
     public int numIslands(char[][] grid) {
         int count = 0;
         for (int i = 0; i < grid.length; i++) {
