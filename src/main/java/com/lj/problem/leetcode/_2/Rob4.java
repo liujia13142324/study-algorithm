@@ -58,6 +58,21 @@ package com.lj.problem.leetcode._2;
  */
 public class Rob4 {
 
+    public long rob4(int[] nums, int[] colors) {
+        long pre = 0;
+        long curr = nums[0];
+        for (int i = 2; i <= nums.length; i++) {
+            long tmp = curr;
+            if (colors[i - 1] != colors[i - 2]) {
+                curr = curr + nums[i - 1];
+            } else {
+                curr = Math.max(curr, pre + nums[i - 1]);
+            }
+            pre = tmp;
+        }
+        return curr;
+    }
+
     public long rob3(int[] nums, int[] colors) {
         long[] dp = new long[nums.length + 1];
         dp[1] = nums[0];
