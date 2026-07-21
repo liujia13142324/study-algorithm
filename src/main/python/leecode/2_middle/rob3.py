@@ -70,6 +70,20 @@ class Solution:
 
         return dp[n]
 
+    def rob(self, nums: List[int], colors: List[int]) -> int:
+        n = len(nums)
+        pre = 0
+        curr = nums[0]
+        for i in range(2, n + 1):
+            tmp = curr
+            if colors[i - 1] != colors[i - 2]:
+                curr = curr + nums[i - 1]
+            else:
+                curr = max(curr, pre + nums[i - 1])
+            pre = tmp
+
+        return curr
+
 
 
 
