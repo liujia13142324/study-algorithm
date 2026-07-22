@@ -54,6 +54,7 @@ package com.lj.problem.leetcode._1;
 public class SmallestNumber {
 
     public int smallestNumber(int n) {
-
+        int bit = 32-Integer.numberOfLeadingZeros(n);
+        return (1 << bit) - 1;
     }
 }
