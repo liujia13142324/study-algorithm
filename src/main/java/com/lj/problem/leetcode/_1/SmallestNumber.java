@@ -53,8 +53,18 @@ package com.lj.problem.leetcode._1;
  */
 public class SmallestNumber {
 
+    public int smallestNumber2(int n) {
+        return (Integer.highestOneBit(n) << 1) - 1;
+    }
+
     public int smallestNumber(int n) {
         int bit = 32-Integer.numberOfLeadingZeros(n);
         return (1 << bit) - 1;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(Integer.highestOneBit(8));
+        System.out.println(Integer.highestOneBit(7));
+        System.out.println(Integer.highestOneBit(6));
     }
 }
