@@ -8,3 +8,6 @@ class Solution:
             ans += 1
             i = (i << 1) + 1
         return ans
+
+    def countMonobit(self, n: int) -> int:
+        return (n + 1).bit_length()

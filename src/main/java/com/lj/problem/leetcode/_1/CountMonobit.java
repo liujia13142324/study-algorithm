@@ -38,6 +38,19 @@ package com.lj.problem.leetcode._1;
  */
 public class CountMonobit {
 
+    /**
+     * 答案即为 (n + 1) 二进制的长度
+     *  0 <= 2^k - 1 <= n 求 k 的个数
+     *  1 <= 2^k <= n + 1
+     *  0 <= k <= w - 1， w 为 (n + 1) 二进制的长度
+     *  故 k = w (0 ~ w-1)
+     * @param n
+     * @return
+     */
+    public int countMonobit2(int n) {
+        return 32 - Integer.numberOfLeadingZeros(n + 1);
+    }
+
     public int countMonobit(int n) {
         int ans = 1;
         for (int i = 1; i <= n; i = (i << 1) + 1) {
