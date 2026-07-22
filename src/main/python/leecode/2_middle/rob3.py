@@ -85,6 +85,15 @@ class Solution:
         return curr
 
 
+if __name__ == '__main__':
+    print(9 ^ 8)
+    t = 9
+    while t:
+        lowbit = t & -t
+        # t ^= lowbit
+        t &= (t - 1)
+        i = lowbit.bit_length() - 1
+        print(i)
 
 
 
