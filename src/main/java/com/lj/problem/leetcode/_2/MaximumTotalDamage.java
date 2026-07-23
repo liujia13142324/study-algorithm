@@ -1,5 +1,11 @@
 package com.lj.problem.leetcode._2;
 
+import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 3186. 施咒的最大总伤害
  * 中等
@@ -48,7 +54,59 @@ package com.lj.problem.leetcode._2;
  */
 public class MaximumTotalDamage {
 
-    public long maximumTotalDamage(int[] power) {
-
+    @Test
+    public void test() {
+//        System.out.println(maximumTotalDamage(new int[]{1,1,3,4}));
+        System.out.println(maximumTotalDamage(new int[]{5,9,2,10,2,7,10,9,3,8}));
     }
+
+    public long maximumTotalDamage2(int[] power) {
+        Arrays.sort(power);
+        long[] dp = new long[power.length + 1];
+        long ans = dp[1] = power[0];
+        for (int i = 2; i <= power.length; i++) {
+            if (power[i - 1] == power[i - 2]) {
+                dp[i] = dp[i - 1] + power[i - 1];
+            }else {
+                dp[i] = dp[find(power, power[i - 1] - 3) + 1] + power[i - 1];
+            }
+            ans = Math.max(ans, dp[i]);
+        }
+        return ans;
+    }
+
+    public long maximumTotalDamage(int[] power) {
+        Arrays.sort(power);
+        long[][] dp = new long[2][power.length + 1];
+        long ans = dp[1][1] = power[0];
+        for (int i = 2; i <= power.length; i++) {
+            if (power[i - 1] == power[i - 2]) {
+                dp[1][i] = dp[1][i - 1] + power[i - 1];
+            }else {
+                int pre = find(power, power[i - 1] - 3) + 1;
+                dp[1][i] = Math.max(dp[0][pre], dp[1][pre]) + power[i - 1];
+            }
+            dp[0][i] = ans;
+            ans = Math.max(ans, dp[1][i]);
+        }
+        return ans;
+    }
+
+
+    private int find(int[] power, int target) {
+        int l = -1;
+        int r = power.length;
+        while (l + 1 < r) {
+            int mid = l + (r - l) / 2;
+            if (power[mid] <= target) {
+                l = mid;
+            }else {
+                r = mid;
+            }
+        }
+
+        return l;
+    }
+
+
 }
