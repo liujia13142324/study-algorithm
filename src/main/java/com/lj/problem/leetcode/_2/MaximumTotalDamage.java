@@ -56,23 +56,9 @@ public class MaximumTotalDamage {
 
     @Test
     public void test() {
-//        System.out.println(maximumTotalDamage(new int[]{1,1,3,4}));
-        System.out.println(maximumTotalDamage(new int[]{5,9,2,10,2,7,10,9,3,8}));
-    }
-
-    public long maximumTotalDamage2(int[] power) {
-        Arrays.sort(power);
-        long[] dp = new long[power.length + 1];
-        long ans = dp[1] = power[0];
-        for (int i = 2; i <= power.length; i++) {
-            if (power[i - 1] == power[i - 2]) {
-                dp[i] = dp[i - 1] + power[i - 1];
-            }else {
-                dp[i] = dp[find(power, power[i - 1] - 3) + 1] + power[i - 1];
-            }
-            ans = Math.max(ans, dp[i]);
-        }
-        return ans;
+//        System.out.println(maximumTotalDamage2(new int[]{1,1,3,4}));
+        System.out.println(maximumTotalDamage2(new int[]{7,1,6,6}));
+//        System.out.println(maximumTotalDamage2(new int[]{5,9,2,10,2,7,10,9,3,8}));
     }
 
     public long maximumTotalDamage(int[] power) {
@@ -83,7 +69,7 @@ public class MaximumTotalDamage {
             if (power[i - 1] == power[i - 2]) {
                 dp[1][i] = dp[1][i - 1] + power[i - 1];
             }else {
-                int pre = find(power, power[i - 1] - 3) + 1;
+                int pre = find(power, power[i - 1] - 2) + 1;
                 dp[1][i] = Math.max(dp[0][pre], dp[1][pre]) + power[i - 1];
             }
             dp[0][i] = ans;
@@ -92,13 +78,56 @@ public class MaximumTotalDamage {
         return ans;
     }
 
+    public long maximumTotalDamage3(int[] power) {
+        Map<Integer, Integer> cntMap = new HashMap<>();
+        for (int p: power) {
+            cntMap.merge(p, 1, Integer::sum);
+        }
+        int n = cntMap.size();
+        int[] distinct = new int[n];
+        int i = 0;
+        for (int x: cntMap.keySet()) {
+            distinct[i++] = x;
+        }
+        Arrays.sort(distinct);
+        int j = 0;
+        long[] dp = new long[n + 1];
+        for (i = 1; i <= n; i++) {
+            int x = distinct[i - 1];
+            while (distinct[j] < x - 2) {
+                j++;
+            }
+            dp[i] = Math.max(dp[i - 1], dp[j] + (long)x * cntMap.get(x));
+        }
+        return dp[n];
+    }
+
+
+    public long maximumTotalDamage2(int[] power) {
+        Map<Integer, Integer> cntMap = new HashMap<>();
+        for (int p: power) {
+            cntMap.merge(p, 1, Integer::sum);
+        }
+        int[] distinct = new int[cntMap.size()];
+        int i = 0;
+        for (Map.Entry<Integer, Integer> entry: cntMap.entrySet()) {
+            distinct[i++] = entry.getKey();
+        }
+        Arrays.sort(distinct);
+        long[] dp = new long[distinct.length + 1];
+        for (i = 1; i <= distinct.length; i++) {
+            dp[i] = Math.max(dp[i - 1], dp[find(distinct, distinct[i - 1] - 2) + 1] + (long) distinct[i - 1] * cntMap.get(distinct[i - 1]) );
+        }
+        return dp[distinct.length];
+    }
+
 
     private int find(int[] power, int target) {
         int l = -1;
         int r = power.length;
         while (l + 1 < r) {
             int mid = l + (r - l) / 2;
-            if (power[mid] <= target) {
+            if (power[mid] < target) {
                 l = mid;
             }else {
                 r = mid;
