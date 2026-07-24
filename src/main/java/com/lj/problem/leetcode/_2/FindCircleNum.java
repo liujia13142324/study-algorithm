@@ -43,11 +43,45 @@ public class FindCircleNum {
 
     @Test
     public void test() {
-        System.out.println(findCircleNum(new int[][]{
-            {1,1,0},
-            {1,1,0},
+        System.out.println(findCircleNum2(new int[][]{
+            {1,0,0},
+            {0,1,0},
             {0,0,1}
         }));
+    }
+
+    /**
+     * 并查集
+     * @param isConnected
+     * @return
+     */
+    public int findCircleNum2(int[][] isConnected) {
+        int[] helper = new int[isConnected.length];
+        for (int i = 0; i < helper.length; i++) {
+            helper[i] = i;
+        }
+
+        int cnt = helper.length;
+        for (int i = 0; i < isConnected.length; i++) {
+            for (int j = 0; j < isConnected[i].length; j++) {
+                if (isConnected[i][j] == 1) {
+                    int end1 = findEnd(i, helper);
+                    int end2 = findEnd(j, helper);
+                    if (end1 != end2) {
+                        helper[end1] = end2;
+                        cnt--;
+                    }
+                }
+            }
+        }
+        return cnt;
+    }
+
+    private int findEnd(int i, int[] helper) {
+        if (helper[i] == i) {
+            return i;
+        }
+        return helper[i] = findEnd(helper[i], helper);
     }
 
     public int findCircleNum(int[][] isConnected) {
