@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._2;
 
+import org.junit.Test;
+
 /**
  * 547. 省份数量
  * 中等
@@ -39,7 +41,35 @@ package com.lj.problem.leetcode._2;
  */
 public class FindCircleNum {
 
-    public int findCircleNum(int[][] isConnected) {
-
+    @Test
+    public void test() {
+        System.out.println(findCircleNum(new int[][]{
+            {1,1,0},
+            {1,1,0},
+            {0,0,1}
+        }));
     }
+
+    public int findCircleNum(int[][] isConnected) {
+        int ans = 0;
+        for (int i = 0; i < isConnected.length; i++) {
+            ans += dfs(i, isConnected);
+        }
+        return ans;
+    }
+
+    private int dfs(int i, int[][] isConnected) {
+        if (isConnected[i][i] != 1) return 0;
+        int ans = 0;
+        for (int j = 0; j < isConnected.length; j++) {
+            if (isConnected[i][j] == 1) {
+                isConnected[i][j] = 2;
+                isConnected[j][i] = 2;
+                dfs(j, isConnected);
+                ans = 1;
+            }
+        }
+        return ans;
+    }
+
 }
