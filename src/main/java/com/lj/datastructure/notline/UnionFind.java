@@ -16,13 +16,15 @@ public class UnionFind {
         }
     }
 
-    public void merge(int x, int y) {
+    public boolean merge(int x, int y) {
         x = find(x);
         y = find(y);
         if (x != y) {
             root[x] = y;
             cnt --;
+            return true;
         }
+        return false;
     }
 
     private int find(int i) {

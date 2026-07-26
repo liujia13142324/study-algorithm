@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._2;
 
+import com.lj.datastructure.notline.UnionFind;
+
 /**
  * 684. 冗余连接
  * 中等
@@ -41,7 +43,13 @@ package com.lj.problem.leetcode._2;
 public class FindRedundantConnection {
 
     public int[] findRedundantConnection(int[][] edges) {
-
+        UnionFind uf = new UnionFind(edges.length + 1);
+        for (int[] edge : edges) {
+            if (!uf.merge(edge[0], edge[1])) {
+                return edge;
+            }
+        }
+        return null;
     }
 
 }
