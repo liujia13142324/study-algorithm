@@ -46,3 +46,12 @@ class Solution:
             dp[0][i] = max(dp[0][i - 1], dp[1][i - 1])
             dp[1][i] = nums[i - 1] + max(dp[1][i - 1], 0)
         return max(dp[0][n], dp[1][n])
+
+    def maxSubArray(self, nums: List[int]) -> int:
+        n = len(nums)
+        max_ = -1000000
+        pre = 0
+        for i in range(0, n):
+            pre = max(0, pre) + nums[i]
+            max_ = max(max_, pre)
+        return max_
