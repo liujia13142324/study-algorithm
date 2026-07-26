@@ -48,18 +48,18 @@ public class MaxSubArray {
         System.out.println(maxSubArray(new int[]{-2,-1}));
     }
 
+    // ans = 前缀和 - 最小前缀和 ==> 当最小前缀和 < 0, 如果最小前缀和 > 0, 那么就应该等于前缀和
+    // min >= 0 ==> ans = 前缀和
+    // min < 0  ==> ans = 前缀和 - min
     public int maxSubArray1(int[] nums) {
-        int[] sums = new int[nums.length];
-        int len = nums.length;
-        sums[0] = nums[0];
-        int min = nums[0];
-        int ans = nums[0];
-        for (int i = 1; i < len; i++) {
-            sums[i] = nums[i] + sums[i - 1];
-            ans = Math.max(ans, Math.max(sums[i], sums[i] - min));
-            min = Math.min(min, sums[i]);
+        int sums = 0;
+        int min = 0;
+        int ans = Integer.MIN_VALUE;
+        for (int num: nums) {
+            sums += num;
+            ans = Math.max(ans , sums - min);
+            min = Math.min(min, sums);
         }
-
         return ans;
     }
 
