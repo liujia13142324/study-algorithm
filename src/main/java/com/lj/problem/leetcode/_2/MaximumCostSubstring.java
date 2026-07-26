@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._2;
 
+import java.util.Arrays;
+
 /**
  * 2606. 找到最大开销的子字符串
  * 中等
@@ -48,6 +50,21 @@ package com.lj.problem.leetcode._2;
 public class MaximumCostSubstring {
 
     public int maximumCostSubstring(String s, String chars, int[] vals) {
-
+        int[] charPricesMapping = new int[26];
+        Arrays.fill(charPricesMapping, -10000);
+        char[] chars1 = chars.toCharArray();
+        for (int i = 0; i < chars1.length; i++) {
+            charPricesMapping[chars1[i] - 'a'] = vals[i];
+        }
+        int ans = 0;
+        int sums = 0;
+        int min = 0;
+        for (char c: s.toCharArray()) {
+            int idx = c - 'a';
+            sums += charPricesMapping[idx] == -10000 ? idx + 1: charPricesMapping[idx];
+            ans = Math.max(ans, sums - min);
+            min = Math.min(min, sums);
+        }
+        return ans;
     }
 }
