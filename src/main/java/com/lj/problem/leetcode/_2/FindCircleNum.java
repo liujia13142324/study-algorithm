@@ -1,5 +1,6 @@
 package com.lj.problem.leetcode._2;
 
+import com.lj.datastructure.notline.UnionFind;
 import org.junit.Test;
 
 /**
@@ -43,9 +44,9 @@ public class FindCircleNum {
 
     @Test
     public void test() {
-        System.out.println(findCircleNum2(new int[][]{
-            {1,0,0},
-            {0,1,0},
+        System.out.println(findCircleNum3(new int[][]{
+            {1,1,0},
+            {1,1,0},
             {0,0,1}
         }));
     }
@@ -104,6 +105,19 @@ public class FindCircleNum {
             return i;
         }
         return helper[i] = findEnd(helper[i], helper);
+    }
+
+    public int findCircleNum3(int[][] isConnected) {
+        int n = isConnected.length;
+        UnionFind unionFind = new UnionFind(n);
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (isConnected[i][j] == 1) {
+                    unionFind.merge(i, j);
+                }
+            }
+        }
+        return unionFind.cnt;
     }
 
 }
