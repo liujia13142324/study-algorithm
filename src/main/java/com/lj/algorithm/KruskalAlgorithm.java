@@ -45,7 +45,7 @@ public class KruskalAlgorithm {
             int end1 = getEnd(ends,edge[0]);
             int end2 = getEnd(ends,edge[1]);
             
-            // 防止出现回路
+            // 防止出现回路 --> 这里不应该是合并连通图？
             if(end1 != end2){
                 // 修改end1而不是end[edge[0]]，使用三点回路分析理解，end1有两种可能，
                 // 1：就是edge[0]，当这个点是第一次加入结果图
