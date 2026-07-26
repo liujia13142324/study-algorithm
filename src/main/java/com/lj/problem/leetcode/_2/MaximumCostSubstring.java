@@ -67,4 +67,23 @@ public class MaximumCostSubstring {
         }
         return ans;
     }
+
+    // dp
+    public int maximumCostSubstring2(String s, String chars, int[] vals) {
+        int[] charPricesMapping = new int[26];
+        Arrays.fill(charPricesMapping, -10000);
+        char[] chars1 = chars.toCharArray();
+        for (int i = 0; i < chars1.length; i++) {
+            charPricesMapping[chars1[i] - 'a'] = vals[i];
+        }
+
+        int pre = 0;
+        int ans = 0;
+        for (char c: s.toCharArray()) {
+            int idx = c - 'a';
+            pre = Math.max(0, pre) + (charPricesMapping[idx] == -10000 ? idx + 1: charPricesMapping[idx]);
+            ans = Math.max(ans, pre);
+        }
+        return ans;
+    }
 }
