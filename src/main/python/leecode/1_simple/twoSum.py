@@ -1,3 +1,5 @@
+from typing import List
+
 
 # 1. 两数之和
 # 已解答

@@ -1,5 +1,9 @@
 package com.lj.problem.leetcode._1;
 
+import org.junit.Test;
+
+import java.util.Arrays;
+
 /**
  * 3880. 两个值之间的最小绝对差值
  * 简单
@@ -50,6 +54,28 @@ package com.lj.problem.leetcode._1;
  */
 public class MinAbsoluteDifference {
 
+    static int[] mapping = {0, 2, 1};
+
+    @Test
+    public void test() {
+        System.out.println(minAbsoluteDifference2(new int[]{1,0,0,2,0,1}));
+    }
+
+    public int minAbsoluteDifference2(int[] nums) {
+        int ans = Integer.MAX_VALUE;
+        int[] lastIdx = new int[3];
+        Arrays.fill(lastIdx, -1);
+        for (int i = 0; i < nums.length; i++) {
+            if (mapping[nums[i]] != 0) {
+                lastIdx[nums[i]] = i;
+                if (lastIdx[mapping[nums[i]]] != -1) {
+                    ans = Math.min(ans, i - lastIdx[mapping[nums[i]]]);
+                }
+            }
+        }
+        return ans == Integer.MAX_VALUE ? -1 : ans;
+    }
+
     public int minAbsoluteDifference(int[] nums) {
         int ans = Integer.MAX_VALUE;
         int target = -1;
@@ -60,7 +86,7 @@ public class MinAbsoluteDifference {
                     pre = i;
                     target = nums[i] == 1 ? 2 : 1;
                 }else if (nums[i] == target) {
-                    ans = Math.min(ans, Math.abs(i - pre));
+                    ans = Math.min(ans, i - pre);
                     pre = i;
                     target = nums[i] == 1 ? 2 : 1;
                 }else {
