@@ -51,6 +51,23 @@ package com.lj.problem.leetcode._1;
 public class MinAbsoluteDifference {
 
     public int minAbsoluteDifference(int[] nums) {
-
+        int ans = Integer.MAX_VALUE;
+        int target = -1;
+        int pre = -1;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] == 1 || nums[i] == 2) {
+                if (target == -1) {
+                    pre = i;
+                    target = nums[i] == 1 ? 2 : 1;
+                }else if (nums[i] == target) {
+                    ans = Math.min(ans, Math.abs(i - pre));
+                    pre = i;
+                    target = nums[i] == 1 ? 2 : 1;
+                }else {
+                    pre = i;
+                }
+            }
+        }
+        return ans == Integer.MAX_VALUE ? -1 : ans;
     }
 }
