@@ -53,14 +53,26 @@ import java.util.Arrays;
  * 0 <= nums[i] <= 2
  */
 public class MinAbsoluteDifference {
-
-    static int[] mapping = {0, 2, 1};
-
     @Test
     public void test() {
         System.out.println(minAbsoluteDifference2(new int[]{1,0,0,2,0,1}));
     }
 
+    public int minAbsoluteDifference3(int[] nums) {
+        int ans = nums.length;
+        int[] last = {-nums.length, -nums.length};
+        for (int i = 0; i < nums.length; i++) {
+            int x = nums[i];
+            if (x > 0) {
+                x--;
+                ans = Math.min(ans, i - last[x ^ 1]);
+                last[x] = i;
+            }
+        }
+        return ans == nums.length ? -1 : ans;
+    }
+
+    static int[] mapping = {0, 2, 1};
     public int minAbsoluteDifference2(int[] nums) {
         int ans = Integer.MAX_VALUE;
         int[] lastIdx = new int[3];
@@ -81,7 +93,7 @@ public class MinAbsoluteDifference {
         int target = -1;
         int pre = -1;
         for (int i = 0; i < nums.length; i++) {
-            if (nums[i] == 1 || nums[i] == 2) {
+            if (nums[i] > 0) {
                 if (target == -1) {
                     pre = i;
                     target = nums[i] == 1 ? 2 : 1;
