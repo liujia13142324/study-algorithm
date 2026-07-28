@@ -1,5 +1,8 @@
 package com.lj.problem.leetcode._2;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 2342. 数位和相等数对的最大和
  * 中等
@@ -36,6 +39,25 @@ package com.lj.problem.leetcode._2;
 public class MaximumSum {
 
     public int maximumSum(int[] nums) {
+        Map<Integer, Integer> mapping = new HashMap();
+        int ans = Integer.MIN_VALUE;
+        for (int num: nums) {
+            int sum = getBitSum(num);
+            int mappingVal = mapping.getOrDefault(sum, Integer.MIN_VALUE);
+            ans = Math.max(ans, mappingVal + num);
+            if (mappingVal < num) {
+                mapping.put(sum, num);
+            }
+        }
+        return ans < 0 ? -1 : ans;
+    }
 
+    private int getBitSum(int num) {
+        int ans = 0;
+        while (num > 0) {
+            ans += (num % 10) ;
+            num /= 10;
+        }
+        return ans;
     }
 }
