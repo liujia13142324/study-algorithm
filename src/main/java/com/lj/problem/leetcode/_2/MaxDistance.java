@@ -39,14 +39,15 @@ public class MaxDistance {
 
     public int maxDistance(List<List<Integer>> arrays) {
         int ans = 0;
-        int minVal = arrays.get(0).get(0);
-        int maxVal = arrays.get(0).get(arrays.get(0).size()-1);
+        int minVal = Integer.MAX_VALUE / 2;
+        int maxVal = Integer.MIN_VALUE / 2;
 
-        for (int i = 1, n = arrays.size(); i < n; i++) {
-            List<Integer> curr = arrays.get(i);
-            ans = Math.max(ans, Math.max(Math.abs(curr.get(0) - maxVal), Math.abs(curr.get(curr.size() - 1) - minVal)));
-            minVal = Math.min(minVal, curr.get(0));
-            maxVal = Math.max(maxVal, curr.get(curr.size()-1));
+        for (List<Integer> curr: arrays) {
+            int min = curr.get(0);
+            int max = curr.get(curr.size() - 1);
+            ans = Math.max(ans, Math.max( maxVal - min, max - minVal));
+            minVal = Math.min(minVal, min);
+            maxVal = Math.max(maxVal, max);
         }
 
         return ans;
