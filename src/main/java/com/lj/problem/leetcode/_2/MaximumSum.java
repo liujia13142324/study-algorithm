@@ -1,5 +1,6 @@
 package com.lj.problem.leetcode._2;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,14 +40,15 @@ import java.util.Map;
 public class MaximumSum {
 
     public int maximumSum(int[] nums) {
-        Map<Integer, Integer> mapping = new HashMap();
+        int[] mapping = new int[82];
+        Arrays.fill(mapping, Integer.MIN_VALUE);
         int ans = Integer.MIN_VALUE;
         for (int num: nums) {
             int sum = getBitSum(num);
-            int mappingVal = mapping.getOrDefault(sum, Integer.MIN_VALUE);
+            int mappingVal = mapping[sum];
             ans = Math.max(ans, mappingVal + num);
             if (mappingVal < num) {
-                mapping.put(sum, num);
+                mapping[sum] = num;
             }
         }
         return ans < 0 ? -1 : ans;
