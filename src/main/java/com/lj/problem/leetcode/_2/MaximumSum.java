@@ -42,7 +42,7 @@ public class MaximumSum {
     public int maximumSum(int[] nums) {
         int[] mapping = new int[82];
         Arrays.fill(mapping, Integer.MIN_VALUE);
-        int ans = Integer.MIN_VALUE;
+        int ans = -1;
         for (int num: nums) {
             int sum = getBitSum(num);
             int mappingVal = mapping[sum];
@@ -51,7 +51,7 @@ public class MaximumSum {
                 mapping[sum] = num;
             }
         }
-        return ans < 0 ? -1 : ans;
+        return ans;
     }
 
     private int getBitSum(int num) {
