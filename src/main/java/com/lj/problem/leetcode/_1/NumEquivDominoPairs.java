@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._1;
 
+import org.junit.Test;
+
 /**
  * 1128. 等价多米诺骨牌对的数量
  * 简单
@@ -34,6 +36,16 @@ package com.lj.problem.leetcode._1;
 public class NumEquivDominoPairs {
 
     public int numEquivDominoPairs(int[][] dominoes) {
-
+        int[][] cnt = new int[10][10];
+        int ans = 0;
+        for (int[] domino: dominoes) {
+            if (domino[0] == domino[1]) {
+                ans = ans + cnt[domino[1]][domino[0]];
+            }else {
+                ans = ans + cnt[domino[1]][domino[0]] + cnt[domino[0]][domino[1]];
+            }
+            cnt[domino[0]][domino[1]]++;
+        }
+        return ans;
     }
 }
