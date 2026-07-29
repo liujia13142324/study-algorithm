@@ -37,7 +37,6 @@ package com.lj.problem.leetcode._2;
 public class MaxAbsoluteSum {
 
     public int maxAbsoluteSum3(int[] nums) {
-        int[][] dp = new int[2][nums.length];
         int max = 0;
         int min = 0;
         int ans = 0;
