@@ -1,5 +1,8 @@
 package com.lj.problem.leetcode._2;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 1679. K 和数对的最大数目
  * 中等
@@ -41,6 +44,16 @@ package com.lj.problem.leetcode._2;
 public class MaxOperations {
 
     public int maxOperations(int[] nums, int k) {
-
+        Map<Integer, Integer> mapping = new HashMap<>();
+        int ans = 0;
+        for (int num: nums) {
+            if (mapping.getOrDefault(k-num, 0) > 0) {
+                mapping.merge(k - num, 1, Math::subtractExact);
+                ans++;
+            }else {
+                mapping.merge(num, 1, Integer::sum);
+            }
+        }
+        return ans;
     }
 }
