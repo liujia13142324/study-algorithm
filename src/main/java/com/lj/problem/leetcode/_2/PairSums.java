@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._2;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -27,7 +29,17 @@ import java.util.List;
 public class PairSums {
 
     public List<List<Integer>> pairSums(int[] nums, int target) {
-
+        int[] mapping = new int[200001];
+        List<List<Integer>> ans = new ArrayList();
+        for (int num: nums) {
+            if (mapping[target - num + 100000] > 0) {
+                mapping[target - num + 100000]--;
+                ans.add(Arrays.asList(num, target - num));
+            }else {
+                mapping[num + 100000]++;
+            }
+        }
+        return ans;
     }
 
 }
