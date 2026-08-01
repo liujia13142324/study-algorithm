@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._2;
 
+import org.junit.Test;
+
 /**
  * 1191. K 次串联后最大子数组之和
  * 中等
@@ -39,7 +41,44 @@ package com.lj.problem.leetcode._2;
  */
 public class KConcatenationMaxSum {
 
-    public int kConcatenationMaxSum(int[] arr, int k) {
+    @Test
+    public void test() {
+//        System.out.println(kConcatenationMaxSum2(new int[]{-5,-2,0,0,3,9,-2,-5,4}, 5));
+        System.out.println(kConcatenationMaxSum(new int[]{-1,1,2,3,-8,4}, 2));
+//        System.out.println(kConcatenationMaxSum2(new int[]{10000,10000,10000,10000,10000,10000,10000,10000,10000,10000}, 100000));
+    }
 
+    public int kConcatenationMaxSum2(int[] arr, int k) {
+        long ans = 0;
+        long dp = 0;
+        for (int i = 0; i < k; i++) {
+            for (int num: arr) {
+                dp =  Math.max(dp, 0) + num;
+                ans = Math.max(ans, dp);
+            }
+        }
+        return (int) (ans % 1000000007);
+    }
+
+    public int kConcatenationMaxSum(int[] arr, int k) {
+        long ans = 0;
+        long sum = 0;
+        int dp = 0;
+        for (int num: arr) {
+            dp = Math.max(dp, 0) + num;
+            ans = Math.max(ans, dp);
+            sum += num;
+        }
+        if (sum > 0) {
+             ans  += (k - 1) * sum;
+        }
+        if (k == 1) {
+            return (int) ans;
+        }
+        for (int num: arr) {
+            dp = Math.max(dp, 0) + num;
+            ans = Math.max(ans, dp);
+        }
+        return (int) (ans % 1000000007);
     }
 }
