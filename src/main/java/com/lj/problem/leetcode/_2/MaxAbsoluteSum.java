@@ -75,4 +75,42 @@ public class MaxAbsoluteSum {
         }
         return ans;
     }
+
+    /**
+     * 前缀和2, 因为是绝对值，直接算最大最小值的差距
+     * 如果最大前缀和出现在最小前缀和的右边，那么上式算的是最大子数组和。
+     * 如果最大前缀和出现在最小前缀和的左边，那么上式算的是最小子数组和的绝对值。
+     * @param nums
+     * @return
+     */
+    public int maxAbsoluteSum5(int[] nums) {
+        int max = 0;
+        int min = 0;
+        int sum = 0;
+        for (int num: nums) {
+            sum += num;
+            min = Math.min(min, sum);
+            max = Math.max(max, sum);
+        }
+        return max - min;
+    }
+
+    /**
+     * 前缀和
+     * @param nums
+     * @return
+     */
+    public int maxAbsoluteSum4(int[] nums) {
+        int max = 0;
+        int min = 0;
+        int sum = 0;
+        int ans = 0;
+        for (int num: nums) {
+            sum += num;
+            ans = Math.max(ans, Math.max(Math.abs(sum - min), Math.abs(sum - max)));
+            min = Math.min(min, sum);
+            max = Math.max(max, sum);
+        }
+        return ans;
+    }
 }
