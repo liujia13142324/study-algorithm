@@ -31,6 +31,7 @@
 #
 # 1 <= nums.length <= 105
 # -104 <= nums[i] <= 104
+from itertools import accumulate
 from typing import List
 
 
@@ -44,3 +45,25 @@ class Solution:
             min_ = min(min_, 0) + num
             ans = max(ans, max(max_, abs(min_)))
         return ans
+
+    def maxAbsoluteSum(self, nums: List[int]) -> int:
+        min_ = 0
+        max_ = 0
+        sums = 0
+        for num in nums:
+            sums += num
+            max_ = max(max_, sums)
+            min_ = min(min_, sums)
+        return max_ - min_
+
+    def maxAbsoluteSum(self, nums: List[int]) -> int:
+        pre_sums = list(accumulate(nums, initial=0))
+        return max(pre_sums) - min(pre_sums)
+
+
+
+if __name__ == '__main__':
+    pre_sums = list(accumulate([2,-5,1,-4,3,-2], initial=0))
+    print(pre_sums)
+    pre_sums = list(accumulate([2,-5,1,-4,3,-2], initial=1))
+    print(pre_sums)
