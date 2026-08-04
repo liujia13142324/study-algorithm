@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._3;
 
+import org.junit.Test;
+
 /**
  * 2321. 拼接数组的最大分数
  * 困难
@@ -40,10 +42,35 @@ package com.lj.problem.leetcode._3;
  * 输出：31
  * 解释：选择不交换任何子数组。
  * 分数为 max(sum(nums1), sum(nums2)) = max(31, 3) = 31 。
+ *
+ * 提示：
+ *
+ * n == nums1.length == nums2.length
+ * 1 <= n <= 105
+ * 1 <= nums1[i], nums2[i] <= 104
  */
 public class MaximumsSplicedArray {
 
-    public int maximumsSplicedArray(int[] nums1, int[] nums2) {
+    @Test
+    public void test1() {
+        System.out.println(maximumsSplicedArray(new int[]{20,40,20,70,30}, new int[]{50,20,50,40,20}));
+    }
 
+    public int maximumsSplicedArray(int[] nums1, int[] nums2) {
+        int max1 = maximumsSplicedArray0(nums1, nums2);
+        int max2 = maximumsSplicedArray0(nums2, nums1);
+        return Math.max(max1, max2);
+    }
+
+    private int maximumsSplicedArray0(int[] source, int[] target) {
+        int maxIncrement = 0;
+        int increment = 0;
+        int sum = 0;
+        for (int i = 0; i < source.length; i++) {
+            sum += source[i];
+            increment = Math.max(0, increment + target[i] - source[i]);
+            maxIncrement = Math.max(maxIncrement,  increment);
+        }
+        return sum + maxIncrement;
     }
 }
