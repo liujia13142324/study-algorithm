@@ -1,5 +1,9 @@
 package com.lj.problem.leetcode._1;
 
+import org.junit.Test;
+
+import java.util.Arrays;
+
 /**
  * 3074. 重新分装苹果
  * 简单
@@ -39,7 +43,24 @@ package com.lj.problem.leetcode._1;
  */
 public class MinimumBoxes {
 
-    public int minimumBoxes(int[] apple, int[] capacity) {
+    @Test
+    public void test() {
+        System.out.println(minimumBoxes(new int[]{1,3,2}, new int[]{4,3,1,5,2}));
+    }
 
+    public int minimumBoxes(int[] apple, int[] capacity) {
+        Arrays.sort(capacity);
+        int i = apple.length - 1;
+        int j = capacity.length - 1;
+        while (i >= 0 && j >= 0) {
+            if (capacity[j] >= apple[i]) {
+                capacity[j] -= apple[i];
+                i--;
+            } else if (apple[i] > capacity[j]){
+                apple[i] -= capacity[j];
+                j--;
+            }
+        }
+        return capacity.length - j;
     }
 }
