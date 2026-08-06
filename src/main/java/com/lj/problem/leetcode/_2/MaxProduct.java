@@ -1,10 +1,19 @@
 package com.lj.problem.leetcode._2;
 
+import org.junit.Test;
+
 /**
- * 给你一个整数数组 nums ，请你找出数组中乘积最大的非空连续子数组
- * （该子数组中至少包含一个数字），并返回该子数组所对应的乘积。
+ * 152. 乘积最大子数组
+ * 已解答
+ * 中等
+ * 相关标签
+ * premium lock icon
+ * 相关企业
+ * 给你一个整数数组 nums ，请你找出数组中乘积最大的非空连续 子数组（该子数组中至少包含一个数字），并返回该子数组所对应的乘积。
  *
  * 测试用例的答案是一个 32-位 整数。
+ *
+ * 请注意，一个只包含一个元素的数组的乘积是这个元素的值。
  *
  *
  *
@@ -24,10 +33,34 @@ package com.lj.problem.leetcode._2;
  *
  * 1 <= nums.length <= 2 * 104
  * -10 <= nums[i] <= 10
- * nums 的任何前缀或后缀的乘积都 保证 是一个 32-位 整数
+ * nums 的任何子数组的乘积都 保证 是一个 32-位 整数
  */
 public class MaxProduct {
-    
+
+    @Test
+    public void test() {
+        System.out.println(maxProduct3(new int[]{-4,-3,-2}));
+    }
+
+    public int maxProduct3(int[] nums) {
+        int max = 1;
+        int min = 1;
+        int ans = Integer.MIN_VALUE;
+        for (int num: nums) {
+            if (num >= 0) {
+                max = Math.max(max, 1) * num;
+                min = Math.min(min, 1) * num;
+            }else {
+                int tmp = max;
+                max = Math.min(min, 1) * num;
+                min = Math.max(tmp, 1) * num;
+            }
+            ans = Math.max(ans, max);
+        }
+        return ans;
+    }
+
+
     /*public int maxProduct(int[] nums) {
         
         if (nums.length == 1) {return nums[0];}
