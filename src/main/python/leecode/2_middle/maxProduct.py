@@ -39,6 +39,30 @@ class Solution:
         max_val = 1
         min_val = 1
         for num in nums:
+            tmp = max_val
+            max_val = max(max(max_val, 1) * num, min(min_val, 1) * num)
+            min_val = min(max(tmp, 1) * num, min(min_val, 1) * num)
+            ans = max(ans, max_val)
+        return ans
+
+    # 这两个更快
+    def maxProduct(self, nums: List[int]) -> int:
+        ans = -inf
+        max_val = 1
+        min_val = 1
+        for num in nums:
+            tmp = max_val
+            max_val = max(max_val * num, min_val * num, num)
+            min_val = min(tmp * num, min_val * num, num)
+            ans = max(ans, max_val)
+        return ans
+
+    # 这两个更快
+    def maxProduct(self, nums: List[int]) -> int:
+        ans = -inf
+        max_val = 1
+        min_val = 1
+        for num in nums:
             if num >= 0:
                 max_val = max(max_val, 1) * num
                 min_val = min(min_val, 1) * num
