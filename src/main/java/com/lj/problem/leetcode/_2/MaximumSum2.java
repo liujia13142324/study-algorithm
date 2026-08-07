@@ -39,6 +39,16 @@ package com.lj.problem.leetcode._2;
 public class MaximumSum2 {
 
     public int maximumSum(int[] arr) {
-
+        int f1 = 0;
+        int f2 = 0;
+        int ans = Integer.MIN_VALUE;
+        for (int num: arr) {
+            int tmp = f1;
+            f1 = Math.max(f1, 0) + num;
+            f2 = Math.max(f2, 0) + num;
+            ans = Math.max(ans, Math.max(f1, f2));
+            f2 = Math.max(f2, tmp);
+        }
+        return ans;
     }
 }
