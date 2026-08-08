@@ -1,5 +1,9 @@
 package com.lj.problem.leetcode._2;
 
+import org.junit.Test;
+
+import java.util.Arrays;
+
 /**
  * 3381. 长度可被 K 整除的子数组的最大元素和
  * 中等
@@ -53,7 +57,32 @@ package com.lj.problem.leetcode._2;
  */
 public class MaxSubarraySum {
 
-    public long maxSubarraySum(int[] nums, int k) {
-
+    @Test
+    public void test() {
+        System.out.println(maxSubarraySum(new int[]{-5,1,2,-3,4}, 2));
+        System.out.println(maxSubarraySum(new int[]{1, 2}, 1));
     }
+
+    public long maxSubarraySum(int[] nums, int k) {
+        long[] dp = new long[nums.length - k + 1];
+        long windowSum = 0;
+        for (int i = 0; i < nums.length; i++) {
+            windowSum += nums[i];
+            if (i < k - 1) {
+                continue;
+            }
+            dp[i - k + 1] = windowSum;
+            windowSum -= nums[i - k + 1];
+        }
+
+        long ans = Long.MIN_VALUE;
+        for (int i = 0; i < dp.length; i++) {
+            if (i >= k) {
+                dp[i] = Math.max(dp[i - k], 0) + dp[i];
+            }
+            ans = Math.max(ans, dp[i]);
+        }
+        return ans;
+    }
+
 }
