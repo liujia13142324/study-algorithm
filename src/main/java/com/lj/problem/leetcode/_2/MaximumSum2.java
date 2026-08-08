@@ -51,4 +51,18 @@ public class MaximumSum2 {
         }
         return ans;
     }
+
+    public int maximumSum2(int[] arr) {
+        int f1 = Integer.MIN_VALUE / 2;
+        int f2 = Integer.MIN_VALUE / 2;
+        int ans = Integer.MIN_VALUE / 2;
+        for (int num: arr) {
+            // 有没有第二个 max 都可以
+//            f2 = Math.max(f1, f2 + num);
+            f2 = Math.max(f1, Math.max(f2, 0) + num);
+            f1 = Math.max(f1, 0) + num;
+            ans = Math.max(ans, Math.max(f1, f2));
+        }
+        return ans;
+    }
 }
