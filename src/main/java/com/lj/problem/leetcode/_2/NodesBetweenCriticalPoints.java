@@ -61,7 +61,29 @@ package com.lj.problem.leetcode._2;
 public class NodesBetweenCriticalPoints {
 
     public int[] nodesBetweenCriticalPoints(ListNode head) {
+        int firstT = -1;
+        int minT = Integer.MAX_VALUE;
+        int lastT = -1;
+        int i = -1;
+        ListNode pre = head;
+        while (head != null) {
+            i++;
+            if (head.next != null) {
+                if ((head.val > head.next.val && head.val > pre.val || (head.val < head.next.val && head.val < pre.val))) {
+                    if (firstT == -1) {
+                        firstT = i;
+                    }
+                    if (lastT != -1) {
+                        minT = Math.min(minT, i - lastT);
+                    }
+                    lastT = i;
+                }
+            }
+            pre = head;
+            head = head.next;
+        }
 
+        return firstT == lastT ? new int[]{-1, -1} : new int[]{minT, lastT - firstT};
     }
 
 
