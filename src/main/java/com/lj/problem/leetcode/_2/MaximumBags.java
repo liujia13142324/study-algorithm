@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._2;
 
+import java.util.Arrays;
+
 /**
  * 2279. 装满石头的背包的最大数量
  * 中等
@@ -39,6 +41,17 @@ package com.lj.problem.leetcode._2;
 public class MaximumBags {
 
     public int maximumBags(int[] capacity, int[] rocks, int additionalRocks) {
-
+        for (int i = 0; i < capacity.length; i++) {
+            capacity[i] -= rocks[i];
+        }
+        Arrays.sort(capacity);
+        int i = 0;
+        for (; i < capacity.length; i++) {
+            if (additionalRocks < capacity[i]) {
+                break;
+            }
+            additionalRocks -= capacity[i];
+        }
+        return i;
     }
 }
