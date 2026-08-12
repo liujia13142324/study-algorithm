@@ -47,6 +47,27 @@ import java.util.Arrays;
  * 1 <= coins <= 108
  */
 public class MaxIceCream {
+
+    public int maxIceCream2(int[] costs, int coins) {
+        int[] cnt = new int[100001];
+        for (int cost: costs) {
+            cnt[cost] ++;
+        }
+        int ans = 0;
+        for (int i = 0; i < cnt.length; i++) {
+            while (cnt[i] > 0 && coins >= i) {
+                ans++;
+                cnt[i]--;
+                coins -= i;
+            }
+            if (cnt[i] > 0) {
+                break;
+            }
+        }
+
+        return ans;
+    }
+
     public int maxIceCream(int[] costs, int coins) {
         Arrays.sort(costs);
         int i = 0;
