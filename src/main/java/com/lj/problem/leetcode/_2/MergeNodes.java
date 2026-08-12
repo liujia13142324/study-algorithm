@@ -46,7 +46,21 @@ package com.lj.problem.leetcode._2;
 public class MergeNodes {
 
     public ListNode mergeNodes(ListNode head) {
-
+        ListNode c = head;
+        ListNode pre = head;
+        int mergeValue = 0;
+        while (c != null) {
+            if (c.val == 0 && mergeValue > 0) {
+                c.val = mergeValue;
+                mergeValue = 0;
+                pre.next = c;
+                pre = c;
+            }else {
+                mergeValue += c.val;
+            }
+            c = c.next;
+        }
+        return head.next;
     }
 
 
