@@ -48,16 +48,23 @@ public class LargestSumAfterKNegations {
         for (int num: nums) {
             sum += num;
         }
-
+        int maxVal = -10000;
         int minIdx = 0;
         for (; k > 0; k--) {
-            sum = sum - 2 * nums[minIdx];
-            if (-nums[minIdx] > nums[minIdx + 1]) {
-                minIdx++;
+            if (minIdx < nums.length - 1) {
+                if (-nums[minIdx] > nums[minIdx + 1]) {
+                    sum = sum - 2 * nums[minIdx];
+                    maxVal = Math.max(nums[minIdx], nums[minIdx + 1]);
+                    minIdx++;
+                } else {
+                    return (k & 1) == 0 ? sum : (sum - 2 * nums[minIdx]);
+                }
+            } else {
+                // 说明全是负数，现在的最小值，是原来的最大值
+                return (k & 1) == 0 ? sum : (sum - 2 * maxVal);
             }
-            return (k & 1) == 0 ? sum : (sum - 2 * nums[minIdx]);
-
         }
+
         return sum;
     }
 }
