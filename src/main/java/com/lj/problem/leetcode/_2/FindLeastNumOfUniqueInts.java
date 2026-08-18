@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._2;
 
+import java.util.*;
+
 /**
  * 1481. 不同整数的最少数目
  * 中等
@@ -30,5 +32,29 @@ package com.lj.problem.leetcode._2;
  * 0 <= k <= arr.length
  */
 public class FindLeastNumOfUniqueInts {
+
+    public int findLeastNumOfUniqueInts(int[] arr, int k) {
+        Map<Integer, Integer> mapping = new HashMap<>();
+        int[] cnt = new int[arr.length];
+        int idx = 0;
+        for (int num: arr) {
+            if (mapping.containsKey(num)) {
+                cnt[mapping.get(num)]++;
+            }else {
+                cnt[idx]++;
+                mapping.put(num, idx++);
+            }
+        }
+        Arrays.sort(cnt, 0, idx);
+        int i = 0;
+        for (; i < idx; i++) {
+            if (cnt[i] > k) {
+                break;
+            }
+            k -= cnt[i];
+        }
+
+        return idx - i;
+    }
 
 }
