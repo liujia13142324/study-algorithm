@@ -41,7 +41,24 @@ package com.lj.problem.leetcode._2;
 public class NumComponents {
 
     public int numComponents(ListNode head, int[] nums) {
+        boolean[] mapping = new boolean[10001];
+        for (int num: nums) {
+            mapping[num] = true;
+        }
 
+        int ans = 0;
+        while (head != null) {
+            if (mapping[head.val]) {
+                ans++;
+                while (head != null && mapping[head.val]) {
+                    head = head.next;
+                }
+            } else {
+                head = head.next;
+            }
+        }
+
+        return ans;
     }
 
 
