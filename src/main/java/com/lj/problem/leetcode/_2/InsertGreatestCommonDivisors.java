@@ -45,9 +45,31 @@ package com.lj.problem.leetcode._2;
 public class InsertGreatestCommonDivisors {
 
     public ListNode insertGreatestCommonDivisors(ListNode head) {
-
+        ListNode next = head.next;
+        ListNode c = head;
+        while (next != null) {
+            int gcd = getMaxGcd(Math.max(c.val, next.val), Math.min(c.val, next.val));
+            c.next = new ListNode(gcd, next);
+            c = next;
+            next = next.next;
+        }
+        return head;
     }
 
+    /**
+     * 更相减损术
+     * @param a
+     * @param b
+     * @return
+     */
+    private int getMaxGcd(int a, int b) {
+        while (a != b) {
+            int c = a - b;
+            a = Math.max(c, b);
+            b = Math.min(c, b);
+        }
+        return a;
+    }
 
     public class ListNode {
         int val;
