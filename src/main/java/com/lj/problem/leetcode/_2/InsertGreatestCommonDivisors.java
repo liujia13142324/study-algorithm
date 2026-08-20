@@ -48,12 +48,27 @@ public class InsertGreatestCommonDivisors {
         ListNode next = head.next;
         ListNode c = head;
         while (next != null) {
-            int gcd = getMaxGcd(Math.max(c.val, next.val), Math.min(c.val, next.val));
+            int gcd = getMaxGcd2(Math.max(c.val, next.val), Math.min(c.val, next.val));
             c.next = new ListNode(gcd, next);
             c = next;
             next = next.next;
         }
         return head;
+    }
+
+    /**
+     * 辗转相除, 这个更快
+     * @param a
+     * @param b
+     * @return
+     */
+    private int getMaxGcd2(int a, int b) {
+        while (b != 0) {
+            int c = a % b;
+            a = b;
+            b = c;
+        }
+        return a;
     }
 
     /**
