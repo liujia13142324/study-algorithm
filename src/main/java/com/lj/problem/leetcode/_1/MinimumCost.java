@@ -45,6 +45,17 @@ package com.lj.problem.leetcode._1;
  */
 public class MinimumCost {
     public int minimumCost(int[] nums) {
+        int min1 = Integer.MAX_VALUE;
+        int min2 = Integer.MAX_VALUE;
+        for (int i = 1; i < nums.length; i++) {
+            if (min1 > nums[i]) {
+                min2 = min1;
+                min1 = nums[i];
+            }else if (min2 > nums[i]) {
+                min2 = nums[i];
+            }
+        }
 
+        return nums[0] + min1 + min2;
     }
 }
