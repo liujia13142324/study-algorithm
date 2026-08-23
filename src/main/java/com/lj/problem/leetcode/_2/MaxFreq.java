@@ -49,6 +49,13 @@ import java.util.Map;
  */
 public class MaxFreq {
 
+    /**
+     * 只用考虑 minSize,
+     * 子串越短，包含的不同字母个数越少，越能满足 ≤maxLetters 的要求。
+     * 子串越短，子串在 s 中的出现次数也越多。
+     * 结合上面两个性质，我们只需考虑长度恰好等于 minSize 的子串（maxSize 是多余的）。
+     *
+     */
     public int maxFreq2(String s, int maxLetters, int minSize, int maxSize) {
         int letterCnt = 0;
         int[] letterCounter = new int[26];
