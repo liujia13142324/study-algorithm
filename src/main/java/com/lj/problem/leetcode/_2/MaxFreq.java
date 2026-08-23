@@ -1,5 +1,11 @@
 package com.lj.problem.leetcode._2;
 
+import cn.hutool.core.lang.hash.Hash;
+import org.junit.Test;
+
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 1297. 子串的最大出现次数
  * 中等
@@ -44,6 +50,42 @@ package com.lj.problem.leetcode._2;
 public class MaxFreq {
 
     public int maxFreq(String s, int maxLetters, int minSize, int maxSize) {
+        int letterCnt = 0;
+        int[] letterCounter = new int[26];
+        Map<String, Integer> ansMap = new HashMap<>();
+        int ans = 0;
+        char[] chars = s.toCharArray();
+        int l = 0;
+        for (int r = 0; r < chars.length; r++) {
+            letterCounter[chars[r] - 'a']++;
+            if (letterCounter[chars[r] - 'a'] == 1) letterCnt++;
 
+            if (r - l + 1 < minSize) {
+                continue;
+            }
+
+            // letters 统计 || 长度统计
+            while (letterCnt > maxLetters || r - l + 1 > maxSize) {
+                if (letterCounter[chars[l] - 'a'] == 1) {
+                    letterCnt--;
+                }
+                letterCounter[chars[l] - 'a']--;
+                l++;
+            }
+
+            for (int j = l; j <= r - minSize + 1; j++) {
+                String subString = s.substring(j, r + 1);
+                ans = Math.max(ans, ansMap.merge(subString, 1, Integer::sum));
+            }
+        }
+
+        return ans;
     }
+
+
+    @Test
+    public void test() {
+        System.out.println(maxFreq("aabcabcab", 2, 2, 3));;
+    }
+
 }
