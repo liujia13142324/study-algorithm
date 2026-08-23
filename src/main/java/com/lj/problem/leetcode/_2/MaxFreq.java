@@ -49,6 +49,31 @@ import java.util.Map;
  */
 public class MaxFreq {
 
+
+    public int maxFreq2(String s, int maxLetters, int minSize, int maxSize) {
+        int letterCnt = 0;
+        int[] letterCounter = new int[26];
+        Map<String, Integer> ansMap = new HashMap<>();
+        int ans = 0;
+        char[] chars = s.toCharArray();
+        for (int window = minSize; window <= maxSize; window++) {
+            int l = 0;
+            for (int r = 0; r < chars.length; r++) {
+                letterCounter[chars[r] - 'a']++;
+                if (letterCounter[chars[r] - 'a'] == 1) letterCnt++;
+                if (r < window - 1) continue;
+                if (letterCnt <= maxLetters) {
+                    ans = Math.max(ans, ansMap.merge(s.substring(l, r + 1), 1, Integer::sum));
+                }
+                letterCounter[chars[l] - 'a']--;
+                if (letterCounter[chars[l] - 'a'] == 0) letterCnt--;
+                l++;
+            }
+        }
+        return ans;
+    }
+
+
     public int maxFreq(String s, int maxLetters, int minSize, int maxSize) {
         int letterCnt = 0;
         int[] letterCounter = new int[26];
@@ -85,7 +110,7 @@ public class MaxFreq {
 
     @Test
     public void test() {
-        System.out.println(maxFreq("aabcabcab", 2, 2, 3));;
+        System.out.println(maxFreq2("aabcabcab", 2, 2, 3));;
     }
 
 }
