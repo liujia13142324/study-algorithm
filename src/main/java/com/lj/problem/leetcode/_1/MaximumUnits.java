@@ -1,5 +1,8 @@
 package com.lj.problem.leetcode._1;
 
+import java.util.Arrays;
+import java.util.Comparator;
+
 /**
  * 1710. 卡车上的最大单元数
  * 简单
@@ -42,6 +45,35 @@ package com.lj.problem.leetcode._1;
 public class MaximumUnits {
 
     public int maximumUnits(int[][] boxTypes, int truckSize) {
+        // 这样排序更快？
+        Arrays.sort(boxTypes, (a, b) -> b[1] - a[1]);
+        int ans = 0;
+        for (int[] boxType: boxTypes) {
+            int numberOfBoxes = boxType[0];
+            int numberOfUnitsPerBox = boxType[1];
+            if (truckSize >= numberOfBoxes) {
+                ans += numberOfBoxes * numberOfUnitsPerBox;
+                truckSize -= numberOfBoxes;
+            }else {
+                ans += truckSize * numberOfUnitsPerBox;
+                break;
+            }
+        }
+        return ans;
+    }
 
+    public int maximumUnits2(int[][] boxTypes, int truckSize) {
+        Arrays.sort(boxTypes, Comparator.comparingInt(e->e[1]));
+        int ans = 0;
+        for (int i = boxTypes.length - 1; i >= 0 && truckSize > 0; i--) {
+
+            while (truckSize > 0 && boxTypes[i][0] > 0) {
+                ans += boxTypes[i][1];
+                boxTypes[i][0]--;
+                truckSize--;
+            }
+
+        }
+        return ans;
     }
 }
