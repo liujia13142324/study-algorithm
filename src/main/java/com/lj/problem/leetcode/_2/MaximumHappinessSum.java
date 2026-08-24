@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._2;
 
+import java.util.Arrays;
+
 /**
  * 3075. 幸福值最大化的选择方案
  * 中等
@@ -50,7 +52,14 @@ package com.lj.problem.leetcode._2;
  */
 public class MaximumHappinessSum {
     public long maximumHappinessSum(int[] happiness, int k) {
-
+        Arrays.sort(happiness);
+        long ans = 0;
+        for (int i = happiness.length - 1; i >= 0 && k > 0; i--, k--) {
+            int val = happiness[i] - happiness.length + 1 + i;
+            if (val <= 0) break;
+            ans += val;
+        }
+        return ans;
     }
 
 }
