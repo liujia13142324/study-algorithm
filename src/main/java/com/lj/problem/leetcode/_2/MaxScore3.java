@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._2;
 
+import org.junit.Test;
+
 /**
  * 3938. 矩阵中最大共享路径和
  * 中等
@@ -66,5 +68,43 @@ package com.lj.problem.leetcode._2;
  */
 public class MaxScore3 {
 
+    @Test
+    public void test() {
+//        System.out.println(maxScore(new int[][]{
+//                {-17,-3,-14,3,-10,-18,2,-5}
+//                ,{-19,8,4,-13,-1,13,-13,8}
+//                ,{5,4,-18,4,-13,-11,4,-15}
+//        }));
 
+        System.out.println(maxScore(new int[][]{
+                {-5,-6,-7}
+                ,{-8,-100,-9}
+                ,{-10,-11,-12}
+        }));
+    }
+
+    public int maxScore(int[][] grid) {
+        int ans = Integer.MIN_VALUE;
+        for (int i = 0; i < grid.length; i++) {
+            int preSum = grid[i][0];
+            int pre = grid[i][0];
+            for (int j = 1; j < grid[0].length; j++) {
+                preSum = Math.max(preSum, pre) + grid[i][j];
+                ans = (i == 0 || i == grid.length - 1 || j == grid[0].length - 1) ? Math.max(ans, preSum) : Math.max(ans, Math.max(preSum, grid[i][j]));
+                pre = grid[i][j];
+            }
+        }
+
+        for (int i = 0; i < grid[0].length; i++) {
+            int preSum = grid[0][i];
+            int pre = grid[0][i];
+            for (int j = 1; j < grid.length; j++) {
+                preSum = Math.max(preSum, pre) + grid[j][i];
+                ans = (i == 0 || i == grid[0].length - 1 || j == grid.length - 1) ? Math.max(ans, preSum) : Math.max(ans, Math.max(preSum, grid[j][i]));
+                pre = grid[j][i];
+            }
+        }
+
+        return ans;
+    }
 }
