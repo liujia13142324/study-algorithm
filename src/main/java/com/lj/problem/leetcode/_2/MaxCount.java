@@ -46,6 +46,22 @@ package com.lj.problem.leetcode._2;
 public class MaxCount {
 
     public int maxCount(int[] banned, int n, int maxSum) {
+        boolean[] mapping = new boolean[10001];
+        for (int ban: banned) {
+            mapping[ban] = true;
+        }
 
+        int sum = 0;
+        int ans = 0;
+        for (int i = 1; i <= n; i++) {
+            if (mapping[i]) continue;
+            if (sum + i > maxSum) {
+                break;
+            }
+            sum += i;
+            ans++;
+        }
+
+        return ans;
     }
 }
