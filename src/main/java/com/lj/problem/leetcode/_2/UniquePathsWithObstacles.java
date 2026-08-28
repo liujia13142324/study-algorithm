@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._2;
 
+import java.util.Arrays;
+
 /**
  * 63. 不同路径 II
  * 中等
@@ -43,6 +45,20 @@ package com.lj.problem.leetcode._2;
 public class UniquePathsWithObstacles {
 
     public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+        int[] dp = new int[obstacleGrid[0].length];
+        dp[0] = 1;
+        for (int[] ints : obstacleGrid) {
+            for (int j = 0; j < obstacleGrid[0].length; j++) {
+                if (ints[j] == 1) {
+                    dp[j] = 0;
+                    continue;
+                }
+                if (j > 0) {
+                    dp[j] += dp[j - 1];
+                }
+            }
+        }
 
+        return dp[obstacleGrid[0].length - 1];
     }
 }
