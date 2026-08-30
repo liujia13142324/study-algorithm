@@ -1,5 +1,8 @@
 package com.lj.problem.leetcode._2;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * 120. 三角形最小路径和
  * 中等
@@ -46,4 +49,23 @@ package com.lj.problem.leetcode._2;
  * 69.7%
  */
 public class MinimumTotal {
+
+    public int minimumTotal(List<List<Integer>> triangle) {
+        int length = triangle.size();
+        int[] dp = new int[triangle.get(length - 1).size() + 1];
+        Arrays.fill(dp, Integer.MAX_VALUE);
+        dp[1] = 0;
+        for (int i = 0; i < length; i++) {
+            List<Integer> line = triangle.get(i);
+            for (int j = line.size() - 1; j >= 0; j--) {
+                dp[j + 1] = Math.min(dp[j], dp[j + 1]) + line.get(j);
+            }
+        }
+        int min = Integer.MAX_VALUE;
+        for (int num: dp) {
+            min = Math.min(min, num);
+        }
+        return min;
+    }
+
 }
