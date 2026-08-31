@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._2;
 
+import java.util.Arrays;
+
 /**
  *3393. 统计异或值为给定值的路径数目
  * 中等
@@ -66,8 +68,15 @@ public class CountPathsWithXorValue {
 
     static int MOD = 1000_000_007;
 
+
     public int countPathsWithXorValue(int[][] grid, int k) {
-        return dfs(grid, k, grid.length - 1, grid[0].length - 1);
+        int[][][] cache = new int[grid.length][grid[0].length][16];
+        for (int[][] c1: cache) {
+            for (int[] c2: c1) {
+                Arrays.fill(c2, -1);
+            }
+        }
+        return dfs(grid, k, grid.length - 1, grid[0].length - 1, cache);
     }
 
     /**
@@ -78,18 +87,19 @@ public class CountPathsWithXorValue {
      * @param j
      * @return
      */
-    private int dfs(int[][] grid, int k, int i, int j) {
+    private int dfs(int[][] grid, int k, int i, int j, int[][][] cache) {
         if (i == 0 && j == 0) {
             return grid[i][j] == k ? 1 : 0;
         }
+        if (cache[i][j][k] != -1) return cache[i][j][k];
         int ans = 0;
         int nextK = k ^ grid[i][j];
         if (i > 0) {
-            ans = dfs(grid, nextK, i - 1, j) % MOD;
+            ans = dfs(grid, nextK, i - 1, j, cache);
         }
         if (j > 0) {
-            ans = ans + (dfs(grid, nextK, i, j - 1) % MOD);
+            ans = ans + dfs(grid, nextK, i, j - 1, cache);
         }
-        return ans % MOD;
+        return cache[i][j][k] = ans % MOD;
     }
 }
