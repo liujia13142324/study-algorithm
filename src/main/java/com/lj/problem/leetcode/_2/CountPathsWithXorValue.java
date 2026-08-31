@@ -3,6 +3,7 @@ package com.lj.problem.leetcode._2;
 import java.util.Arrays;
 
 /**
+ * // TODO 待优化
  *3393. 统计异或值为给定值的路径数目
  * 中等
  * 相关标签
@@ -58,7 +59,6 @@ import java.util.Arrays;
  *
  *
  * 提示：
- *
  * 1 <= m == grid.length <= 300
  * 1 <= n == grid[r].length <= 300
  * 0 <= grid[r][c] < 16
@@ -67,8 +67,6 @@ import java.util.Arrays;
 public class CountPathsWithXorValue {
 
     static int MOD = 1000_000_007;
-
-
     public int countPathsWithXorValue(int[][] grid, int k) {
         int[][][] cache = new int[grid.length][grid[0].length][16];
         for (int[][] c1: cache) {
