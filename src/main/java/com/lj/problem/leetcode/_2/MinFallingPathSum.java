@@ -37,7 +37,22 @@ package com.lj.problem.leetcode._2;
 public class MinFallingPathSum {
 
     public int minFallingPathSum(int[][] matrix) {
+        int n = matrix.length;
+        int [] dp = new int[n + 1];
+        dp[n] = Integer.MAX_VALUE;
+        for (int[] row: matrix) {
+            int pre = Integer.MAX_VALUE;
+            for (int i = 0; i < row.length; i++) {
+                int tmp = dp[i];
+                dp[i] = row[i] + Math.min(Math.min(pre, dp[i]), dp[i + 1]);
+                pre = tmp;
+            }
+        }
 
+        int ans = Integer.MAX_VALUE;
+        for (int v: dp) {
+            ans = Math.min(ans, v);
+        }
+        return ans;
     }
-
 }
