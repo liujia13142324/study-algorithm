@@ -83,13 +83,42 @@ package com.lj.problem.leetcode._2;
  */
 public class MinCost {
 
-    private static int[][] inCost = null;
 
 
+    /**
+     * 9 ms, 还有个 8 ms 的，思路差不多就不写了
+     * @param m
+     * @param n
+     * @param waitCost
+     * @return
+     */
+    public long minCost2(int m, int n, int[][] waitCost) {
+        long[] dp = new long[n];
+        waitCost[0][0] = 0;
+        dp[0] = 1;
+        for (int j = 1; j < n; j++) {
+            dp[j] = dp[j - 1] + waitCost[0][j - 1] + j + 1;
+        }
+        for (int i = 1; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                long min = dp[j] + waitCost[i - 1][j];
+                if (j > 0) {
+                    min = Math.min(min, dp[j - 1] + waitCost[i][j - 1]);
+                }
+                dp[j] = min + (long) (i + 1) * (j + 1);
+            }
+        }
+        return dp[n - 1];
+    }
+
+    /**
+     * 11 ms
+     * @param m
+     * @param n
+     * @param waitCost
+     * @return
+     */
     public long minCost(int m, int n, int[][] waitCost) {
-//        if (inCost == null) {
-//            initInCost();
-//        }
         long[] dp = new long[n];
         waitCost[0][0] = 0;
         for (int i = 0; i < m; i++) {
@@ -101,7 +130,6 @@ public class MinCost {
                 if (j > 0) {
                     min = Math.min(min, dp[j - 1] + waitCost[i][j-1]);
                 }
-//                dp[j] = min + inCost[i][j];
                 dp[j] = (min == Long.MAX_VALUE ? 0 : min) + (long) (i + 1) * (j + 1);
             }
         }
@@ -109,12 +137,4 @@ public class MinCost {
         return dp[n - 1];
     }
 
-    private void initInCost() {
-        inCost = new int[100000][100000];
-        for (int i = 0; i < 100000; i++) {
-            for (int j = 0; j < 100000; j++) {
-                inCost[i][j] = (i + 1) * (j + 1);
-            }
-        }
-    }
 }
