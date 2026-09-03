@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._2;
 
+import java.util.Arrays;
+
 /**
  * 2126. 摧毁小行星
  * 中等
@@ -45,6 +47,15 @@ package com.lj.problem.leetcode._2;
 public class AsteroidsDestroyed {
 
     public boolean asteroidsDestroyed(int mass, int[] asteroids) {
+        Arrays.sort(asteroids);
+        long _mass = mass;
+        for (int asteroid : asteroids) {
+            if (_mass < asteroid) {
+                return false;
+            }
+            _mass += asteroid;
+        }
 
+        return true;
     }
 }
