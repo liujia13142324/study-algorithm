@@ -1,5 +1,9 @@
 package com.lj.problem.leetcode._2;
 
+import org.junit.Test;
+
+import java.util.Arrays;
+
 /**
  * 2304. 网格中的最小路径代价
  * 中等
@@ -49,7 +53,38 @@ package com.lj.problem.leetcode._2;
  */
 public class MinPathCost {
 
-    public int minPathCost(int[][] grid, int[][] moveCost) {
-
+    @Test
+    public void test() {
+        System.out.println(minPathCost(new int[][]{
+                {5, 3}
+                , {4, 0}
+                , {2, 1}
+        }, new int[][]{
+                {9,8},
+                {1,5},
+                {10,12},
+                {18,6},
+                {2,4},
+                {14,3},
+        }));
     }
+
+    public int minPathCost(int[][] grid, int[][] moveCost) {
+        int[][] dp = new int[grid.length][grid[0].length];
+        dp[0] = grid[0];
+        for (int i = 0; i < grid.length - 1; i++) {
+            Arrays.fill(dp[i + 1], Integer.MAX_VALUE);
+            for (int j = 0; j < grid[i].length; j++) {
+                for (int k = 0; k < grid[i].length; k++) {
+                    dp[i + 1][k] = Math.min(dp[i + 1][k], dp[i][j] + moveCost[grid[i][j]][k] + grid[i + 1][k]);
+                }
+            }
+        }
+        int ans = Integer.MAX_VALUE;
+        for (int num: dp[dp.length - 1]) {
+            ans = Math.min(ans, num);
+        }
+        return ans;
+    }
+
 }
