@@ -160,25 +160,21 @@ public class MyLoopLinkedList<T> extends MyLinkedList<T> {
     
     @Override
     public void reverseShow() {
-        // TODO
         System.out.println("暂不支持...");
     }
 
     @Override
     public void reverse() {
-        // TODO
         System.out.println("暂不支持...");
     }
 
     @Override
     public void reverse2() {
-        // TODO
         System.out.println("暂不支持...");
     }
 
     @Override
     public void reverse3() {
-        // TODO
         System.out.println("暂不支持...");
     }
 
