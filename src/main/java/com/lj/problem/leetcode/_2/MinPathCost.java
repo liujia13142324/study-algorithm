@@ -69,6 +69,33 @@ public class MinPathCost {
         }));
     }
 
+    /**
+     * 这种写法，下一步就可以原地修改了
+     * @param grid
+     * @param moveCost
+     * @return
+     */
+    public int minPathCost2(int[][] grid, int[][] moveCost) {
+        int m = grid.length;
+        int n = grid[0].length;
+        int[][] dp = new int[m][n];
+        dp[0] = grid[0];
+        for (int i = 0; i < m - 1; i++) {
+            for (int j = 0; j < n; j++) {
+                dp[i + 1][j] = Integer.MAX_VALUE;
+                for (int k = 0; k < n; k++) {
+                    dp[i + 1][j] = Math.min(dp[i + 1][j], dp[i][k] + moveCost[grid[i][k]][j] + grid[i + 1][j]);
+                }
+            }
+        }
+        int ans = Integer.MAX_VALUE;
+        for (int num: dp[m - 1]) {
+            ans = Math.min(ans, num);
+        }
+        return ans;
+    }
+
+
     public int minPathCost(int[][] grid, int[][] moveCost) {
         int[][] dp = new int[grid.length][grid[0].length];
         dp[0] = grid[0];
