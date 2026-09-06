@@ -39,6 +39,30 @@ package com.lj.problem.leetcode._3;
  */
 public class MinFallingPathSum {
 
+    /**
+     * 原地修改
+     * @param grid
+     * @return
+     */
+    public int minFallingPathSum2(int[][] grid) {
+        int n = grid.length;
+        for (int i = n - 2; i >= 0; i--) {
+            for (int j = 0; j < n; j++) {
+                int min = Integer.MAX_VALUE;
+                for (int k = 0; k < n; k++) {
+                    if (k == j) continue;
+                    min = Math.min(min, grid[i + 1][k]);
+                }
+                grid[i][j] += min;
+            }
+        }
+        int min = Integer.MAX_VALUE;
+        for (int num: grid[0]) {
+            min = Math.min(min, num);
+        }
+        return min;
+    }
+
     public int minFallingPathSum(int[][] grid) {
         int n = grid.length;
         int[][] f = new int[n][n];
