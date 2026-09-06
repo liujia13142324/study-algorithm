@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._2;
 
+import java.util.Arrays;
+
 /**
  * 2587. 重排数组以得到最大前缀分数
  * 中等
@@ -37,6 +39,16 @@ package com.lj.problem.leetcode._2;
 public class MaxScore4 {
 
     public int maxScore(int[] nums) {
+        Arrays.sort(nums);
+        long sum = 0;
+        int i = nums.length - 1;
+        for (; i >= 0; i--) {
+            sum += nums[i];
+            if (sum <= 0) {
+                break;
+            }
+        }
 
+        return nums.length - i - 1;
     }
 }
