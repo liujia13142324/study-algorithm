@@ -1,6 +1,10 @@
 package com.lj.problem.leetcode._2;
 
+import org.junit.Test;
+
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * 2126. 摧毁小行星
@@ -46,6 +50,47 @@ import java.util.Arrays;
  */
 public class AsteroidsDestroyed {
 
+    @Test
+    public void test() {
+        System.out.println(asteroidsDestroyed2(71683, new int[]{156,197,192,14,97,160,14,5}));
+    }
+
+
+    /**
+     * 按照二进制分组, 优化版本
+     * @param mass
+     * @param asteroids
+     * @return
+     */
+    public boolean asteroidsDestroyed3(int mass, int[] asteroids) {
+        // 构造 min 数组，sum 数组
+        // 求结果
+
+        int[] min = new int[17];
+        int[] sum = new int[17];
+        int maxGroup = 0;
+        Arrays.fill(min, Integer.MAX_VALUE);
+
+        for (int asteroid: asteroids) {
+            int group = 32 - Integer.numberOfLeadingZeros(asteroid) - 1;
+            min[group] = Math.min(min[group], asteroid);
+            sum[group] += asteroid;
+            maxGroup = Math.max(maxGroup, group);
+        }
+
+        long _mass = mass;
+        for (int i = 0; i <= maxGroup; i++) {
+            if (min[i] != Integer.MAX_VALUE && _mass >= min[i]) {
+                _mass += sum[i];
+            }else if (min[i] != Integer.MAX_VALUE) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
     public boolean asteroidsDestroyed(int mass, int[] asteroids) {
         Arrays.sort(asteroids);
         long _mass = mass;
@@ -56,6 +101,48 @@ public class AsteroidsDestroyed {
             _mass += asteroid;
         }
 
+        return true;
+    }
+
+
+    /**
+     * 按照二进制分组
+     * @param mass
+     * @param asteroids
+     * @return
+     */
+    public boolean asteroidsDestroyed2(int mass, int[] asteroids) {
+        // 0 ~ 16
+        List<Integer>[] groups = new List[] {
+                new ArrayList<>(),new ArrayList<>(),new ArrayList<>(),new ArrayList<>(),new ArrayList<>(),
+                new ArrayList<>(),new ArrayList<>(),new ArrayList<>(),new ArrayList<>(),new ArrayList<>(),
+                new ArrayList<>(),new ArrayList<>(),new ArrayList<>(),new ArrayList<>(),new ArrayList<>(),
+                new ArrayList<>(),new ArrayList<>()
+        };
+
+        int maxGroup = 0;
+        for (int asteroid : asteroids) {
+            int group = 32-Integer.numberOfLeadingZeros(asteroid) - 1;
+            List<Integer> groupArr = groups[group];
+            maxGroup = Math.max(maxGroup, group);
+            if (!groupArr.isEmpty() && groupArr.get(0) > asteroid) {
+                groupArr.add(groupArr.get(0));
+                groupArr.set(0, asteroid);
+            }else {
+                groupArr.add(asteroid);
+            }
+        }
+
+        long _mass = mass;
+        for (int i = 0; i <= maxGroup; i++) {
+            if (!groups[i].isEmpty() && _mass >= groups[i].get(0)) {
+                for (int __mass: groups[i]) {
+                    _mass += __mass;
+                }
+            }else if (!groups[i].isEmpty()) {
+                return false;
+            }
+        }
         return true;
     }
 }
