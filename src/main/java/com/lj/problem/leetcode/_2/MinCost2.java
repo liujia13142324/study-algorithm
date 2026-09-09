@@ -1,5 +1,12 @@
 package com.lj.problem.leetcode._2;
 
+import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * 3882. 网格图中最小异或路径
  * 中等
@@ -72,7 +79,75 @@ package com.lj.problem.leetcode._2;
  */
 public class MinCost2 {
 
-    public int minCost(int[][] grid) {
+    @Test
+    public void test() {
+        System.out.println(minCost( new int[][]{
+                {2,7,5}
+        }));
+    }
 
+    /**
+     * 770ms，很慢
+     * @param grid
+     * @return
+     */
+    public int minCost2(int[][] grid) {
+        Set<Integer>[] dp = new HashSet[grid[0].length + 1];
+        Arrays.fill(dp, new HashSet<>());
+        dp[1] = new HashSet<>();
+        dp[1].add(0);
+
+        for (int[] row: grid) {
+            for (int j = 0; j < row.length; j++) {
+                Set<Integer> tmp = new HashSet<>();
+                for (int num: dp[j + 1]) {
+                    tmp.add(num ^ row[j]);
+                }
+                for (int num: dp[j]) {
+                    tmp.add(num ^ row[j]);
+                }
+                dp[j + 1] = tmp;
+            }
+        }
+
+        int min = Integer.MAX_VALUE;
+        for (int num: dp[grid[0].length]) {
+            min = Math.min(min, num);
+        }
+
+        return min;
+    }
+
+
+
+    // 内存超出
+    public int minCost(int[][] grid) {
+        int[][] dp = new int[grid[0].length + 1][];
+        int[] cnt = new int[grid[0].length + 1];
+        Arrays.fill(dp, new int[]{});
+        dp[1] = new int[]{0};
+        cnt[1] = 1;
+
+        for (int[] row: grid) {
+            for (int j = 0; j < row.length; j++) {
+                cnt[j + 1] = cnt[j] + cnt[j + 1];
+                int[] tmp = new int[cnt[j + 1]];
+                int tmpIdx = 0;
+                for (int num: dp[j + 1]) {
+                    tmp[tmpIdx++] = num ^ row[j];
+                }
+                for (int num: dp[j]) {
+                    tmp[tmpIdx++] = num ^ row[j];
+                }
+                dp[j + 1] = tmp;
+            }
+        }
+
+        int min = Integer.MAX_VALUE;
+        for (int num: dp[grid[0].length]) {
+            min = Math.min(min, num);
+        }
+
+        return min;
     }
 }
