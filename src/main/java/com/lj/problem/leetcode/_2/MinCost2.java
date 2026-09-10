@@ -86,6 +86,41 @@ public class MinCost2 {
         }));
     }
 
+    int ans = Integer.MAX_VALUE;
+
+    /**
+     * 深度搜索 + 最优剪枝
+     * @param grid
+     * @return
+     */
+    public int minCost3(int[][] grid) {
+        // 这样好像会更快
+        // 异或和不会超过所有元素的 OR
+        int orAll = 0;
+        for (int[] row : grid) {
+            for (int x : row) {
+                orAll |= x;
+            }
+        }
+        boolean[][][] visited = new boolean[grid.length][grid[0].length][orAll + 1];
+//        boolean[][][] visited = new boolean[grid.length][grid[0].length][1024];
+        dfs(grid.length - 1, grid[0].length - 1, 0, grid, visited);
+        return ans;
+    }
+
+    private void dfs(int i, int j, int k, int[][] grid, boolean[][][] visited) {
+        if (ans == 0 || i < 0 || j < 0 || visited[i][j][k]) return;
+
+        visited[i][j][k] = true;
+        k ^= grid[i][j];
+        if (i == 0 && j == 0) {
+            ans = Math.min(ans, k);
+        }
+        dfs(i - 1, j, k, grid, visited);
+        dfs(i, j - 1, k, grid, visited);
+    }
+
+
     /**
      * 770ms，很慢
      * @param grid
