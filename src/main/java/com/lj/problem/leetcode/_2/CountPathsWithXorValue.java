@@ -67,6 +67,132 @@ import java.util.Arrays;
 public class CountPathsWithXorValue {
 
     static int MOD = 1000_000_007;
+
+    /**
+     * 23 ms
+     * @param grid
+     * @param k
+     * @return
+     */
+    public int countPathsWithXorValue6(int[][] grid, int k) {
+        int m = grid.length;
+        int n = grid[0].length;
+        int mx = 0;
+        for (int[] row: grid) {
+            for (int num: row) {
+                mx = Math.max(mx, num);
+            }
+        }
+
+        int u = 1 << (32 - Integer.numberOfLeadingZeros(mx));
+        if (k >= u) {
+            return 0;
+        }
+
+        int[][][] dp = new int[m + 1][n + 1][u];
+        dp[0][1][0] = 1;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                int val = grid[i][j];
+                for (int l = 0; l < u; l++) {
+                    dp[i + 1][j + 1][l] = (dp[i][j + 1][l ^ val] + dp[i + 1][j][l ^ val]) % MOD;
+                }
+            }
+        }
+
+        return dp[m][n][k];
+    }
+
+    /**
+     * 27ms
+     * @param grid
+     * @param k
+     * @return
+     */
+    public int countPathsWithXorValue5(int[][] grid, int k) {
+        int m = grid.length;
+        int n = grid[0].length;
+        int mx = 0;
+        for (int[] row: grid) {
+            for (int num: row) {
+                mx = Math.max(mx, num);
+            }
+        }
+
+        int u = 1 << (32 - Integer.numberOfLeadingZeros(mx));
+        if (k >= u) {
+            return 0;
+        }
+
+        int[][][] dp = new int[m + 1][n + 1][u];
+        dp[1][1][grid[0][0]] = 1;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                for (int l = 0; l < 16; l++) {
+                    dp[i + 1][j + 1][l] += ((dp[i][j + 1][l ^ grid[i][j]] + dp[i + 1][j][l ^ grid[i][j]]) % MOD);
+                }
+            }
+        }
+
+        return dp[m][n][k] % MOD;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(1 << (32 - Integer.numberOfLeadingZeros(5)));
+    }
+
+
+    /**
+     * 28ms
+     * @param grid
+     * @param k
+     * @return
+     */
+    public int countPathsWithXorValue3(int[][] grid, int k) {
+        int m = grid.length;
+        int n = grid[0].length;
+        int[][][] dp = new int[m + 1][n + 1][16];
+        dp[1][1][grid[0][0]] = 1;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                for (int l = 0; l < 16; l++) {
+                    dp[i + 1][j + 1][l] += ((dp[i][j + 1][l ^ grid[i][j]] + dp[i + 1][j][l ^ grid[i][j]]) % MOD);
+                }
+            }
+        }
+
+        return dp[m][n][k] % MOD;
+    }
+
+
+    /**
+     * 49 ms
+     * @param grid
+     * @param k
+     * @return
+     */
+    public int countPathsWithXorValue2(int[][] grid, int k) {
+        int m = grid.length;
+        int n = grid[0].length;
+        int[][][] dp = new int[m][n][16];
+        dp[0][0][grid[0][0]] = 1;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                for (int l = 0; l < 16; l++) {
+                    if (i > 0) {
+                        dp[i][j][l] += (dp[i - 1][j][l ^ grid[i][j]] % MOD);
+                    }
+                    if (j > 0) {
+                        dp[i][j][l] += (dp[i][j - 1][l ^ grid[i][j]] % MOD);
+                    }
+                }
+            }
+        }
+
+        return dp[m - 1][n - 1][k] % MOD;
+    }
+
+
     public int countPathsWithXorValue(int[][] grid, int k) {
         int[][][] cache = new int[grid.length][grid[0].length][16];
         for (int[][] c1: cache) {
@@ -78,7 +204,7 @@ public class CountPathsWithXorValue {
     }
 
     /**
-     * 超时
+     * 超时, cache后 92 ms
      * @param grid
      * @param k
      * @param i
