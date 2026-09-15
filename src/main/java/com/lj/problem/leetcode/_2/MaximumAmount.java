@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._2;
 
+import java.util.Arrays;
+
 /**
  * 3418. 机器人可以获得的最大金币数
  * 中等
@@ -62,6 +64,38 @@ package com.lj.problem.leetcode._2;
 public class MaximumAmount {
 
     public int maximumAmount(int[][] coins) {
+        int[][][] cache = new int[3][coins.length][coins[0].length];
+        for (int[][] c: cache) {
+            for (int[] c2: c) {
+                Arrays.fill(c2, Integer.MIN_VALUE);
+            }
+        }
+        return dfs(coins.length - 1, coins[0].length - 1, 2, coins, cache);
+    }
 
+    private int dfs(int i, int j, int k, int[][] coins, int[][][] cache) {
+
+        if (i < 0 || j < 0) {
+            return Integer.MIN_VALUE;
+        }
+
+        if (cache[k][i][j] != Integer.MIN_VALUE) {
+            return cache[k][i][j];
+        }
+
+
+        int val = coins[i][j];
+        int ans = Integer.MIN_VALUE;
+
+        if (val < 0 && k > 0) {
+            // 使用感化能力
+            int mx = Math.max(dfs(i - 1, j, k - 1, coins, cache), dfs(i, j - 1, k - 1, coins, cache));
+            ans = mx == Integer.MIN_VALUE ? 0 : mx;
+        }
+
+        // 不使用感化能力
+        int mx = Math.max(dfs(i - 1, j, k, coins, cache), dfs(i, j - 1, k, coins, cache));
+
+        return cache[k][i][j] = Math.max(ans, (mx == Integer.MIN_VALUE ? 0 : mx) + coins[i][j]);
     }
 }
