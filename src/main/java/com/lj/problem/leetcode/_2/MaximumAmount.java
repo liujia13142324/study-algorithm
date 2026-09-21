@@ -1,5 +1,9 @@
 package com.lj.problem.leetcode._2;
 
+import cn.hutool.core.io.IoUtil;
+import com.alibaba.fastjson.JSONArray;
+import com.lj.study.common.utils.MyArrayUtil;
+
 import java.util.Arrays;
 
 /**
@@ -63,6 +67,44 @@ import java.util.Arrays;
  */
 public class MaximumAmount {
 
+    public int maximumAmount2(int[][] coins) {
+        int m = coins.length;
+        int n = coins[0].length;
+        int[][][] dp = new int[m][n][3];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                Arrays.fill(dp[i][j], Integer.MIN_VALUE);
+            }
+        }
+        for (int i = 0; i < m; i++) {
+            for (int j = 0 ; j < n; j++) {
+                for (int k = 0; k < 3; k++) {
+                    if (i > 0) {
+                        dp[i][j][k] = Math.max(dp[i][j][k], dp[i - 1][j][k]);
+                    }
+                    if (j > 0) {
+                        dp[i][j][k] = Math.max(dp[i][j][k], dp[i][j - 1][k]);
+                    }
+                    dp[i][j][k] = (dp[i][j][k] == Integer.MIN_VALUE ? 0 : dp[i][j][k]) + coins[i][j];
+
+                    if (k > 0 && coins[i][j] < 0) {
+                        int tmp = Integer.MIN_VALUE;
+                        if (i > 0) {
+                            tmp  = Math.max(tmp, dp[i - 1][j][k - 1]);
+                        }
+                        if (j > 0) {
+                            tmp = Math.max(tmp, dp[i][j - 1][k - 1]);
+                        }
+                        dp[i][j][k] = Math.max(dp[i][j][k], tmp == Integer.MIN_VALUE ? 0 : tmp);
+                    }
+                }
+            }
+        }
+
+        return dp[m-1][n-1][2];
+    }
+
+
     public int maximumAmount(int[][] coins) {
         int[][][] cache = new int[3][coins.length][coins[0].length];
         for (int[][] c: cache) {
@@ -83,6 +125,7 @@ public class MaximumAmount {
             return cache[k][i][j];
         }
 
+        System.out.println(i + " " + j + " " + k);
 
         int val = coins[i][j];
         int ans = Integer.MIN_VALUE;
@@ -97,5 +140,27 @@ public class MaximumAmount {
         int mx = Math.max(dfs(i - 1, j, k, coins, cache), dfs(i, j - 1, k, coins, cache));
 
         return cache[k][i][j] = Math.max(ans, (mx == Integer.MIN_VALUE ? 0 : mx) + coins[i][j]);
+    }
+
+    public static void main(String[] args) {
+        /*String s = IoUtil.read(MaximumAmount.class.getResourceAsStream("/longtext"), "utf8");
+        JSONArray arr = JSONArray.parseArray(s);
+        int[][] tmp = new int[arr.size()][];
+        for (int i = 0; i < arr.size(); i++) {
+            JSONArray jsonArray = arr.getJSONArray(i);
+            tmp[i] = new int[jsonArray.size()];
+            for (int j = 0; j < jsonArray.size(); j++) {
+                tmp[i][j] = jsonArray.getInteger(j);
+            }
+        }*/
+
+
+        int[][] tmp  = new int[][]{
+                {0,-1,1}
+                ,{1,-2,-3}
+                ,{2,-3,4}
+                ,{2,5,4}
+        };
+        new MaximumAmount().maximumAmount(tmp);
     }
 }
