@@ -1,5 +1,7 @@
 package com.lj.problem.leetcode._2;
 
+import org.junit.Test;
+
 import java.util.Arrays;
 
 /**
@@ -61,6 +63,53 @@ import java.util.Arrays;
  */
 public class MaxPathScore {
 
+    @Test
+    public void test() {
+        System.out.println(maxPathScore2(new int[][]{{0, 1}, {1, 2}}, 1));
+    }
+
+    /**
+     * 206 ms， 66%
+     * @param grid
+     * @param k
+     * @return
+     */
+    public int maxPathScore2(int[][] grid, int k) {
+        int m = grid.length;
+        int n = grid[0].length;
+        int[][][] dp = new int[m + 1][n + 1][k + 1];
+        for (int[][] dp1: dp) {
+            for (int[] dp2: dp1) {
+                Arrays.fill(dp2, Integer.MIN_VALUE);
+            }
+        }
+        if (grid[0][0] == 0) {
+            for (int a = 0; a <= k; a++) {
+                dp[1][0][a] = 0;
+            }
+        }
+
+        for (int i = 1; i <= m; i++) {
+            // 加了更慢
+//            boolean anyGeZero = false;
+            for (int j = 1; j <= n; j++) {
+                for (int a = 0; a <= k; a++) {
+                    if (grid[i-1][j-1] == 0) {
+                        dp[i][j][a] = Math.max(dp[i-1][j][a], dp[i][j-1][a]);
+                    } else if (a > 0){
+                        dp[i][j][a] = Math.max(dp[i-1][j][a-1], dp[i][j-1][a-1]) + grid[i-1][j-1];
+                    }
+//                    anyGeZero = anyGeZero | dp[i][j][a] >= 0;
+                }
+            }
+//            if (!anyGeZero) {
+//                return -1;
+//            }
+        }
+
+        return dp[m][n][k] < 0 ? -1 : dp[m][n][k];
+    }
+
 
     /**
      * 457 ms
@@ -95,6 +144,6 @@ public class MaxPathScore {
             }
         }
 
-        return dp[k][m][n] < 0 ? -1 : dp[k][m][n];
+        return dp[m][n][k] < 0 ? -1 : dp[m][n][k];
     }
 }
