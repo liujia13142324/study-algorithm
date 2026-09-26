@@ -1,8 +1,5 @@
 package com.lj.problem.leetcode._2;
 
-import cn.hutool.core.io.IoUtil;
-import com.alibaba.fastjson.JSONArray;
-import com.lj.study.common.utils.MyArrayUtil;
 
 import java.util.Arrays;
 
@@ -66,6 +63,33 @@ import java.util.Arrays;
  * -1000 <= coins[i][j] <= 1000
  */
 public class MaximumAmount {
+
+    public int maximumAmount3(int[][] coins) {
+        int m = coins.length;
+        int n = coins[0].length;
+        int[][][] dp = new int[3][m + 1][n + 1];
+
+        for (int k = 0; k < 3; k++) {
+            Arrays.fill(dp[k][0], Integer.MIN_VALUE);
+            for (int i = 2; i <= m; i++) {
+                dp[k][i][0] = Integer.MIN_VALUE;
+            }
+        }
+
+        for (int k = 0; k < 3; k++) {
+            for (int i = 1; i <= m; i++) {
+                for (int j = 1; j <= n; j++) {
+                    dp[k][i][j] = Math.max(dp[k][i - 1][j], dp[k][i][j - 1]) + coins[i - 1][j - 1];
+                    if (k > 0 && coins[i - 1][j - 1] < 0) {
+                        dp[k][i][j] = Math.max(dp[k][i][j], Math.max(dp[k - 1][i - 1][j], dp[k - 1][i][j - 1]));
+                    }
+                }
+            }
+        }
+
+        return dp[2][m][n];
+    }
+
 
     public int maximumAmount2(int[][] coins) {
         int m = coins.length;
@@ -161,6 +185,6 @@ public class MaximumAmount {
                 ,{2,-3,4}
                 ,{2,5,4}
         };
-        new MaximumAmount().maximumAmount(tmp);
+        new MaximumAmount().maximumAmount3(tmp);
     }
 }
