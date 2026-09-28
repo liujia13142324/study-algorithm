@@ -1,5 +1,10 @@
 package com.lj.problem.leetcode._2;
 
+import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.Map;
+
 /**
  * 2684. 矩阵中移动的最大次数
  * 中等
@@ -44,8 +49,46 @@ package com.lj.problem.leetcode._2;
  */
 public class MaxMoves {
 
-    public int maxMoves(int[][] grid) {
-
+    @Test
+    public void test1() {
+        System.out.println(maxMoves(new int[][]{
+                {3,2,4}
+                , {2,1,9}
+                , {1,1,7}
+        }));
     }
 
+    public int maxMoves(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        int[] dp = new int[m];
+
+        int ans = 0;
+        for (int j = 1; j < n; j++) {
+            int mx = Integer.MIN_VALUE;
+            int pre = 0;
+            for (int i = 0; i < m; i++) {
+                int tmp = dp[i];
+                if (grid[i][j] > grid[i][j-1]) {
+                    dp[i] += 1;
+                } else {
+                    dp[i] = Integer.MIN_VALUE;
+                }
+                if (i > 0 && grid[i][j] > grid[i-1][j-1]) {
+                    dp[i] = Math.max(dp[i], pre + 1);
+                }
+                if (i < m - 1 && grid[i][j] > grid[i+1][j-1]) {
+                    dp[i] = Math.max(dp[i], dp[i + 1] + 1);
+                }
+                mx = Math.max(mx, dp[i]);
+                pre = tmp;
+            }
+            if (mx < 0) {
+                break;
+            }
+            ans = Math.max(ans, mx);
+        }
+
+        return ans;
+    }
 }
