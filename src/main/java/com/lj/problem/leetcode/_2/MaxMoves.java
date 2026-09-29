@@ -58,6 +58,11 @@ public class MaxMoves {
         }));
     }
 
+    /**
+     * dfs 也能搞
+     * @param grid
+     * @return
+     */
     public int maxMoves(int[][] grid) {
         int m = grid.length;
         int n = grid[0].length;
