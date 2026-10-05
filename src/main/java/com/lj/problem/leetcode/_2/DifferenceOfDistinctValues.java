@@ -54,20 +54,59 @@ import java.util.Set;
  */
 public class DifferenceOfDistinctValues {
 
+
     public int[][] differenceOfDistinctValues(int[][] grid) {
-        Set<Integer> sets = new HashSet<>();
         int[][] ans = new int[grid.length][grid[0].length];
 
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[0].length; j++) {
-                int leftTopCnt = getLeftCnt(sets, grid, i, j);
-                int rightBottomCnt = getRightCnt(sets, grid, i, j);
+                int leftTopCnt = getLeftCnt2(grid, i, j);
+                int rightBottomCnt = getRightCnt2(grid, i, j);
                 ans[i][j] = Math.abs(leftTopCnt - rightBottomCnt);
             }
         }
         return ans;
     }
 
+    /**
+     * 6 ms
+     * @param grid
+     * @param i
+     * @param j
+     * @return
+     */
+    private int getRightCnt2(int[][] grid, int i, int j) {
+        boolean[] map = new boolean[51];
+        int size = 0;
+        while (i < grid.length - 1 && j < grid[0].length - 1) {
+            int k = grid[++i][++j];
+            if (!map[k]) {
+                size ++;
+                map[k] = true;
+            }
+        }
+        return size;
+    }
+
+    private int getLeftCnt2(int[][] grid, int i, int j) {
+        boolean[] map = new boolean[51];
+        int size = 0;
+        while (i > 0 && j > 0) {
+            int k = grid[--i][--j];
+            if (!map[k]) {
+                size ++;
+                map[k] = true;
+            }
+        }
+        return size;
+    }
+
+
+    /**
+     * 20ms
+     * @param grid
+     * @return
+     */
     private int getRightCnt(Set<Integer> sets, int[][] grid, int i, int j) {
         sets.clear();
         while (i < grid.length - 1 && j < grid[0].length - 1) {
