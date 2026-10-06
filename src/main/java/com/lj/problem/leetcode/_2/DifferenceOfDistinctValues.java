@@ -55,6 +55,67 @@ import java.util.Set;
 public class DifferenceOfDistinctValues {
 
 
+    public int[][] differenceOfDistinctValues3(int[][] grid) {
+
+        int m = grid.length;
+        int n = grid[0].length;
+        Set<Integer> set = new HashSet<>();
+        int[][] ans = new int[m][n];
+
+        for (int k = 1; k < m + n; k++) {
+            int minJ = Math.max(0, n - k);
+            int maxJ = Math.min(m + n - 1 - k, n - 1);
+
+            set.clear();
+            for (int j = minJ, i = k + j - n; j <= maxJ; i++, j++) {
+                ans[i][j] = set.size();
+                set.add(grid[i][j]);
+            }
+
+            set.clear();
+            for (int j = maxJ, i = k + j - n; j >= minJ; i--, j--) {
+                ans[i][j] = Math.abs(ans[i][j] - set.size());
+                set.add(grid[i][j]);
+            }
+        }
+
+        return ans;
+    }
+
+
+    /**
+     * 6 ms
+     * @param grid
+     */
+    public int[][] differenceOfDistinctValues2(int[][] grid) {
+
+        int m = grid.length;
+        int n = grid[0].length;
+        Set<Integer> set = new HashSet<>();
+        int[][] ans = new int[m][n];
+
+        for (int k = 1; k < m + n; k++) {
+            int minJ = Math.max(0, n - k);
+            int maxJ = Math.min(m + n - 1 - k, n - 1);
+
+            set.clear();
+            for (int i = Math.max(0, k - n), j = minJ; j <= maxJ; i++, j++) {
+                ans[i][j] = set.size();
+                set.add(grid[i][j]);
+            }
+
+            set.clear();
+            for (int j = maxJ, i = Math.max(0, k - n) + maxJ - minJ; j >= minJ; i--, j--) {
+                ans[i][j] = Math.abs(ans[i][j] - set.size());
+                set.add(grid[i][j]);
+            }
+        }
+
+        return ans;
+    }
+
+
+
     public int[][] differenceOfDistinctValues(int[][] grid) {
         int[][] ans = new int[grid.length][grid[0].length];
 
