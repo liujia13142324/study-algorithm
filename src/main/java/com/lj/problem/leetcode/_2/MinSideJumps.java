@@ -61,6 +61,45 @@ public class MinSideJumps {
         System.out.println(minSideJumps(new int[]{0,0,0,3,3,1,3,0,1,1,0,3,0,2,1,2,2,0,0,0,1,2,3,1,2,1,1,2,2,1,1,0,2,3,3,3,0,2,3,2,0,0,0,1,0,2,2,0,0,2,0,2,0,1,1,0,3,1,3,3,0,1,0,3,0,3,1,2,3,1,0,0,2,3,2,0,0,3,1,2,3,2,2,3,1,3,3,2,0,1,3,0,3,2,2,3,2,1,2,2,0}));
     }
 
+    /**
+     * 不在同一跑到横跳，不会产生环，
+     * @param obstacles
+     * @return
+     */
+    public int minSideJumps2(int[] obstacles) {
+        int[][] cache = new int[3][obstacles.length];
+        for (int[] tmp: cache) {
+            Arrays.fill(tmp, -1);
+        }
+        return dfs2(1, 0, obstacles, cache);
+    }
+
+    private int dfs2(int i, int j, int[] obstacles, int[][] cache) {
+        if (j == obstacles.length - 1) {
+            return 0;
+        }
+        if (cache[i][j] != -1) {
+            return cache[i][j];
+        }
+        int minVal = Integer.MAX_VALUE / 2;
+
+        if (obstacles[j + 1] != (i + 1)) {
+            minVal = Math.min(minVal, dfs2(i, j + 1, obstacles, cache));
+        }
+
+        for (int k = 0; k < 3; k++) {
+            if (i != k && obstacles[j] != (k + 1) && obstacles[j + 1] != (k + 1)) {
+                minVal = Math.min(minVal, dfs2(k, j + 1, obstacles, cache) + 1);
+            }
+        }
+        return cache[i][j] = minVal;
+    }
+
+    /**
+     * 在同一跑道横跳，会产生环（这个做法是瞎猫碰到死耗子？）
+     * @param obstacles
+     * @return
+     */
     public int minSideJumps(int[] obstacles) {
         int[][] cache = new int[3][obstacles.length];
         for (int[] tmp: cache) {
@@ -84,8 +123,8 @@ public class MinSideJumps {
             minVal = Math.min(minVal, dfs(i, j + 1, obstacles, cache, visited));
         } else {
             for (int k = 0; k < 3; k++) {
-                if (!visited[k][j] && obstacles[j] != (k + 1)) {
-                    minVal = Math.min(minVal, dfs(k, j, obstacles, cache, visited) + 1);
+                if (!visited[k][j] && obstacles[j] != (k + 1) && obstacles[j + 1] != (k + 1)) {
+                    minVal = Math.min(minVal, dfs(k, j + 1, obstacles, cache, visited) + 1);
                 }
             }
         }
