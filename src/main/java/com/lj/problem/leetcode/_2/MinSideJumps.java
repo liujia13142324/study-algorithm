@@ -97,6 +97,8 @@ public class MinSideJumps {
 
     /**
      * 在同一跑道横跳，会产生环（这个做法是瞎猫碰到死耗子？）
+     * 对于这道题，侧跳并不一定需要在没有障碍时提前进行。由于跑道之间的侧跳代价为 1，而向前移动代价为 0，提前侧跳有时可以被推迟到真正需要的时候。
+     * 因此，单看这个 else，还不能直接断言第二段代码一定会产生错误答案；
      * @param obstacles
      * @return
      */
@@ -109,6 +111,12 @@ public class MinSideJumps {
         return dfs(1, 0, obstacles, cache, visited);
     }
 
+    /**
+     *  cache 和 visited 混用的问题：
+     *  比如，当遍历 i,j 的时候，为了避免出现环路，会设置 visited[i,j] = true, 那么在遍历横跳位置的时候，
+     *  其他位置（比如，i+1, j）就没办法获取 i, j 的结果。因为避免环路跳过i, j 的判断，除此之外，此刻 i, j 也没有算出来。
+     * @return
+     */
     private int dfs(int i, int j, int[] obstacles, int[][] cache, boolean[][] visited) {
         if (j == obstacles.length - 1) {
             return 0;
@@ -131,4 +139,31 @@ public class MinSideJumps {
         visited[i][j] = false;
         return cache[i][j] = minVal;
     }
+
+    /**
+     *  最早版本的问题，存在 cache 和 visited 混用的问题，不能AC。实例分析见 MinSideJumps.md
+     */
+    /*private int dfs(int i, int j, int[] obstacles, int[][] cache, boolean[][] visited) {
+        if (j == obstacles.length - 1) {
+            return 0;
+        }
+        if (cache[i][j] != -1) {
+            return cache[i][j];
+        }
+        visited[i][j] = true;
+        int minVal = Integer.MAX_VALUE / 2;
+
+        if (obstacles[j + 1] != (i + 1)) {
+            minVal = Math.min(minVal, dfs(i, j + 1, obstacles, cache, visited));
+        }
+
+        for (int k = 0; k < 3; k++) {
+            if (!visited[k][j] && obstacles[j] != (k + 1)) {
+                minVal = Math.min(minVal, dfs(k, j, obstacles, cache, visited) + 1);
+            }
+        }
+        visited[i][j] = false;
+        return cache[i][j] = minVal;
+    }*/
+
 }
